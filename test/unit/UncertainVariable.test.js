@@ -1,5 +1,4 @@
-import { UVType } from "../../src/UncertainVariable";
-import { UV } from "../../src/UncertainVariable";
+import { UVType, UV } from "../../src/UncertainVariable";
 
 let a = new UV(UVType.Normal, { min90ci: 0.2, max90ci: 1.2 });
 
