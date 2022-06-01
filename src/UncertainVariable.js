@@ -1,6 +1,7 @@
 export const UVType = {
   Normal: {
     id: 2,
+    name: "Normal",
     params: ["min90ci", "max90ci"],
     checks: [
       params => {
@@ -13,6 +14,7 @@ export const UVType = {
   },
   Bernoulli: {
     id: 1,
+    name: "Bernoulli",
     params: ["p"],
     checks: [
       params => {
