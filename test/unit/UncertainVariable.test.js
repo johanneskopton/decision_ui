@@ -1,7 +1,7 @@
-import { PVType } from "../../src/ProbabilityVariable";
-import { PV } from "../../src/ProbabilityVariable";
+import { UVType } from "../../src/UncertainVariable";
+import { UV } from "../../src/UncertainVariable";
 
-let a = new PV(PVType.Normal, { min90ci: 0.2, max90ci: 1.2 });
+let a = new UV(UVType.Normal, { min90ci: 0.2, max90ci: 1.2 });
 
 test("create valid normal random variable", () => {
   expect(a.params.min90ci).toBe(0.2);
@@ -11,7 +11,7 @@ test("create valid normal random variable", () => {
   expect(a.get_most_likely()).toBe(0.7);
 });
 
-let b = new PV(PVType.Normal, { min90ci: 2.2, max90ci: 1.2 });
+let b = new UV(UVType.Normal, { min90ci: 2.2, max90ci: 1.2 });
 
 test("create invalid normal random variable", () => {
   expect(b.params.min90ci).toBe(2.2);
@@ -21,13 +21,13 @@ test("create invalid normal random variable", () => {
 });
 
 let c = () => {
-  new PV(PVType.Normal, { min90ci: 1 });
+  new UV(UVType.Normal, { min90ci: 1 });
 };
 test("create normal random variable incompletely", () => {
   expect(c).toThrow("incomplete definition of random variable!");
 });
 
-let d = new PV(PVType.Bernoulli, { p: 0.6 });
+let d = new UV(UVType.Bernoulli, { p: 0.6 });
 test("create valid Bernoulli random varibale", () => {
   expect(d.params.p).toBe(0.6);
   expect(d.is_valid).toBe(true);

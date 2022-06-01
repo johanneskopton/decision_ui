@@ -1,4 +1,4 @@
-export const PVType = {
+export const UVType = {
   Normal: {
     id: 2,
     params: ["min90ci", "max90ci"],
@@ -25,7 +25,7 @@ export const PVType = {
   }
 };
 
-export class PV {
+export class UV {
   constructor(type, params) {
     this.type = type;
     // check param completeness
