@@ -4,12 +4,12 @@ import { Node } from "@baklavajs/core";
 export class UVNode extends Node {
   constructor() {
     super();
-    this.type = "Uncertain Input";
-    this.name = "Uncertain Input";
+    this.type = "Input";
+    this.name = "Input";
     this.addOption(
       "Probability distribution",
       "SelectOption",
-      "Normal",
+      "norm",
       undefined,
       {
         items: Object.keys(UVType)

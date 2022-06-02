@@ -1,18 +1,18 @@
 export const UVType = {
-  Normal: {
+  norm: {
     id: 2,
-    name: "Normal",
-    params: ["min90ci", "max90ci"],
+    name: "norm",
+    params: ["lower", "upper"],
     checks: [
       params => {
-        return params["min90ci"] <= params["max90ci"];
+        return params["lower"] <= params["upper"];
       }
     ],
     most_likely: params => {
-      return (params["min90ci"] + params["max90ci"]) / 2;
+      return (params["lower"] + params["upper"]) / 2;
     }
-  },
-  Bernoulli: {
+  }
+  /*Bernoulli: {
     id: 1,
     name: "Bernoulli",
     params: ["p"],
@@ -24,7 +24,7 @@ export const UVType = {
     most_likely: params => {
       return (params["p"] >= 0.5) * 1;
     }
-  }
+  }*/
 };
 
 export class UV {

@@ -41,7 +41,7 @@
       // added by the user as well as saved & loaded.
       this.editor.registerNodeType("MathNode", MathNode);
       this.editor.registerNodeType("DisplayNode", DisplayNode);
-      this.editor.registerNodeType("Uncertain", UVNode);
+      this.editor.registerNodeType("Input", UVNode);
 
       // add some nodes so the screen is not empty on startup
       const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
