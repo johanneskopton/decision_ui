@@ -5,15 +5,15 @@ import Vue from "vue";
 import vuetify from "@/plugins/vuetify"; // path to vuetify export
 import App from "./App.vue";
 
-import { BaklavaVuePlugin } from '@baklavajs/plugin-renderer-vue'
-import '@baklavajs/plugin-renderer-vue/dist/styles.css'
+import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
+import "@baklavajs/plugin-renderer-vue/dist/styles.css";
 
-Vue.use(BaklavaVuePlugin)
+Vue.use(BaklavaVuePlugin);
 
-Vue.config.productionTip = false
-Vue.config.devtools = false
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
 
-Vue.prototype.log = console.log
+Vue.prototype.log = console.log;
 
 /* eslint-disable no-new */
 new Vue({
