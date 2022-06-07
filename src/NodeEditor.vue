@@ -35,7 +35,7 @@
       this.editor.use(this.engine);
 
       // Show a minimap in the top right corner
-      this.viewPlugin.enableMinimap = true;
+      this.viewPlugin.enableMinimap = false;
 
       // register the nodes we have defined, so they can be
       // added by the user as well as saved & loaded.
