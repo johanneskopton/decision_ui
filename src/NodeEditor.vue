@@ -2,11 +2,31 @@
   <div style="height: 100vh; width: 100vw">
     <!--<hint-overlay />-->
     <baklava-editor :plugin="viewPlugin" />
-    <v-btn class="mx-2 floating_button" fab dark color="secondary">
-      <v-icon dark>
-        mdi-plus
-      </v-icon>
-    </v-btn>
+    <div class="floating_btn_group">
+      <v-btn class="ma-2" fab dark color="secondary" @click="saveGraph">
+        <v-icon dark>
+          mdi-tray-arrow-down
+        </v-icon>
+      </v-btn>
+      <input
+        type="file"
+        ref="loadfile"
+        id="loadfile"
+        style="display: none"
+        @change="loadGraph"
+      />
+      <v-btn
+        class="ma-2"
+        fab
+        dark
+        color="secondary"
+        @click="$refs.loadfile.click()"
+      >
+        <v-icon dark>
+          mdi-tray-arrow-up
+        </v-icon>
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -19,6 +39,7 @@
   import { MathNode } from "./MathNode";
   import { DisplayNode } from "./DisplayNode";
   import { UVNode } from "./UVNode";
+  import { saveAs } from "file-saver";
 
   export default {
     //components: { HintOverlay },
@@ -56,7 +77,6 @@
         node2.getInterface("Value")
       );
       this.engine.calculate();
-      console.log(this.editor.save());
     },
     methods: {
       addNodeWithCoordinates(nodeType, x, y) {
@@ -65,13 +85,33 @@
         n.position.x = x;
         n.position.y = y;
         return n;
+      },
+      saveGraph() {
+        var blob = new Blob([JSON.stringify(this.editor.save(), null, 2)], {
+          type: "application/json;charset=utf-8"
+        });
+        saveAs(blob, "graph.json");
+      },
+      loadGraph() {
+        var file = this.$el.querySelector("#loadfile").files[0];
+        const reader = new FileReader();
+        reader.addEventListener(
+          "load",
+          () => {
+            // console.log(reader.result);
+            res = this.editor.load(JSON.parse(reader.result));
+            console.log(res);
+          },
+          false
+        );
+        reader.readAsText(file);
       }
     }
   };
 </script>
 
 <style>
-  .floating_button {
+  .floating_btn_group {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
