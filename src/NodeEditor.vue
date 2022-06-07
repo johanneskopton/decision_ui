@@ -1,12 +1,12 @@
 <template>
   <div style="height: 100vh; width: 100vw">
-    <hint-overlay />
+    <!--<hint-overlay />-->
     <baklava-editor :plugin="viewPlugin" />
   </div>
 </template>
 
 <script>
-  import HintOverlay from "./HintOverlay.vue";
+  //import HintOverlay from "./HintOverlay.vue";
   import { Editor } from "@baklavajs/core";
   import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
@@ -16,7 +16,7 @@
   import { UVNode } from "./UVNode";
 
   export default {
-    components: { HintOverlay },
+    //components: { HintOverlay },
     data() {
       return {
         editor: new Editor(),
