@@ -1,5 +1,7 @@
 <template>
-  <node-editor />
+  <v-app>
+    <node-editor />
+  </v-app>
 </template>
 
 <script>
