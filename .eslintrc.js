@@ -33,6 +33,7 @@ module.exports = {
         svg: "always",
         math: "always"
       }
-    ]
+    ],
+    "vue/max-attributes-per-line": ["off"]
   }
 };
