@@ -2,6 +2,11 @@
   <div style="height: 100vh; width: 100vw">
     <!--<hint-overlay />-->
     <baklava-editor :plugin="viewPlugin" />
+    <v-btn class="mx-2 floating_button" fab dark color="secondary">
+      <v-icon dark>
+        mdi-plus
+      </v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -64,3 +69,12 @@
     }
   };
 </script>
+
+<style>
+  .floating_button {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 5;
+  }
+</style>
