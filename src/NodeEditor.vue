@@ -66,8 +66,8 @@
 
       // register the nodes we have defined, so they can be
       // added by the user as well as saved & loaded.
-      this.editor.registerNodeType("MathNode", MathNode);
-      this.editor.registerNodeType("DisplayNode", DisplayNode);
+      this.editor.registerNodeType("Math", MathNode);
+      this.editor.registerNodeType("Display", DisplayNode);
       this.editor.registerNodeType("Input", UVNode);
       this.editor.registerNodeType("Sum", SumNode);
 

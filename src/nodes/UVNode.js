@@ -4,7 +4,7 @@ import { Node } from "@baklavajs/core";
 export class UVNode extends Node {
   constructor() {
     super();
-    this.type = "Input";
+    this.type = "InputNode";
     this.name = "Input";
     this.addOption(
       "Probability distribution",
