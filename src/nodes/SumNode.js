@@ -1,5 +1,8 @@
 import { Node } from "@baklavajs/core";
 
+const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+const alphabet = alpha.map(x => String.fromCharCode(x));
+
 export class SumNode extends Node {
   constructor() {
     super();
@@ -28,14 +31,16 @@ export class SumNode extends Node {
   add_summand() {
     var id = this.summandInterfaces.length;
     this.adding_summand = true;
-    this.summandInterfaces.push(this.addInputInterface(id, "NumberOption", 0));
+    this.summandInterfaces.push(
+      this.addInputInterface(alphabet[id], "NumberOption", 0)
+    );
     this.adding_summand = false;
   }
 
   calculate() {
     let result = 0;
     for (let i = 0; i < this.summandInterfaces.length; i++) {
-      result += this.getInterface(i).value;
+      result += this.getInterface(alphabet[i]).value;
     }
 
     this.getInterface("Result").value = result;

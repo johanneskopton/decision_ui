@@ -5,8 +5,8 @@ export class MathNode extends Node {
     super();
     this.type = "MathNode";
     this.name = "Math";
-    this.addInputInterface("Number 1", "NumberOption", 1);
-    this.addInputInterface("Number 2", "NumberOption", 10);
+    this.addInputInterface("A", "NumberOption", 1);
+    this.addInputInterface("B", "NumberOption", 10);
     this.addOption("Operation", "SelectOption", "Add", undefined, {
       items: ["Add", "Subtract", "Multiply", "Divide"]
     });
@@ -14,8 +14,8 @@ export class MathNode extends Node {
   }
 
   calculate() {
-    const n1 = this.getInterface("Number 1").value;
-    const n2 = this.getInterface("Number 2").value;
+    const n1 = this.getInterface("A").value;
+    const n2 = this.getInterface("B").value;
     const operation = this.getOptionValue("Operation");
     let result;
     if (operation === "Add") {
