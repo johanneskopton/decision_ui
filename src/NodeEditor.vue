@@ -110,7 +110,9 @@
   };
 </script>
 
-<style>
+<style lang="scss">
+  @import "./style/baklava.scss";
+
   .floating_btn_group {
     position: absolute;
     bottom: 1rem;

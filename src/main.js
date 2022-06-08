@@ -6,7 +6,6 @@ import vuetify from "@/plugins/vuetify"; // path to vuetify export
 import App from "./App.vue";
 
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
-import "@baklavajs/plugin-renderer-vue/dist/styles.css";
 
 Vue.use(BaklavaVuePlugin);
 

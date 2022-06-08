@@ -1,0 +1,28 @@
+@import "@baklavajs/plugin-renderer-vue/dist/styles/variables.scss";
+@import 'vuetify/src/styles/main.sass';
+
+$color-primary: var(--v-primary-base);
+$color-node-background: var(--v-secondary-lighten3);
+$color-pattern-default: map-get($shades, "white");
+$color-pattern-line: map-get($blue-grey, "lighten-5");
+$color-pattern-black: map-get($blue-grey, "lighten-5");
+$color-control-dark-background: var(--v-secondary-lighten1);
+$color-node-title-background: var(--v-secondary-base);
+$color-connection-default: var(--v-secondary-lighten3);
+$color-sidebar-background: var(--v-secondary-lighten1);
+$border-radius-control: 5px;
+$border-radius-node: 7px;
+$color-node-selected: var(--v-primary-lighten1);
+
+@import "@baklavajs/plugin-renderer-vue/dist/styles/styles.scss";
+
+.dark-select {
+    &>.__dropdown {
+            background: var(--v-secondary-base);
+    }
+}
+.node {
+    &.--selected {
+        box-shadow: 0 0 0 2px $color-node-selected;
+    }
+}
