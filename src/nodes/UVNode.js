@@ -1,4 +1,4 @@
-import { UVType, UV } from "./UncertainVariable";
+import { UVType, UV } from "../UncertainVariable";
 import { Node } from "@baklavajs/core";
 
 export class UVNode extends Node {

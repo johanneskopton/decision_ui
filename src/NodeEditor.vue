@@ -36,9 +36,9 @@
   import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
   import { Engine } from "@baklavajs/plugin-engine";
-  import { MathNode } from "./MathNode";
-  import { DisplayNode } from "./DisplayNode";
-  import { UVNode } from "./UVNode";
+  import { MathNode } from "./nodes/MathNode";
+  import { DisplayNode } from "./nodes/DisplayNode";
+  import { UVNode } from "./nodes/UVNode";
   import { saveAs } from "file-saver";
 
   export default {
