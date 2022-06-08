@@ -37,6 +37,7 @@
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
   import { Engine } from "@baklavajs/plugin-engine";
   import { MathNode } from "./nodes/MathNode";
+  import { SumNode } from "./nodes/SumNode";
   import { DisplayNode } from "./nodes/DisplayNode";
   import { UVNode } from "./nodes/UVNode";
   import { saveAs } from "file-saver";
@@ -68,6 +69,7 @@
       this.editor.registerNodeType("MathNode", MathNode);
       this.editor.registerNodeType("DisplayNode", DisplayNode);
       this.editor.registerNodeType("Input", UVNode);
+      this.editor.registerNodeType("Sum", SumNode);
 
       // add some nodes so the screen is not empty on startup
       const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
