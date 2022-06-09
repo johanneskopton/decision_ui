@@ -1,7 +1,7 @@
 import { UVType, UV } from "../UncertainVariable";
-import { Node } from "@baklavajs/core";
+import { UncertainNode } from "./UncertainNode";
 
-export class UVNode extends Node {
+export class UVNode extends UncertainNode {
   constructor() {
     super();
     this.type = "InputNode";
@@ -19,7 +19,6 @@ export class UVNode extends Node {
     this.update_uv_type = this.update_uv_type.bind(this);
     this.update_uv_type();
     this.events.update.addListener(undefined, this.update_uv_type);
-    this.addOutputInterface("Output");
   }
 
   update_uv_type() {
@@ -41,7 +40,7 @@ export class UVNode extends Node {
     }
   }
 
-  calculate() {
+  calculate_single() {
     let params = new Object();
     this.uv_type.params.forEach(element => {
       params[element] = this.getInterface(element).value;
@@ -53,7 +52,6 @@ export class UVNode extends Node {
     } else {
       result = NaN;
     }
-
-    this.getInterface("Output").value = result;
+    return result;
   }
 }
