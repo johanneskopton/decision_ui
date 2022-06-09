@@ -40,6 +40,7 @@
   import { SumNode } from "./nodes/SumNode";
   import { DisplayNode } from "./nodes/DisplayNode";
   import { UVNode } from "./nodes/UVNode";
+  import { ChanceEventNode } from "./nodes/ChanceEventNode";
   import { saveAs } from "file-saver";
 
   export default {
@@ -70,6 +71,7 @@
       this.editor.registerNodeType("Display", DisplayNode);
       this.editor.registerNodeType("Input", UVNode);
       this.editor.registerNodeType("Sum", SumNode);
+      this.editor.registerNodeType("ChanceEvent", ChanceEventNode);
 
       // add some nodes so the screen is not empty on startup
       const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
