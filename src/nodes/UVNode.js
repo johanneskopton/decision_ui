@@ -49,7 +49,7 @@ export class UVNode extends Node {
     this.uv = new UV(this.uv_type, params);
     let result;
     if (this.uv.is_valid) {
-      result = this.uv.get_most_likely();
+      result = this.uv.get_random_sample();
     } else {
       result = NaN;
     }
