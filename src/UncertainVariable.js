@@ -1,3 +1,8 @@
+import gaussian from "gaussian";
+
+// 95% quantile of the standard normal distribution
+const q95_Z = 1.6448536269514722;
+
 export const UVType = {
   norm: {
     id: 2,
@@ -5,11 +10,18 @@ export const UVType = {
     params: ["lower", "upper"],
     checks: [
       params => {
-        return params["lower"] <= params["upper"];
+        return params["lower"] < params["upper"];
       }
     ],
     most_likely: params => {
       return (params["lower"] + params["upper"]) / 2;
+    },
+    random_sample: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      let std = (params["upper"] - mean) / q95_Z;
+      let variance = std ** 2;
+      let distribution = gaussian(mean, variance);
+      return distribution.ppf(Math.random());
     }
   }
   /*Bernoulli: {
@@ -46,5 +58,9 @@ export class UV {
 
   get_most_likely() {
     return this.type.most_likely(this.params);
+  }
+
+  get_random_sample() {
+    return this.type.random_sample(this.params);
   }
 }
