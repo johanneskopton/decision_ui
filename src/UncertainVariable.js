@@ -4,6 +4,14 @@ import gaussian from "gaussian";
 const q95_Z = 1.6448536269514722;
 
 export const UVType = {
+  deterministic: {
+    id: 0,
+    name: "deterministic",
+    params: ["value"],
+    checks: [],
+    most_likely: params => params.value,
+    random_sample: params => params.value
+  },
   norm: {
     id: 2,
     name: "norm",
