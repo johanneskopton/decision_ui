@@ -77,7 +77,7 @@
       // added by the user as well as saved & loaded.
       this.editor.registerNodeType("Math", MathNode);
       this.editor.registerNodeType("Display", DisplayNode);
-      this.editor.registerNodeType("Input", UVNode);
+      this.editor.registerNodeType("UncertainInput", UVNode);
       this.editor.registerNodeType("Sum", SumNode);
       this.editor.registerNodeType("ChanceEvent", ChanceEventNode);
 
