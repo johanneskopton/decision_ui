@@ -1,14 +1,18 @@
-import { NodeBuilder } from "@baklavajs/core";
+import { Node } from "@baklavajs/core";
 
-export const DisplayNode = new NodeBuilder("DisplayNode")
-  .setName("Display")
-  .addInputInterface("Value")
-  .addOption("ValueText", "TextOption")
-  .onCalculate(n => {
-    let value = n.getInterface("Value").value;
+export class DisplayNode extends Node {
+  constructor() {
+    super();
+    this.type = "DisplayNode";
+    this.name = "Display";
+    this.addInputInterface("Value", undefined, 0, { type: "probabilistic" });
+    this.addOption("ValueText", "TextOption");
+  }
+  calculate() {
+    let value = this.getInterface("Value").value;
     if (typeof value === "number") {
       value = value.toFixed(3);
     }
-    n.setOptionValue("ValueText", value);
-  })
-  .build();
+    this.setOptionValue("ValueText", value);
+  }
+}
