@@ -14,18 +14,37 @@ export class MathNode extends NumericNode {
   }
 
   calculate() {
-    const n1 = this.getInterface("A").value;
-    const n2 = this.getInterface("B").value;
+    const A = this.getInterface("A").value;
+    const B = this.getInterface("B").value;
+    const operations = {
+      Add: (A, B) => A + B,
+      Subtract: (A, B) => A - B,
+      Multiply: (A, B) => A * B,
+      Divide: (A, B) => A / B
+    };
+    var result;
     const operation = this.getOptionValue("Operation");
-    let result;
-    if (operation === "Add") {
-      result = n1 + n2;
-    } else if (operation === "Subtract") {
-      result = n1 - n2;
-    } else if (operation === "Multiply") {
-      result = n1 * n2;
-    } else if (operation === "Divide") {
-      result = n1 / n2;
+
+    if (A.length && B.length) {
+      // both are vectors
+      if (A.length == B.length) {
+        // need to have the same length
+        result = A.map((e, i) => operations[operation](e, B[i]));
+      } else {
+        result = undefined;
+      }
+    } else if (!isNaN(A) && !isNaN(B)) {
+      // both are scalars
+      result = operations[operation](A, B);
+    } else {
+      // one is vector, one is scalar
+      if (A.length) {
+        // A is the vector
+        result = A.map(e => operations[operation](e, B));
+      } else {
+        // B is the vector
+        result = B.map(e => operations[operation](A, e));
+      }
     }
 
     this.getInterface("Result").value = result;
