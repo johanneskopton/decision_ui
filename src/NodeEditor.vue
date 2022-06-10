@@ -33,9 +33,11 @@
 <script>
   //import HintOverlay from "./HintOverlay.vue";
   import { Editor } from "@baklavajs/core";
+  import { InterfaceTypePlugin } from "@baklavajs/plugin-interface-types";
   import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
   import { Engine } from "@baklavajs/plugin-engine";
+  import colors from "vuetify/lib/util/colors";
   import { MathNode } from "./nodes/MathNode";
   import { SumNode } from "./nodes/SumNode";
   import { DisplayNode } from "./nodes/DisplayNode";
@@ -61,6 +63,12 @@
       // The engine plugin calculates the nodes in the graph in the
       // correct order using the "calculate" methods of the nodes
       this.editor.use(this.engine);
+      // The interface type plugin allows for custom interface types
+      const intfTypePlugin = new InterfaceTypePlugin();
+      this.editor.use(intfTypePlugin);
+      // Define interface types
+      intfTypePlugin.addType("probabilistic", colors.purple.accent1);
+      intfTypePlugin.addType("deterministic", colors.shades.white);
 
       // Show a minimap in the top right corner
       this.viewPlugin.enableMinimap = false;
