@@ -1,9 +1,8 @@
-import { Node } from "@baklavajs/core";
+import { NumericNode } from "./NumericNode";
 
-export class UncertainNode extends Node {
+export class UncertainNode extends NumericNode {
   constructor() {
     super();
-    this.addOutputInterface("Result");
   }
 
   calculate() {
@@ -13,5 +12,6 @@ export class UncertainNode extends Node {
     }
 
     this.getInterface("Result").value = result;
+    this.check_valid();
   }
 }
