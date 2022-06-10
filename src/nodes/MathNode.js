@@ -1,6 +1,6 @@
-import { Node } from "@baklavajs/core";
+import { NumericNode } from "./NumericNode";
 
-export class MathNode extends Node {
+export class MathNode extends NumericNode {
   constructor() {
     super();
     this.type = "MathNode";
