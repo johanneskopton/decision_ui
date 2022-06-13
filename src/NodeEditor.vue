@@ -37,6 +37,7 @@
   import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
   import { Engine } from "@baklavajs/plugin-engine";
+  import HistogramOption from "./components/histogramOption.vue";
   import colors from "vuetify/lib/util/colors";
   import { MathNode } from "./nodes/MathNode";
   import { SumNode } from "./nodes/SumNode";
@@ -80,6 +81,9 @@
       this.editor.registerNodeType("UncertainInput", UVNode);
       this.editor.registerNodeType("Sum", SumNode);
       this.editor.registerNodeType("ChanceEvent", ChanceEventNode);
+
+      // register custom options
+      this.viewPlugin.registerOption("HistogramOption", HistogramOption);
 
       // add some nodes so the screen is not empty on startup
       const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
