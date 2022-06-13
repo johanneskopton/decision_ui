@@ -42,7 +42,7 @@ export class UVNode extends UncertainNode {
     }
   }
 
-  calculate_single() {
+  calculate_single(_) {
     let params = new Object();
     this.uv_type.params.forEach(element => {
       params[element] = this.getInterface(element).value;
