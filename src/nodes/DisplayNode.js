@@ -6,7 +6,7 @@ export class DisplayNode extends Node {
     this.type = "DisplayNode";
     this.name = "Display";
     this.addInputInterface("Value", undefined, 0, { type: "probabilistic" });
-    this.addOption("ValueText", "TextOption");
+    this.addOption("ValueText", "HistogramOption");
   }
   calculate() {
     let value = this.getInterface("Value").value;
