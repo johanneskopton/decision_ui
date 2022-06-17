@@ -91,7 +91,7 @@
                       var tickDistance = values[1] - values[0];
                       var numDecimal =
                         -1 * Math.floor(Math.log10(tickDistance));
-                      numDecimal = Math.max(numDecimal - 1, 0);
+                      numDecimal = Math.max(numDecimal, 0);
                       return value.toFixed(numDecimal);
                     }
                   },
