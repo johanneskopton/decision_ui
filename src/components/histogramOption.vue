@@ -58,16 +58,8 @@
         }
 
         var hist = histogram(data);
-        var binRange = hist.tickRange();
-        console.log(binRange);
-        var labels = range(binRange[0], Math.round(binRange[1]), binRange[2]);
-        var bins = Array(labels.length).fill(0);
-
-        for (var i = 0; i < data.length; i++) {
-          var value = data[i];
-          var index = labels.indexOf(hist.fun(value));
-          bins[index] = bins[index] + 1;
-        }
+        var labels = hist.bins;
+        var bins = hist.bin_counts;
 
         var baseColor = "rgba(255, 255, 255, 1)";
         var baseColor2 = "rgba(255, 255, 255, 0.2)";
