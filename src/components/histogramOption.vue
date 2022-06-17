@@ -104,7 +104,8 @@
               yAxes: [
                 {
                   ticks: {
-                    fontColor: baseColor
+                    fontColor: baseColor,
+                    maxTicksLimit: 4
                   },
                   gridLines: {
                     color: baseColor2,
