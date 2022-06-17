@@ -13,7 +13,7 @@ export class UncertainNode extends NumericNode {
     Object.keys(input_interfaces).forEach(e => {
       input_values[e] = input_interfaces[e].value;
     });
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 1000; i++) {
       var input_values_sample = new Object();
       Object.keys(input_values).forEach(e => {
         if (input_values[e].length) {
