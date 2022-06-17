@@ -29,6 +29,7 @@
         console.log("Prop changed: ", newVal, " | was: ", oldVal);
         if (Array.isArray(newVal)) {
           if (new Set(newVal).size > 1) {
+            this.det_val = false;
             this.draw_hist();
           } else {
             this.det_val = newVal[0];
