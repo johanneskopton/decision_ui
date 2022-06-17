@@ -20,7 +20,8 @@
     },
     data() {
       return {
-        det_val: false
+        det_val: false,
+        graph: undefined
       };
     },
     watch: {
@@ -67,7 +68,8 @@
         var baseColor = "rgba(255, 255, 255, 1)";
         var baseColor2 = "rgba(255, 255, 255, 0.2)";
 
-        var myBarChart = Chart.Bar(ctx, {
+        if (this.graph) this.graph.destroy();
+        this.graph = Chart.Bar(ctx, {
           data: {
             labels: labels,
             datasets: [
