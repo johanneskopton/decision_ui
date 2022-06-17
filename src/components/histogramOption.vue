@@ -33,15 +33,19 @@
             this.det_val = false;
             this.draw_hist();
           } else {
-            this.det_val = newVal[0];
+            this.print_deterministic(newVal[0]);
           }
         } else {
-          this.det_val = newVal;
+          this.print_deterministic(newVal);
         }
       }
     },
     methods: {
-      print_deterministic() {},
+      print_deterministic(det_val_raw) {
+        this.det_val = det_val_raw.toFixed(
+          Math.max(0, 3 - Math.floor(Math.log10(det_val_raw)))
+        );
+      },
       draw_hist() {
         console.log(this.value);
         var ctx = this.$refs.hist.getContext("2d");
