@@ -119,6 +119,11 @@
             },
             tooltips: {
               enabled: false
+            },
+            aspectRatio: 1.41,
+            hover: { mode: null },
+            options: {
+              events: []
             }
           }
         });
