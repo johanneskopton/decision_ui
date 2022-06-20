@@ -50,7 +50,6 @@
             );
       },
       draw_hist() {
-        console.log(this.value);
         var ctx = this.$refs.hist.getContext("2d");
         var data = this.value;
         function range(start, end, step = 1) {

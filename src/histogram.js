@@ -28,6 +28,5 @@ export default function(s, n_bins = 15) {
     let idx = Math.floor((s[i] - lo) / bin_size);
     if (idx >= 0 && idx < n_bins) bin_counts[idx]++;
   }
-  console.log(bin_counts);
   return { bins, bin_counts };
 }
