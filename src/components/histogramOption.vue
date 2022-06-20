@@ -1,7 +1,7 @@
 <template>
   <div class="hist_container">
-    <span v-if="det_val">Deterministic: {{ det_val }}</span>
-    <canvas v-if="!det_val" id="hist" ref="hist" />
+    <span v-if="det_val !== false">Deterministic: {{ det_val }}</span>
+    <canvas v-show="det_val === false" id="hist" ref="hist" />
   </div>
 </template>
 
