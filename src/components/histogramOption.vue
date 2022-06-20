@@ -25,9 +25,7 @@
       };
     },
     watch: {
-      value: function(newVal, oldVal) {
-        // watch it
-        console.log("Prop changed: ", newVal, " | was: ", oldVal);
+      value: function(newVal) {
         if (Array.isArray(newVal)) {
           if (new Set(newVal).size > 1) {
             this.det_val = false;
@@ -73,7 +71,7 @@
                 data: bins,
                 categoryPercentage: 1.0,
                 barPercentage: 1.0,
-                backgroundColor: "#CE93D8"
+                backgroundColor: "#CE93D8" // TODO: make dynamic (vuetify)
               }
             ]
           },
@@ -87,7 +85,7 @@
                     autoSkip: true,
                     maxTicksLimit: 7,
                     fontColor: baseColor,
-                    callback: function(value, index, values) {
+                    callback: function(value, _, values) {
                       var tickDistance = values[1] - values[0];
                       var numDecimal =
                         -1 * Math.floor(Math.log10(tickDistance));
