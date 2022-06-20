@@ -7,7 +7,7 @@
 
 <script>
   import Chart from "chart.js";
-  import histogram from "../histogram-pretty";
+  import histogram from "../histogram";
 
   export default {
     props: {
