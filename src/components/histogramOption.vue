@@ -70,7 +70,7 @@
               {
                 data: bins,
                 categoryPercentage: 1.0,
-                barPercentage: 1.0,
+                barPercentage: 1.1,
                 backgroundColor: "#CE93D8" // TODO: make dynamic (vuetify)
               }
             ]
