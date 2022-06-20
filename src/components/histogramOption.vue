@@ -40,9 +40,14 @@
     },
     methods: {
       print_deterministic(det_val_raw) {
-        this.det_val = det_val_raw.toFixed(
-          Math.max(0, 3 - Math.floor(Math.log10(det_val_raw)))
-        );
+        console.log(det_val_raw);
+        const approximatelyEqual = (v1, v2, epsilon = 0.001) =>
+          Math.abs(v1 - v2) < epsilon;
+        this.det_val = approximatelyEqual(det_val_raw, 0)
+          ? 0
+          : det_val_raw.toFixed(
+              Math.max(0, 3 - Math.floor(Math.log10(det_val_raw)))
+            );
       },
       draw_hist() {
         console.log(this.value);
