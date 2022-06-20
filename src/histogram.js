@@ -17,7 +17,7 @@ export default function(s, n_bins = 15) {
   var lo = quantile(0.01);
   var hilo = hi - lo;
   var bins = Array(n_bins).fill(0);
-  var bin_size = hilo / n_bins;
+  var bin_size = hilo / (n_bins - 1);
   for (var i = 0; i < n_bins; i++) {
     bins[i] = lo + bin_size * i;
   }
@@ -25,7 +25,7 @@ export default function(s, n_bins = 15) {
   // calc bincounts
   var bin_counts = Array(n_bins).fill(0);
   for (var i = 0; i < s.length; i++) {
-    let idx = Math.floor(((s[i] - lo) / hilo) * n_bins);
+    let idx = Math.floor((s[i] - lo) / bin_size);
     if (idx >= 0 && idx < n_bins) bin_counts[idx]++;
   }
   console.log(bin_counts);
