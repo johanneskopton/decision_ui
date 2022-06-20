@@ -1,4 +1,4 @@
-export default function(s, n_bins = 10) {
+export default function(s, n_bins = 15) {
   s = s.slice();
   s.sort(function(a, b) {
     return a - b;
