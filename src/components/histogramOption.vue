@@ -40,7 +40,6 @@
     },
     methods: {
       print_deterministic(det_val_raw) {
-        console.log(det_val_raw);
         const approximatelyEqual = (v1, v2, epsilon = 0.001) =>
           Math.abs(v1 - v2) < epsilon;
         this.det_val = approximatelyEqual(det_val_raw, 0)
