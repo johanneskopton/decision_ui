@@ -1,7 +1,7 @@
 <template>
   <div class="hist_container">
     <span v-if="det_val">Deterministic: {{ det_val }}</span>
-    <canvas v-if="!det_val" id="hist" ref="hist" width="181" max-height="140" />
+    <canvas v-if="!det_val" id="hist" ref="hist" />
   </div>
 </template>
 
