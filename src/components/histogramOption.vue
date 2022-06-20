@@ -1,7 +1,7 @@
 <template>
   <div class="hist_container">
-    <span v-if="det_val !== false">Deterministic: {{ det_val }}</span>
-    <canvas v-show="det_val === false" id="hist" ref="hist" />
+    <span v-show="det_val !== false">Deterministic: {{ det_val }}</span>
+    <canvas :class="is_prob" id="hist" ref="hist" />
   </div>
 </template>
 
@@ -21,6 +21,7 @@
     data() {
       return {
         det_val: false,
+        is_prob: "prob",
         graph: undefined
       };
     },
@@ -29,6 +30,7 @@
         if (Array.isArray(newVal)) {
           if (new Set(newVal).size > 1) {
             this.det_val = false;
+            this.is_prob = "prob";
             this.draw_hist();
           } else {
             this.print_deterministic(newVal[0]);
@@ -47,6 +49,7 @@
           : det_val_raw.toFixed(
               Math.max(0, 3 - Math.floor(Math.log10(det_val_raw)))
             );
+        this.is_prob = "det";
       },
       draw_hist() {
         var ctx = this.$refs.hist.getContext("2d");
@@ -132,3 +135,10 @@
     }
   };
 </script>
+
+<style>
+  canvas.det {
+    /* for some reason v-show did not work*/
+    display: none !important;
+  }
+</style>
