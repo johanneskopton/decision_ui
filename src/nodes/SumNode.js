@@ -1,9 +1,9 @@
-import { Node } from "@baklavajs/core";
+import { UncertainNode } from "./UncertainNode";
 
 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
 const alphabet = alpha.map(x => String.fromCharCode(x));
 
-export class SumNode extends Node {
+export class SumNode extends UncertainNode {
   constructor() {
     super();
     this.type = "SumNode";
@@ -12,7 +12,6 @@ export class SumNode extends Node {
     this.adding_summand = false;
     this.add_summand();
     this.add_summand();
-    this.addOutputInterface("Result");
     this.check_add_summand = this.check_add_summand.bind(this);
     this.check_add_summand();
     this.events.update.addListener(undefined, this.check_add_summand);
@@ -32,17 +31,18 @@ export class SumNode extends Node {
     var id = this.summandInterfaces.length;
     this.adding_summand = true;
     this.summandInterfaces.push(
-      this.addInputInterface(alphabet[id], "NumberOption", 0)
+      this.addInputInterface(alphabet[id], "NumberOption", 0, {
+        type: "probabilistic"
+      })
     );
     this.adding_summand = false;
   }
 
-  calculate() {
+  calculate_single(input) {
     let result = 0;
     for (let i = 0; i < this.summandInterfaces.length; i++) {
-      result += this.getInterface(alphabet[i]).value;
+      result += input[alphabet[i]];
     }
-
-    this.getInterface("Result").value = result;
+    return result;
   }
 }
