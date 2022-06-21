@@ -114,9 +114,7 @@
         reader.addEventListener(
           "load",
           () => {
-            // console.log(reader.result);
-            res = this.editor.load(JSON.parse(reader.result));
-            console.log(res);
+            this.editor.load(JSON.parse(reader.result));
           },
           false
         );
