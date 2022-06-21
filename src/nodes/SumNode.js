@@ -6,7 +6,7 @@ const alphabet = alpha.map(x => String.fromCharCode(x));
 export class SumNode extends UncertainNode {
   constructor() {
     super();
-    this.type = "SumNode";
+    this.type = "Sum";
     this.name = "Sum";
     this.summandInterfaces = [];
     this.adding_summand = false;

@@ -3,7 +3,7 @@ import { UncertainNode } from "./UncertainNode";
 export class ChanceEventNode extends UncertainNode {
   constructor() {
     super();
-    this.type = "ChanceEventNode";
+    this.type = "ChanceEvent";
     this.name = "ChanceEvent";
     this.addInputInterface("chance", "NumberOption", 0, {
       min: 0,

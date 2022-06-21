@@ -4,7 +4,7 @@ import { UncertainNode } from "./UncertainNode";
 export class UVNode extends UncertainNode {
   constructor() {
     super();
-    this.type = "UVNode";
+    this.type = "UncertainInput";
     this.name = "UncertainInput";
     this.addOption(
       "Probability distribution",

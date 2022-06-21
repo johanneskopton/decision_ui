@@ -3,7 +3,7 @@ import { UncertainNode } from "./UncertainNode";
 export class MathNode extends UncertainNode {
   constructor() {
     super();
-    this.type = "MathNode";
+    this.type = "Math";
     this.name = "Math";
     this.addInputInterface("A", "NumberOption", 1, { type: "probabilistic" });
     this.addInputInterface("B", "NumberOption", 10, { type: "probabilistic" });
