@@ -35,11 +35,13 @@ npm run build
 npm run build --report
 
 # deploy on github pages
-git checkout deploy     # change to deploy branch
-git add -f dist/        # add build dir even its on gitignore
-git push origin HEAD    # push
+git checkout deploy                 # change to deploy branch
+git add -f dist/                    # add build dir even its on gitignore
+git commit -m "Deploy."             # commit
+git push                            # push
+git push origin --delete gh-pages   # if necessary
 # make 'gh-pages' branch a subtree of the dist dir of the deploy branch
-git subtree push --prefix dist origin gh-pages
+git subtree push --prefix frontend/dist origin gh-pages
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
