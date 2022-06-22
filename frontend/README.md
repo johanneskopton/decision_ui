@@ -1,8 +1,7 @@
 # Decision UI
 
-A web interface for decision support using influence diagrams and Monte Carlo simulations.
+A web interface for decision analysis using influence diagrams. Made with baklavsjs and vue.
 
-> A Vue.js project
 
 ## Installation
 
