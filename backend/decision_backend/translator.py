@@ -14,7 +14,8 @@ class Translator:
             if interface["name"] == interface_name:
                 return interface["value"]
 
-    def _process_numeric(self, x):
+    @staticmethod
+    def _process_numeric(x):
         return np.around(x, PRECISION)
 
     @staticmethod
