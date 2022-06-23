@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import re
+import pandas as pd
 
 PRECISION = 5
 
@@ -8,6 +9,7 @@ PRECISION = 5
 class Translator:
     def __init__(self, model):
         self.model = self._strip_model(model)
+        self.estimates_df = None
 
     def _get_interface_by_name(self, node, interface_name):
         for interface in node["interfaces"]:
@@ -38,8 +40,18 @@ class Translator:
             lower = self._get_interface_by_name(node, "lower")
             upper = self._get_interface_by_name(node, "upper")
             lower, upper = self._process_numeric([lower, upper])
-            name = node["name"]
-            print(name, distribution, lower, upper)
+            variable_name = node["variable_name"]
+            label = node["name"]
+            variable = {
+                "label": label,
+                "variable": variable_name,
+                "lower": lower,
+                "upper": upper,
+                "distribution": distribution
+            }
+            variable = pd.DataFrame([variable])
+            self.estimates_df = pd.concat(
+                [self.estimates_df, variable], ignore_index=True)
 
     def _strip_model(self, model):
         target_interfaces = set([c["to"] for c in model["connections"]])
