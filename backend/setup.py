@@ -25,6 +25,8 @@ setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
+        "pandas",
+        "numpy"
     ],
     extras_require={
         "dev": [
