@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import re
 
 PRECISION = 5
 
@@ -16,6 +17,18 @@ class Translator:
     def _process_numeric(self, x):
         return np.around(x, PRECISION)
 
+    @staticmethod
+    def _create_variable_name(name, names=set()):
+        name = re.sub(r' ', "_", name)
+        name = re.sub(r'[^a-zA-Z0-9\_]', "", name)
+        name = name.strip("_")
+        base_name = name
+        i = 2
+        while name in names:
+            name = base_name + "_{}".format(i)
+            i += 1
+        return name
+
     def _get_estimates(self):
         for node in self.model["nodes"]:
             if node["type"] != "UncertainInput":
@@ -29,6 +42,7 @@ class Translator:
 
     def _strip_model(self, model):
         target_interfaces = set([c["to"] for c in model["connections"]])
+        variable_names = set()
         for node in model["nodes"]:
             del node["position"]
             del node["state"]
@@ -50,6 +64,9 @@ class Translator:
             for i, option in enumerate(node["options"]):
                 new_options[option[0]] = option[1]
             node["options"] = new_options
+            node["variable_name"] = self._create_variable_name(
+                node["name"], variable_names)
+            variable_names.add(node["variable_name"])
         del model["panning"]
         del model["scaling"]
 
