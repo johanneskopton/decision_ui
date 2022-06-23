@@ -2,6 +2,7 @@ import numpy as np
 import json
 import re
 import pandas as pd
+import copy
 
 PRECISION = 5
 
@@ -54,6 +55,7 @@ class Translator:
                 [self.estimates_df, variable], ignore_index=True)
 
     def _strip_model(self, model):
+        model = copy.deepcopy(model)
         target_interfaces = set([c["to"] for c in model["connections"]])
         variable_names = set()
         for node in model["nodes"]:
