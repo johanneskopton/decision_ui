@@ -33,7 +33,15 @@ class Translator:
             i += 1
         return name
 
-    def _get_estimates(self):
+    def _extract_estimates(self):
+        self.estimates_df = pd.DataFrame(
+            columns=[
+                "label",
+                "variable",
+                "distribution",
+                "lower",
+                "median",
+                "upper", ])
         for node in self.model["nodes"]:
             if node["type"] != "UncertainInput":
                 continue
