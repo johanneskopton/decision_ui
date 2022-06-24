@@ -55,3 +55,16 @@ def test_extract_estimates():
     assert (translator.estimates_df.loc[:, "lower"] == [0, 0, 0.7]).all()
     assert (translator.estimates_df.loc[:, "upper"] == [1, 1.3, 1.5]).all()
     assert np.isnan(translator.estimates_df.loc[0, "median"])
+
+
+def test_translate_math_node():
+    translator = Translator(model)
+    r_line = translator._translate_node("Profit")
+    assert r_line == "Profit <- Revenue - Cost"
+
+
+def test_translate_sum_node():
+    translator = Translator(model)
+    r_line = translator._translate_node("Cost")
+    print(r_line)
+    assert r_line == "Profit <- Revenue - Cost"

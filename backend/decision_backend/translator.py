@@ -4,6 +4,8 @@ import re
 import pandas as pd
 import copy
 
+from decision_backend.node_translator import node_implementations
+
 PRECISION = 5
 
 
@@ -16,6 +18,25 @@ class Translator:
         for interface in node["interfaces"]:
             if interface["name"] == interface_name:
                 return interface["value"]
+
+    def _get_node_by_variable_name(self, variable_name):
+        for node in self.model["nodes"]:
+            if node["variable_name"] == variable_name:
+                return node
+        raise ValueError("Node '{}' does not exists.".format(variable_name))
+
+    def _get_connection_from_interface(self, interface_id, direction="to"):
+        for connection in self.model["connections"]:
+            if connection[direction] == interface_id:
+                return connection
+
+    def _get_node_from_result_interface(self, interface_id):
+        for node in self.model["nodes"]:
+            result_interface = self._get_interface_by_name(node, "Result")
+            if result_interface is None:
+                continue
+            if result_interface["id"] == interface_id:
+                return node
 
     @staticmethod
     def _process_numeric(x):
@@ -61,6 +82,30 @@ class Translator:
             variable = pd.DataFrame([variable])
             self.estimates_df = pd.concat(
                 [self.estimates_df, variable], ignore_index=True)
+
+    def _translate_node(self, variable_name):
+        node = self._get_node_by_variable_name(variable_name)
+        input_variable_names = dict()
+        for interface in node["interfaces"]:
+            if interface["name"] == "Result":
+                continue
+            connection = self._get_connection_from_interface(interface["id"])
+            if connection is None:
+                term = interface["value"]
+            else:
+                input_result_interface_id = connection["from"]
+                result_interface = self._get_node_from_result_interface(
+                    input_result_interface_id)
+                term = result_interface["variable_name"]
+            input_variable_names[interface["name"]] = term
+        input_variable_names.update(node["options"])
+        node_type = node["type"]
+        r_right_side = node_implementations[node_type](input_variable_names)
+        r_line = "{} <- {}".format(variable_name, r_right_side)
+        return r_line
+
+    def _get_model_function(self):
+        pass
 
     def _strip_model(self, model):
         model = copy.deepcopy(model)
