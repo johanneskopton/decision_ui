@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from decision_backend.translator import Translator
 
-fp = "data/model1.json"
+fp = "data/model2.json"
 test_dir = os.path.dirname(__file__)
 
 model = json.load(open(os.path.join(test_dir, fp), "r"))
@@ -12,7 +12,7 @@ model = json.load(open(os.path.join(test_dir, fp), "r"))
 
 def test_create_translator():
     translator = Translator(model)
-    assert len(translator.model["nodes"]) == 8
+    assert len(translator.model["nodes"]) == 10
 
 
 def test_create_variable_name():
@@ -52,8 +52,11 @@ def test_extract_estimates():
     translator = Translator(model)
     translator._extract_estimates()
     assert type(translator.estimates_df) == pd.DataFrame
-    assert (translator.estimates_df.loc[:, "lower"] == [0, 0, 0.7]).all()
-    assert (translator.estimates_df.loc[:, "upper"] == [1, 1.3, 1.5]).all()
+    print(translator.estimates_df.loc[:, "upper"])
+    assert (translator.estimates_df.loc[:, "lower"] == [
+        30, 1.8, 40, 0.2]).all()
+    assert (translator.estimates_df.loc[:, "upper"] == [
+        50, 2.4, 50, 0.5]).all()
     assert np.isnan(translator.estimates_df.loc[0, "median"])
 
 
