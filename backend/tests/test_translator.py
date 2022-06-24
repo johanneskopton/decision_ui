@@ -50,7 +50,7 @@ def test_strip_model():
 
 def test_extract_estimates():
     translator = Translator(model)
-    translator._extract_estimates()
+    translator.extract_estimates()
     assert type(translator.estimates_df) == pd.DataFrame
     print(translator.estimates_df.loc[:, "upper"])
     assert (translator.estimates_df.loc[:, "lower"] == [

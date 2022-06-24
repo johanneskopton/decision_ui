@@ -54,7 +54,7 @@ class Translator:
             i += 1
         return name
 
-    def _extract_estimates(self):
+    def extract_estimates(self):
         self.estimates_df = pd.DataFrame(
             columns=[
                 "label",
