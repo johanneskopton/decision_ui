@@ -17,7 +17,7 @@ class Translator:
     def _get_interface_by_name(self, node, interface_name):
         for interface in node["interfaces"]:
             if interface["name"] == interface_name:
-                return interface["value"]
+                return interface
 
     def _get_node_by_variable_name(self, variable_name):
         for node in self.model["nodes"]:
@@ -67,8 +67,8 @@ class Translator:
             if node["type"] != "UncertainInput":
                 continue
             distribution = node["options"]["Probability distribution"]
-            lower = self._get_interface_by_name(node, "lower")
-            upper = self._get_interface_by_name(node, "upper")
+            lower = self._get_interface_by_name(node, "lower")["value"]
+            upper = self._get_interface_by_name(node, "upper")["value"]
             lower, upper = self._process_numeric([lower, upper])
             variable_name = node["variable_name"]
             label = node["name"]
