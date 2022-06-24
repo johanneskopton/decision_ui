@@ -30,8 +30,13 @@ def ChanceEvent(args):
     )
 
 
+def Display(args):
+    return args["Value"]
+
+
 node_implementations = {
     "Math": Math,
     "Sum": Sum,
-    "ChanceEvent": ChanceEvent
+    "ChanceEvent": ChanceEvent,
+    "Display": Display
 }

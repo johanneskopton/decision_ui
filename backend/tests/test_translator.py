@@ -77,3 +77,9 @@ def test_translate_chance_event_node():
     r_line = translator._translate_node("Selling_Price")
     target = "Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)"
     assert r_line == target
+
+
+def test_translate_display_node():
+    translator = Translator(model)
+    r_line = translator._translate_node("ProfitResult")
+    assert r_line == "ProfitResult <- Profit"

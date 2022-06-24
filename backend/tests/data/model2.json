@@ -3,7 +3,7 @@
     {
       "type": "Display",
       "id": "node_16560851678734",
-      "name": "Display",
+      "name": "ProfitResult",
       "options": [
         [
           "ValueText",
