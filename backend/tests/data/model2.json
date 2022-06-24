@@ -15342,7 +15342,7 @@
     {
       "type": "Math",
       "id": "node_165608563561678",
-      "name": "Math",
+      "name": "Variable Cost",
       "options": [
         [
           "Operation",
