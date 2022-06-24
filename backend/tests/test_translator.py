@@ -69,5 +69,10 @@ def test_translate_math_node():
 def test_translate_sum_node():
     translator = Translator(model)
     r_line = translator._translate_node("Cost")
-    print(r_line)
-    assert r_line == "Profit <- Revenue - Cost"
+    assert r_line == "Cost <- Variable_Cost + Fixed_Cost"
+
+
+def test_translate_chance_event_node():
+    translator = Translator(model)
+    r_line = translator._translate_node("DemandDrop")
+    assert r_line == "DemandDrop <- chance_event(0.1, 1, Selling_Price)"

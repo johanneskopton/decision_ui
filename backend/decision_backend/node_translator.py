@@ -12,13 +12,22 @@ def Math(args):
     return "{} {} {}".format(args["A"], operator, args["B"])
 
 
-def Sum(input):
-    for i in string.ascii_uppercase:
-        print(i)
+def Sum(args):
+    res_str = args["A"]
+    for i in string.ascii_uppercase[1:]:
+        if i not in args:
+            break
+        if args[i] != 0:
+            res_str += " + {}".format(args[i])
+    return res_str
 
 
-def ChanceEvent(input):
-    pass
+def ChanceEvent(args):
+    return "chance_event({}, {}, {})".format(
+        args["chance"],
+        args["value_if"],
+        args["value_if_not"]
+    )
 
 
 node_implementations = {
