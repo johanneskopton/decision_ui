@@ -94,9 +94,9 @@ class Translator:
                 term = interface["value"]
             else:
                 input_result_interface_id = connection["from"]
-                result_interface = self._get_node_from_result_interface(
+                source_node = self._get_node_from_result_interface(
                     input_result_interface_id)
-                term = result_interface["variable_name"]
+                term = source_node["variable_name"]
             input_variable_names[interface["name"]] = term
         input_variable_names.update(node["options"])
         node_type = node["type"]
