@@ -104,8 +104,61 @@ class Translator:
         r_line = "{} <- {}".format(variable_name, r_right_side)
         return r_line
 
+    def _translate_subgraph(self, variable_name):
+        """ Translate the subgraph that leads to `variable name`.
+        Leave out the nodes, that are already defined.
+        """
+        res_str = ""
+        node = self._get_node_by_variable_name(variable_name)
+        if node["type"] == "UncertainInput":
+            return res_str
+        res_str = self._translate_node(variable_name) + "\n" + res_str
+        node = self._get_node_by_variable_name(variable_name)
+        for interface in node["interfaces"]:
+            if interface["name"] == "Result":
+                continue
+            connection = self._get_connection_from_interface(interface["id"])
+            if connection is None:
+                continue
+            input_result_interface_id = connection["from"]
+            source_node = self._get_node_from_result_interface(
+                input_result_interface_id)
+            source_node_variable_name = source_node["variable_name"]
+            subsubgraph = self._translate_subgraph(source_node_variable_name)
+            res_str = subsubgraph + res_str
+        return res_str
+
     def _get_model_function(self):
-        pass
+        res_str = "model_function <- function(){\n"
+        defined_nodes = set()
+        output_var_str = ""
+        for node in self.model["nodes"]:
+            node_variable_name = node["variable_name"]
+            if node["type"] != "Display":
+                continue
+            subgraph_str = self._translate_subgraph(
+                node_variable_name)
+            stripped_subgraph_str = ""
+            for line in subgraph_str.splitlines():
+                line_variable_name = line.split(" <- ")[0]
+                if line_variable_name not in defined_nodes:
+                    stripped_subgraph_str += line + "\n"
+                    defined_nodes.add(line_variable_name)
+            subgraph_str = stripped_subgraph_str
+            subgraph_str = "# {}\n".format(node_variable_name) + subgraph_str
+            # indent subgraph r code
+            subgraph_str = "\n".join(
+                ["\t" + line for line in subgraph_str.splitlines()])
+            subgraph_str += "\n"
+            res_str += subgraph_str
+            res_str += "\n"
+            output_var_str += "{var_name}={var_name}, ".format(
+                var_name=node_variable_name)
+        output_var_str = output_var_str[:-2]
+        res_str += "\t# generate list of output variables\n"
+        res_str += "\treturn(list({}))".format(output_var_str)
+        res_str += "\n}"
+        return res_str
 
     def _strip_model(self, model):
         model = copy.deepcopy(model)
