@@ -3,6 +3,7 @@ import json
 import re
 import pandas as pd
 import copy
+import os
 
 from decision_backend.node_translator import node_implementations
 
@@ -13,6 +14,7 @@ class Translator:
     def __init__(self, model):
         self.model = self._strip_model(model)
         self.estimates_df = None
+        self.r_script = None
 
     def _get_interface_by_name(self, node, interface_name):
         for interface in node["interfaces"]:
@@ -82,6 +84,24 @@ class Translator:
             variable = pd.DataFrame([variable])
             self.estimates_df = pd.concat(
                 [self.estimates_df, variable], ignore_index=True)
+
+    def write_script(self):
+        path = "/tmp"
+        self.extract_estimates()
+        self.create_r_script()
+        self.estimates_df.to_csv(os.path.join(path, "estimates.csv"))
+        r_script_file = open(os.path.join(path, "model.R"), "w")
+        r_script_file.write(self.r_script)
+
+    def create_r_script(self):
+        res_str = "library(decisionSupport)\n\n"
+        res_str += "input_estimates = estimate_read_csv(\"estimates.csv\")\n\n"
+        res_str += self._get_model_function() + "\n"
+        res_str += "mc <- mcSimulation(estimate=input_estimates,\n\
+\t\tmodel_function=model_function,\n\
+\t\tnumberOfModelRuns=10000,\n\
+\t\tfunctionSyntax='plainNames')"
+        self.r_script = res_str
 
     def _translate_node(self, variable_name):
         node = self._get_node_by_variable_name(variable_name)
