@@ -1,5 +1,7 @@
 import json
 import os
+import pandas as pd
+import numpy as np
 from decision_backend.translator import Translator
 
 fp = "data/model1.json"
@@ -44,3 +46,12 @@ def test_strip_model():
         "name",
         "variable_name"}
     assert set(translator.model.keys()) == {"nodes", "connections"}
+
+
+def test_extract_estimates():
+    translator = Translator(model)
+    translator._extract_estimates()
+    assert type(translator.estimates_df) == pd.DataFrame
+    assert (translator.estimates_df.loc[:, "lower"] == [0, 0, 0.7]).all()
+    assert (translator.estimates_df.loc[:, "upper"] == [1, 1.3, 1.5]).all()
+    assert np.isnan(translator.estimates_df.loc[0, "median"])
