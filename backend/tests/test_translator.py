@@ -12,7 +12,7 @@ model = json.load(open(os.path.join(test_dir, fp), "r"))
 
 def test_create_translator():
     translator = Translator(model)
-    assert len(translator.model["nodes"]) == 11
+    assert len(translator.model["nodes"]) == 12
 
 
 def test_create_variable_name():
@@ -54,9 +54,9 @@ def test_extract_estimates():
     assert type(translator.estimates_df) == pd.DataFrame
     print(translator.estimates_df.loc[:, "upper"])
     assert (translator.estimates_df.loc[:, "lower"] == [
-        30, 1.8, 40, 0.2]).all()
+        30000, 1.8, 40, 0.2]).all()
     assert (translator.estimates_df.loc[:, "upper"] == [
-        50, 2.4, 50, 0.5]).all()
+        50000, 2.4, 50, 0.5]).all()
     assert np.isnan(translator.estimates_df.loc[0, "median"])
 
 
