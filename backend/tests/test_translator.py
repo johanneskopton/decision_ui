@@ -12,7 +12,7 @@ model = json.load(open(os.path.join(test_dir, fp), "r"))
 
 def test_create_translator():
     translator = Translator(model)
-    assert len(translator.model["nodes"]) == 10
+    assert len(translator.model["nodes"]) == 11
 
 
 def test_create_variable_name():
@@ -74,5 +74,6 @@ def test_translate_sum_node():
 
 def test_translate_chance_event_node():
     translator = Translator(model)
-    r_line = translator._translate_node("DemandDrop")
-    assert r_line == "DemandDrop <- chance_event(0.1, 1, Selling_Price)"
+    r_line = translator._translate_node("Selling_Price")
+    target = "Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)"
+    assert r_line == target

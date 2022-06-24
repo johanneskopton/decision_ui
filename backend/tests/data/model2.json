@@ -176,13 +176,8 @@
     {
       "type": "UncertainInput",
       "id": "node_165608538847533",
-      "name": "Selling Price",
-      "options": [
-        [
-          "Probability distribution",
-          "norm"
-        ]
-      ],
+      "name": "Selling Price (Base)",
+      "options": [["Probability distribution", "norm"]],
       "state": {},
       "interfaces": [
         [
@@ -393,7 +388,7 @@
     {
       "type": "ChanceEvent",
       "id": "node_165608583045191",
-      "name": "DemandDrop",
+      "name": "Selling Price",
       "options": [],
       "state": {},
       "interfaces": [
@@ -435,6 +430,40 @@
       "position": {
         "x": -203,
         "y": 13
+      },
+      "width": 200,
+      "twoColumn": false,
+      "customClasses": ""
+    },
+    {
+      "type": "Display",
+      "id": "node_1656088821237102",
+      "name": "PriceResult",
+      "options": [
+        [
+          "ValueText",
+          [
+            1.7896825193247148, 2.4149541551855096, 2.2910386502938063,
+            2.028569759729707
+          ]
+        ]
+      ],
+      "state": {},
+      "interfaces": [
+        [
+          "Value",
+          {
+            "id": "ni_1656088821238103",
+            "value": [
+              1.7896825193247148, 2.4149541551855096, 2.2910386502938063,
+              2.028569759729707
+            ]
+          }
+        ]
+      ],
+      "position": {
+        "x": 445,
+        "y": -102
       },
       "width": 200,
       "twoColumn": false,
@@ -491,11 +520,16 @@
       "id": "1656085844524101",
       "from": "ni_165608538847634",
       "to": "ni_165608583045195"
+    },
+    {
+      "id": "1656088844421106",
+      "from": "ni_165608583045192",
+      "to": "ni_1656088821238103"
     }
   ],
   "panning": {
-    "x": 715,
-    "y": 42
+    "x": 732,
+    "y": 117
   },
   "scaling": 1
 }
