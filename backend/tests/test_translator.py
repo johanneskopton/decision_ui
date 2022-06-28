@@ -2,12 +2,18 @@ import json
 import os
 import pandas as pd
 import numpy as np
+import jinja2
+
 from decision_backend.translator import Translator
 
-fp = "data/model2.json"
 test_dir = os.path.dirname(__file__)
+test_data_dir = os.path.join(test_dir, "data")
 
-model = json.load(open(os.path.join(test_dir, fp), "r"))
+templateLoader = jinja2.FileSystemLoader(searchpath=test_data_dir)
+templateEnv = jinja2.Environment(loader=templateLoader)
+
+model_path = "model.json"
+model = json.load(open(os.path.join(test_data_dir, model_path), "r"))
 
 
 def test_create_translator():
@@ -99,3 +105,19 @@ Revenue <- Selling_Price * Yield_t\n\
 Profit <- Revenue - Cost\n\
 ProfitResult <- Profit\n"
     assert subgraph == target
+
+
+def test_write_script():
+    translator = Translator(model)
+    r_script_path, csv_file_path = translator.write_script()
+    r_script_template_file = "model.R"
+    r_script_template = templateEnv.get_template(r_script_template_file)
+    r_script_target = r_script_template.render(csv_file_path=csv_file_path)
+    r_script = open(r_script_path, "r").read()
+
+    csv_target = open(os.path.join(
+        test_data_dir, "model.csv"), "r").read()
+    csv = open(csv_file_path, "r").read()
+
+    assert r_script == r_script_target
+    assert csv == csv_target

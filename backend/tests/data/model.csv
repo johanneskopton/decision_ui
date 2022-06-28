@@ -1,0 +1,5 @@
+,label,variable,distribution,lower,median,upper
+0,Yield (kg),Yield_kg,norm,30000,,50000
+1,Selling Price (Base),Selling_Price_Base,norm,1.8,,2.4
+2,Fixed Cost,Fixed_Cost,norm,40,,50
+3,Cost Per Yield,Cost_Per_Yield,norm,0.2,,0.5
