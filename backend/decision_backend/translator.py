@@ -4,6 +4,7 @@ import re
 import pandas as pd
 import copy
 import os
+import tempfile
 import jinja2
 
 from decision_backend.node_translator import node_implementations
@@ -93,12 +94,21 @@ class Translator:
                 [self.estimates_df, variable], ignore_index=True)
 
     def write_script(self):
-        path = "/tmp"
+        csv_file = tempfile.NamedTemporaryFile(
+            "w+t", delete=False, suffix=".csv", prefix="decision_ui_")
+        r_script_file = tempfile.NamedTemporaryFile(
+            "w+t", delete=False, suffix=".R", prefix="decision_ui_")
         self.extract_estimates()
-        self.create_r_script()
-        self.estimates_df.to_csv(os.path.join(path, "estimates.csv"))
-        r_script_file = open(os.path.join(path, "model.R"), "w")
-        r_script_file.write(self.r_script)
+        self.create_r_script(csv_file.name)
+        try:
+            self.estimates_df.to_csv(csv_file.name)
+            csv_file.flush()
+            r_script_file.write(self.r_script)
+            r_script_file.flush()
+        finally:
+            csv_file.close()
+            r_script_file.close()
+        return r_script_file.name, csv_file.name
 
     def create_r_script(self, csv_file):
         mc_template = templateEnv.get_template("mc.R")
