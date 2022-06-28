@@ -36,4 +36,5 @@ setup(
             "autopep8",
         ],
     },
+    include_package_data=True,
 )
