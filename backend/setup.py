@@ -26,7 +26,8 @@ setup(
     ],
     install_requires=[
         "pandas",
-        "numpy"
+        "numpy",
+        "jinja2"
     ],
     extras_require={
         "dev": [

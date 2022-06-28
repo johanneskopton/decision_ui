@@ -4,10 +4,17 @@ import re
 import pandas as pd
 import copy
 import os
+import jinja2
 
 from decision_backend.node_translator import node_implementations
 
 PRECISION = 5
+
+src_dir = os.path.dirname(__file__)
+template_dir = os.path.join(src_dir, "templates")
+
+templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
+templateEnv = jinja2.Environment(loader=templateLoader)
 
 
 class Translator:
@@ -93,14 +100,12 @@ class Translator:
         r_script_file = open(os.path.join(path, "model.R"), "w")
         r_script_file.write(self.r_script)
 
-    def create_r_script(self):
-        res_str = "library(decisionSupport)\n\n"
-        res_str += "input_estimates = estimate_read_csv(\"estimates.csv\")\n\n"
-        res_str += self._get_model_function() + "\n"
-        res_str += "mc <- mcSimulation(estimate=input_estimates,\n\
-\t\tmodel_function=model_function,\n\
-\t\tnumberOfModelRuns=10000,\n\
-\t\tfunctionSyntax='plainNames')"
+    def create_r_script(self, csv_file):
+        mc_template = templateEnv.get_template("mc.R")
+        res_str = mc_template.render(
+            csv_file_path=csv_file,
+            model_function=self._get_model_function(),
+        )
         self.r_script = res_str
 
     def _translate_node(self, variable_name):
