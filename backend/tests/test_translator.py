@@ -83,3 +83,19 @@ def test_translate_display_node():
     translator = Translator(model)
     r_line = translator._translate_node("ProfitResult")
     assert r_line == "ProfitResult <- Profit"
+
+
+def test_translate_subgraph():
+    translator = Translator(model)
+    subgraph = translator._translate_subgraph("ProfitResult")
+    print(subgraph)
+    target = "\
+Yield_t <- Yield_kg / 1000\n\
+Variable_Cost <- Yield_t * Cost_Per_Yield\n\
+Cost <- Variable_Cost + Fixed_Cost\n\
+Yield_t <- Yield_kg / 1000\n\
+Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)\n\
+Revenue <- Selling_Price * Yield_t\n\
+Profit <- Revenue - Cost\n\
+ProfitResult <- Profit\n"
+    assert subgraph == target
