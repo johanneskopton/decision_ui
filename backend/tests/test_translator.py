@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import numpy as np
 import jinja2
+import subprocess
 
 from decision_backend.translator import Translator
 
@@ -109,15 +110,37 @@ ProfitResult <- Profit\n"
 
 def test_write_script():
     translator = Translator(model)
-    r_script_path, csv_file_path = translator.write_script()
+    translator.write_script()
     r_script_template_file = "model.R"
     r_script_template = templateEnv.get_template(r_script_template_file)
-    r_script_target = r_script_template.render(csv_file_path=csv_file_path)
-    r_script = open(r_script_path, "r").read()
+    r_script_target = r_script_template.render(
+        estimates_path=translator.estimates_file.name,
+        results_path=translator.results_file.name,)
+    r_script = open(translator.r_script_file.name, "r").read()
 
     csv_target = open(os.path.join(
         test_data_dir, "model.csv"), "r").read()
-    csv = open(csv_file_path, "r").read()
+    csv = open(translator.estimates_file.name, "r").read()
+
+    translator.clean()
 
     assert r_script == r_script_target
     assert csv == csv_target
+
+
+def test_execute_r_mc():
+    translator = Translator(model)
+    translator.write_script()
+
+    subprocess.run(["Rscript", translator.r_script_file.name])
+    df = pd.read_csv(translator.results_file.name)
+    target_columns = {'y.ProfitResult',
+                      'y.PriceResult',
+                      'x.Yield_kg',
+                      'x.Selling_Price_Base',
+                      'x.Fixed_Cost',
+                      'x.Cost_Per_Yield', }
+
+    translator.clean()
+
+    assert set(df.columns) == target_columns

@@ -24,6 +24,10 @@ class Translator:
         self.estimates_df = None
         self.r_script = None
 
+        self.r_script_file = None
+        self.estimates_file = None
+        self.results_file = None
+
     def _get_interface_by_name(self, node, interface_name):
         for interface in node["interfaces"]:
             if interface["name"] == interface_name:
@@ -94,27 +98,36 @@ class Translator:
                 [self.estimates_df, variable], ignore_index=True)
 
     def write_script(self):
-        csv_file = tempfile.NamedTemporaryFile(
-            "w+t", delete=False, suffix=".csv", prefix="decision_ui_")
-        r_script_file = tempfile.NamedTemporaryFile(
-            "w+t", delete=False, suffix=".R", prefix="decision_ui_")
+        self.estimates_file = tempfile.NamedTemporaryFile(
+            "w+t", delete=False, suffix=".csv", prefix="decision_ui_estimate_")
+        self.results_file = tempfile.NamedTemporaryFile(
+            "w+t", delete=False, suffix=".csv", prefix="decision_ui_result_")
+        self.r_script_file = tempfile.NamedTemporaryFile(
+            "w+t", delete=False, suffix=".R", prefix="decision_ui_script_")
         self.extract_estimates()
-        self.create_r_script(csv_file.name)
+        self.create_r_script(self.estimates_file.name, self.results_file.name)
         try:
-            self.estimates_df.to_csv(csv_file.name)
-            csv_file.flush()
-            r_script_file.write(self.r_script)
-            r_script_file.flush()
+            self.r_script_file.write(self.r_script)
+            self.r_script_file.flush()
+            self.estimates_df.to_csv(self.estimates_file.name)
+            self.estimates_file.flush()
+            self.results_file.flush()
         finally:
-            csv_file.close()
-            r_script_file.close()
-        return r_script_file.name, csv_file.name
+            self.r_script_file.close()
+            self.estimates_file.close()
+            self.results_file.close()
 
-    def create_r_script(self, csv_file):
+    def clean(self):
+        os.unlink(self.r_script_file.name)
+        os.unlink(self.estimates_file.name)
+        # os.unlink(self.results_file.name)
+
+    def create_r_script(self, estimates_file, results_file):
         mc_template = templateEnv.get_template("mc.R")
         res_str = mc_template.render(
-            csv_file_path=csv_file,
+            estimates_path=estimates_file,
             model_function=self._get_model_function(),
+            results_path=results_file,
         )
         self.r_script = res_str
 
