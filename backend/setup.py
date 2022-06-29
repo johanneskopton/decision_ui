@@ -27,13 +27,16 @@ setup(
     install_requires=[
         "pandas",
         "numpy",
-        "jinja2"
+        "jinja2",
+        "fastapi",
+        "pydantic"
     ],
     extras_require={
         "dev": [
             "pytest",
             "flake8",
             "autopep8",
+            "uvicorn"
         ],
     },
     include_package_data=True,
