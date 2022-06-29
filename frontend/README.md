@@ -1,7 +1,6 @@
-# Decision UI
+# Decision UI Frontend
 
 A web interface for decision analysis using influence diagrams. Made with baklavsjs and vue.
-
 
 ## Installation
 
@@ -33,7 +32,7 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 
-# deploy on github pages
+# deploy on the github pages of this repo
 git checkout deploy                 # change to deploy branch
 git add -f dist/                    # add build dir even its on gitignore
 git commit -m "Deploy."             # commit
