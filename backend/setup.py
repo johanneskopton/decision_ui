@@ -36,7 +36,8 @@ setup(
             "pytest",
             "flake8",
             "autopep8",
-            "uvicorn"
+            "uvicorn",
+            "requests"
         ],
     },
     include_package_data=True,
