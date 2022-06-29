@@ -1,18 +1,22 @@
 from fastapi import FastAPI
-import subprocess
-import pandas as pd
 
 from decision_backend.model import RawModel
-from decision_backend.translator import Translator
+from decision_backend.decision_support_wrapper import DecisionSupportWrapper
 
 app = FastAPI()
 
 
 @app.get("/api/v1/decision_support")
 async def root(model: RawModel):
-    translator = Translator(model.dict())
-    translator.write_script()
 
-    subprocess.run(["Rscript", translator.r_script_file.name])
-    df = pd.read_csv(translator.results_file.name)
-    return {"message": df}
+    dsw = DecisionSupportWrapper(model)
+    dsw.run()
+    hist = dsw.get_hist()
+    r_script = dsw.get_r_script()
+    estimates = dsw.get_estimates()
+
+    return {
+        "hist": hist,
+        "r_script": r_script,
+        "estimates": estimates
+    }
