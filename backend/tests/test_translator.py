@@ -44,19 +44,6 @@ def test_create_variable_name():
     assert name == "a_3"
 
 
-def test_strip_model():
-    translator = Translator(model)
-    node0 = translator.model["nodes"][0]
-    assert set(node0.keys()) == {
-        "type",
-        "id",
-        "interfaces",
-        "options",
-        "name",
-        "variable_name"}
-    assert set(translator.model.keys()) == {"nodes", "connections"}
-
-
 def test_extract_estimates():
     translator = Translator(model)
     translator.extract_estimates()
