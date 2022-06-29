@@ -15,7 +15,7 @@ model = json.load(open(os.path.join(test_data_dir, model_path), "r"))
 
 
 def test_api():
-    response = client.get("/api/v1/decision_support", data=json.dumps(model))
+    response = client.post("/api/v1/decision_support", data=json.dumps(model))
     c = json.loads(response.content)
     assert type(c["hist"]["y.ProfitResult"]["values"]) == list
     assert type(c["r_script"]) == str

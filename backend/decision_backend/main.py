@@ -6,7 +6,7 @@ from decision_backend.decision_support_wrapper import DecisionSupportWrapper
 app = FastAPI()
 
 
-@app.get("/api/v1/decision_support")
+@app.post("/api/v1/decision_support")
 async def root(model: RawModel):
 
     dsw = DecisionSupportWrapper(model)
