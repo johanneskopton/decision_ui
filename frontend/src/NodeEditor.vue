@@ -2,7 +2,7 @@
   <div style="height: 100vh; width: 100vw">
     <!--<hint-overlay />-->
     <baklava-editor :plugin="viewPlugin" />
-    <div class="floating_btn_group">
+    <div class="floating_btn_group left">
       <v-btn class="ma-2" fab dark color="secondary" @click="saveGraph">
         <v-icon dark>
           mdi-tray-arrow-down
@@ -24,6 +24,23 @@
       >
         <v-icon dark>
           mdi-tray-arrow-up
+        </v-icon>
+      </v-btn>
+    </div>
+    <div class="floating_btn_group right">
+      <v-btn
+        class="ma-2 hoverable"
+        fab
+        dark
+        large
+        color="primary"
+        @click="callBackend"
+      >
+        <v-icon dark class="onhover">
+          mdi-rocket-launch-outline
+        </v-icon>
+        <v-icon dark class="onnohover">
+          mdi-rocket-outline
         </v-icon>
       </v-btn>
     </div>
@@ -130,7 +147,24 @@
   .floating_btn_group {
     position: absolute;
     bottom: 1rem;
-    left: 1rem;
     z-index: 5;
+  }
+
+  .floating_btn_group.left {
+    left: 1rem;
+  }
+
+  .floating_btn_group.right {
+    right: 1rem;
+  }
+
+  button.hoverable .onhover,
+  button.hoverable:hover .onnohover {
+    display: none;
+  }
+
+  button.hoverable .onnohover,
+  button.hoverable:hover .onhover {
+    display: inherit;
   }
 </style>
