@@ -62,6 +62,7 @@
   import { UVNode } from "./nodes/UVNode";
   import { ChanceEventNode } from "./nodes/ChanceEventNode";
   import { saveAs } from "file-saver";
+  import axios from "axios";
 
   export default {
     //components: { HintOverlay },
@@ -136,6 +137,17 @@
           false
         );
         reader.readAsText(file);
+      },
+      callBackend() {
+        var model = this.editor.save();
+        axios
+          .post("http://localhost:8000/api/v1/decision_support", model)
+          .then(function(response) {
+            console.log(response);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
     }
   };
