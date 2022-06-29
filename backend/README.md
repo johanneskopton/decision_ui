@@ -12,6 +12,13 @@ pip install .
 pip install -e .[dev]
 ```
 
+## Testing
+
+```bash
+# run all tests
+pytest
+```
+
 ## Serve for development
 
 ```bash
