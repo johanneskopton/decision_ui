@@ -21,7 +21,7 @@ app.add_middleware(
 
 
 @app.post("/api/v1/decision_support")
-async def root(model: RawModel):
+def root(model: RawModel):
 
     dsw = DecisionSupportWrapper(model)
     dsw.run()
