@@ -5,6 +5,15 @@ from typing import List, TypedDict
 Connection = TypedDict("connection", {"id": str, "from": str, "to": str})
 
 
+class StrippedNode(BaseModel):
+    type: str
+    id: str
+    name: str
+    variable_name: str
+    options: dict
+    interfaces: List
+
+
 class RawNode(BaseModel):
     type: str
     id: str
@@ -16,6 +25,11 @@ class RawNode(BaseModel):
     width: int
     twoColumn: bool
     customClasses: str
+
+
+class StrippedModel(BaseModel):
+    nodes: List[StrippedNode]
+    connections: List[Connection]
 
 
 class RawModel(BaseModel):

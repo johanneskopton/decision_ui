@@ -6,6 +6,7 @@ import jinja2
 import subprocess
 
 from decision_backend.translator import Translator
+from decision_backend.model import RawModel
 
 test_dir = os.path.dirname(__file__)
 test_data_dir = os.path.join(test_dir, "data")
@@ -14,12 +15,13 @@ templateLoader = jinja2.FileSystemLoader(searchpath=test_data_dir)
 templateEnv = jinja2.Environment(loader=templateLoader)
 
 model_path = "model.json"
-model = json.load(open(os.path.join(test_data_dir, model_path), "r"))
+model_dict = json.load(open(os.path.join(test_data_dir, model_path), "r"))
+model = RawModel(**model_dict)
 
 
 def test_create_translator():
     translator = Translator(model)
-    assert len(translator.model["nodes"]) == 12
+    assert len(translator.model.nodes) == 12
 
 
 def test_create_variable_name():

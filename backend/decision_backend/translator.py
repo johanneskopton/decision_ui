@@ -2,12 +2,12 @@ import numpy as np
 import json
 import re
 import pandas as pd
-import copy
 import os
 import tempfile
 import jinja2
 
 from decision_backend.node_translator import node_implementations
+from decision_backend.model import StrippedModel
 
 PRECISION = 5
 
@@ -29,23 +29,23 @@ class Translator:
         self.results_file = None
 
     def _get_interface_by_name(self, node, interface_name):
-        for interface in node["interfaces"]:
+        for interface in node.interfaces:
             if interface["name"] == interface_name:
                 return interface
 
     def _get_node_by_variable_name(self, variable_name):
-        for node in self.model["nodes"]:
-            if node["variable_name"] == variable_name:
+        for node in self.model.nodes:
+            if node.variable_name == variable_name:
                 return node
         raise ValueError("Node '{}' does not exists.".format(variable_name))
 
     def _get_connection_from_interface(self, interface_id, direction="to"):
-        for connection in self.model["connections"]:
+        for connection in self.model.connections:
             if connection[direction] == interface_id:
                 return connection
 
     def _get_node_from_result_interface(self, interface_id):
-        for node in self.model["nodes"]:
+        for node in self.model.nodes:
             result_interface = self._get_interface_by_name(node, "Result")
             if result_interface is None:
                 continue
@@ -77,15 +77,15 @@ class Translator:
                 "lower",
                 "median",
                 "upper", ])
-        for node in self.model["nodes"]:
-            if node["type"] != "UncertainInput":
+        for node in self.model.nodes:
+            if node.type != "UncertainInput":
                 continue
-            distribution = node["options"]["Probability distribution"]
+            distribution = node.options["Probability distribution"]
             lower = self._get_interface_by_name(node, "lower")["value"]
             upper = self._get_interface_by_name(node, "upper")["value"]
             lower, upper = self._process_numeric([lower, upper])
-            variable_name = node["variable_name"]
-            label = node["name"]
+            variable_name = node.variable_name
+            label = node.name
             variable = {
                 "label": label,
                 "variable": variable_name,
@@ -134,7 +134,7 @@ class Translator:
     def _translate_node(self, variable_name):
         node = self._get_node_by_variable_name(variable_name)
         input_variable_names = dict()
-        for interface in node["interfaces"]:
+        for interface in node.interfaces:
             if interface["name"] == "Result":
                 continue
             connection = self._get_connection_from_interface(interface["id"])
@@ -144,10 +144,10 @@ class Translator:
                 input_result_interface_id = connection["from"]
                 source_node = self._get_node_from_result_interface(
                     input_result_interface_id)
-                term = source_node["variable_name"]
+                term = source_node.variable_name
             input_variable_names[interface["name"]] = term
-        input_variable_names.update(node["options"])
-        node_type = node["type"]
+        input_variable_names.update(node.options)
+        node_type = node.type
         r_right_side = node_implementations[node_type](input_variable_names)
         r_line = "{} <- {}".format(variable_name, r_right_side)
         return r_line
@@ -158,11 +158,11 @@ class Translator:
         """
         res_str = ""
         node = self._get_node_by_variable_name(variable_name)
-        if node["type"] == "UncertainInput":
+        if node.type == "UncertainInput":
             return res_str
         res_str = self._translate_node(variable_name) + "\n" + res_str
         node = self._get_node_by_variable_name(variable_name)
-        for interface in node["interfaces"]:
+        for interface in node.interfaces:
             if interface["name"] == "Result":
                 continue
             connection = self._get_connection_from_interface(interface["id"])
@@ -171,7 +171,7 @@ class Translator:
             input_result_interface_id = connection["from"]
             source_node = self._get_node_from_result_interface(
                 input_result_interface_id)
-            source_node_variable_name = source_node["variable_name"]
+            source_node_variable_name = source_node.variable_name
             subsubgraph = self._translate_subgraph(source_node_variable_name)
             res_str = subsubgraph + res_str
         return res_str
@@ -180,9 +180,9 @@ class Translator:
         res_str = "model_function <- function(){\n"
         defined_nodes = set()
         output_var_str = ""
-        for node in self.model["nodes"]:
-            node_variable_name = node["variable_name"]
-            if node["type"] != "Display":
+        for node in self.model.nodes:
+            node_variable_name = node.variable_name
+            if node.type != "Display":
                 continue
             subgraph_str = self._translate_subgraph(
                 node_variable_name)
@@ -209,7 +209,7 @@ class Translator:
         return res_str
 
     def _strip_model(self, model):
-        model = copy.deepcopy(model)
+        model = model.dict()
         target_interfaces = set([c["to"] for c in model["connections"]])
         variable_names = set()
         for node in model["nodes"]:
@@ -239,7 +239,7 @@ class Translator:
         del model["panning"]
         del model["scaling"]
 
-        return model
+        return StrippedModel(**model)
 
     def __str__(self):
-        return (json.dumps(self.model, sort_keys=True, indent=4))
+        return self.model.json()

@@ -9,7 +9,7 @@ from decision_backend.model import RawModel
 
 class DecisionSupportWrapper:
     def __init__(self, raw_model: RawModel):
-        self.translator = Translator(raw_model.dict())
+        self.translator = Translator(raw_model)
         self.translator.write_script()
 
     def run(self):
