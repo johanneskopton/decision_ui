@@ -9,7 +9,7 @@
       permanent
     >
       <v-list dense nav>
-        <v-list-item link>
+        <v-list-item to="/modeling" link>
           <v-list-item-icon>
             <v-icon :rotate="90">
               mdi-graph mdi-rotate-90
@@ -19,7 +19,7 @@
             Model editor
           </v-list-item-title>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item to="/results" link>
           <v-list-item-icon>
             <v-icon>
               mdi-chart-histogram
