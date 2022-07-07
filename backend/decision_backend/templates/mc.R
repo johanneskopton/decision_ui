@@ -1,8 +1,10 @@
 library(readr)
 library(decisionSupport)
 
-input_estimates = estimate_read_csv("{{ estimates_path }}")
-
+{% if is_estimate %}input_estimates <- estimate_read_csv("{{ estimates_path }}")
+{% else %}# estimates can not be empty
+input_estimates <- estimate(c("const"), c(0), c(0))
+{% endif %}
 {{ model_function }}
 
 mc <- mcSimulation(estimate=input_estimates,
