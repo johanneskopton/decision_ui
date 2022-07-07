@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <node-editor />
+    <div class="main-window">
+      <router-view />
+    </div>
   </v-app>
 </template>
 
 <script>
-  import NodeEditor from "./NodeEditor.vue";
-
   export default {
-    components: { NodeEditor }
+    components: {}
   };
 </script>
