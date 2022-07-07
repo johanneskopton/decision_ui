@@ -5,7 +5,7 @@
       app
       class="pt-4"
       color="grey lighten-3"
-      expand-on-hover
+      mini-variant
       permanent
     >
       <v-list dense nav>
