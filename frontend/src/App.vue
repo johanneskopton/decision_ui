@@ -26,7 +26,7 @@
             </v-icon>
           </v-list-item-icon>
           <v-list-item-title>
-            Results Dashboard
+            Results dashboard
           </v-list-item-title>
         </v-list-item>
       </v-list>
