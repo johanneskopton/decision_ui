@@ -8,27 +8,29 @@
       mini-variant
       permanent
     >
-      <v-list dense nav>
-        <v-list-item to="/modeling" link>
-          <v-list-item-icon>
-            <v-icon :rotate="90">
-              mdi-graph mdi-rotate-90
-            </v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>
-            Model editor
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/results" link>
-          <v-list-item-icon>
-            <v-icon>
-              mdi-chart-histogram
-            </v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>
-            Results dashboard
-          </v-list-item-title>
-        </v-list-item>
+      <v-list flat dense nav>
+        <v-list-item-group v-model="selectedItem" color="primary accent-1">
+          <v-list-item to="/modeling" link>
+            <v-list-item-icon>
+              <v-icon :rotate="90">
+                mdi-graph mdi-rotate-90
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Model editor
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/results" link>
+            <v-list-item-icon>
+              <v-icon>
+                mdi-chart-histogram
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Results dashboard
+            </v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
       </v-list>
       <!--
       <v-avatar
@@ -62,5 +64,8 @@
     position: absolute;
     left: 56px;
     right: 0px;
+  }
+  .theme--light.v-icon {
+    color: #9e9e9e;
   }
 </style>
