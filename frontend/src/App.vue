@@ -53,7 +53,8 @@
     components: {},
     data() {
       return {
-        drawer: false
+        drawer: false,
+        selectedItem: false
       };
     }
   };
