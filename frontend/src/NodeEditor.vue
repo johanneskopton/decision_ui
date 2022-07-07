@@ -3,7 +3,7 @@
     <!--<hint-overlay />-->
     <baklava-editor :plugin="viewPlugin" />
     <div class="floating_btn_group left">
-      <v-btn class="ma-2" fab dark color="secondary" @click="saveGraph">
+      <v-btn class="ma-2" text dark color="secondary" @click="saveGraph">
         <v-icon dark>
           mdi-tray-arrow-down
         </v-icon>
@@ -17,7 +17,7 @@
       />
       <v-btn
         class="ma-2"
-        fab
+        text
         dark
         color="secondary"
         @click="$refs.loadfile.click()"
