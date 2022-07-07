@@ -158,16 +158,16 @@
 
   .floating_btn_group {
     position: absolute;
-    bottom: 1rem;
+    bottom: 8px;
     z-index: 5;
   }
 
   .floating_btn_group.left {
-    left: 1rem;
+    left: 8px;
   }
 
   .floating_btn_group.right {
-    right: 1rem;
+    right: 8px;
   }
 
   button.hoverable .onhover,
