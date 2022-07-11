@@ -2,7 +2,12 @@
   <div style="height: 100vh; width: 100vw">
     <!--<hint-overlay />-->
     <baklava-editor :plugin="viewPlugin" />
-    <div class="floating_btn_group left">
+    <v-sheet
+      class="floating_btn_group left"
+      color="white"
+      elevation="4"
+      rounded
+    >
       <v-btn class="ma-2" text dark color="secondary" @click="saveGraph">
         <v-icon dark>
           mdi-tray-arrow-down
@@ -26,24 +31,24 @@
           mdi-tray-arrow-up
         </v-icon>
       </v-btn>
-    </div>
-    <div class="floating_btn_group right">
-      <v-btn
-        class="ma-2 hoverable"
-        fab
-        dark
-        large
-        color="primary"
-        @click="callBackend"
-      >
-        <v-icon dark class="onhover">
-          mdi-rocket-launch-outline
-        </v-icon>
-        <v-icon dark class="onnohover">
-          mdi-rocket-outline
-        </v-icon>
-      </v-btn>
-    </div>
+    </v-sheet>
+    <v-btn
+      class="ma-2 hoverable"
+      fab
+      dark
+      large
+      bottom
+      right
+      color="primary"
+      @click="callBackend"
+    >
+      <v-icon dark class="onhover">
+        mdi-rocket-launch-outline
+      </v-icon>
+      <v-icon dark class="onnohover">
+        mdi-rocket-outline
+      </v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -158,15 +163,18 @@
 
   .floating_btn_group {
     position: absolute;
-    bottom: 8px;
+    bottom: 16px;
     z-index: 5;
   }
 
   .floating_btn_group.left {
-    left: 8px;
+    left: 16px;
   }
 
-  .floating_btn_group.right {
+  button.v-btn--right {
+    position: absolute;
+    bottom: 8px;
+    z-index: 5;
     right: 8px;
   }
 
