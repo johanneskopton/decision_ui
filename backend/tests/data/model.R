@@ -1,7 +1,7 @@
 library(readr)
 library(decisionSupport)
 
-input_estimates = estimate_read_csv("{{ estimates_path }}")
+input_estimates <- estimate_read_csv("{{ estimates_path }}")
 
 model_function <- function(){
 	# ProfitResult
