@@ -3,7 +3,7 @@
 
 import Vue from "vue";
 import VueRouter from "vue-router";
-import { createStore } from "vuex";
+import Vuex from "vuex";
 import vuetify from "@/plugins/vuetify"; // path to vuetify export
 import App from "./App.vue";
 import ModelStore from "./model_store";
