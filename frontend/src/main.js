@@ -6,6 +6,7 @@ import VueRouter from "vue-router";
 import { createStore } from "vuex";
 import vuetify from "@/plugins/vuetify"; // path to vuetify export
 import App from "./App.vue";
+import ModelStore from "./model_store";
 
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
 
@@ -13,11 +14,18 @@ import NodeEditor from "./NodeEditor.vue";
 
 Vue.use(VueRouter);
 Vue.use(BaklavaVuePlugin);
+Vue.use(Vuex);
 
 Vue.config.productionTip = false;
 Vue.config.devtools = false;
 
 Vue.prototype.log = console.log;
+
+const store = new Vuex.Store({
+  modules: {
+    model: ModelStore
+  }
+});
 
 const routes = [
   {
@@ -40,5 +48,6 @@ new Vue({
   el: "#app",
   vuetify,
   router,
+  store,
   render: h => h(App)
 });
