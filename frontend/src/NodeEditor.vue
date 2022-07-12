@@ -65,6 +65,7 @@
           @click="callBackend"
           v-bind="attrs"
           v-on="on"
+          :loading="loading_mc"
         >
           <v-icon dark class="onhover">
             mdi-rocket-launch-outline
@@ -97,7 +98,9 @@
   export default {
     //components: { HintOverlay },
     data() {
-      return {};
+      return {
+        loading_mc: false
+      };
     },
     created() {
       if (!this.$store.state.model.isInitialized) {
@@ -183,14 +186,17 @@
       },
       callBackend() {
         var model = this.$store.state.model.editor.save();
+        this.loading_mc = true;
         axios
           .post("http://localhost:8000/api/v1/decision_support", model)
-          .then(function(response) {
-            console.log(response);
-          })
+          .then(response => this.receiveResults(response))
           .catch(function(error) {
             console.log(error);
           });
+      },
+      receiveResults(response) {
+        console.log(response);
+        this.loading_mc = false;
       }
     }
   };
