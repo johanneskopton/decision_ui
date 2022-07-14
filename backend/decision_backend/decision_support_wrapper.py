@@ -19,13 +19,12 @@ class DecisionSupportWrapper:
         df = pd.read_csv(self.translator.results_file.name)
         res = dict()
         for column in df:
-            if column[:2] == "y.":
-                mc_runs = list(df[column])
-                hist = np.histogram(mc_runs, bins=20, density=True)
-                res[column] = {
-                    "values": hist[0].tolist(),
-                    "bins": hist[1].tolist(),
-                }
+            mc_runs = list(df[column])
+            hist = np.histogram(mc_runs, bins=20, density=True)
+            res[column] = {
+                "values": hist[0].tolist(),
+                "bins": hist[1].tolist(),
+            }
         return res
 
     def get_r_script(self):

@@ -12,4 +12,4 @@ mc <- mcSimulation(estimate=input_estimates,
 		numberOfModelRuns=10000,
 		functionSyntax='plainNames')
 
-write_csv(data.frame(mc), "{{ results_path }}")
+write_csv(data.frame(mc["y"]), "{{ results_path }}")
