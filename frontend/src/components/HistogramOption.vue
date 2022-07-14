@@ -7,7 +7,7 @@
 
 <script>
   import Chart from "chart.js";
-  import histogram from "../histogram";
+  import get_bins from "../get_bins";
 
   export default {
     props: {
@@ -61,7 +61,7 @@
             .map((_, idx) => start + idx * step);
         }
 
-        var hist = histogram(data);
+        var hist = get_bins(data);
         var labels = hist.bins;
         var bins = hist.bin_counts;
 
