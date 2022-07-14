@@ -87,13 +87,13 @@
 
   import { InterfaceTypePlugin } from "@baklavajs/plugin-interface-types";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
-  import HistogramOption from "./components/HistogramOption.vue";
+  import HistogramOption from "./HistogramOption.vue";
   import colors from "vuetify/lib/util/colors";
-  import { MathNode } from "./nodes/MathNode";
-  import { SumNode } from "./nodes/SumNode";
-  import { DisplayNode } from "./nodes/DisplayNode";
-  import { UVNode } from "./nodes/UVNode";
-  import { ChanceEventNode } from "./nodes/ChanceEventNode";
+  import { MathNode } from "../nodes/MathNode";
+  import { SumNode } from "../nodes/SumNode";
+  import { DisplayNode } from "../nodes/DisplayNode";
+  import { UVNode } from "../nodes/UVNode";
+  import { ChanceEventNode } from "../nodes/ChanceEventNode";
 
   export default {
     //components: { HintOverlay },
@@ -203,7 +203,7 @@
 </script>
 
 <style lang="scss">
-  @import "./style/baklava.scss";
+  @import "../style/baklava.scss";
 
   .floating_btn_group {
     position: absolute;

@@ -10,7 +10,7 @@ import ModelStore from "./model_store";
 
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
 
-import NodeEditor from "./NodeEditor.vue";
+import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
 
 Vue.use(VueRouter);
