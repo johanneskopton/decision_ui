@@ -1,6 +1,14 @@
 <template>
-  <br />
+  <div>
+    {{ histData }}
+  </div>
 </template>
 <script>
-  export default {};
+  export default {
+    computed: {
+      histData: function() {
+        return this.$store.state.model.decisionSupportResult.hist;
+      }
+    }
+  };
 </script>

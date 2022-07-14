@@ -228,6 +228,7 @@
         if (response.status == 200) {
           this.network_success_msg = true;
         }
+        this.$store.commit("setDecisionSupportResult", response.data);
       },
       receiveResultsError(response) {
         this.loading_mc = false;

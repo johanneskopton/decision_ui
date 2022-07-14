@@ -8,12 +8,16 @@ export default {
       editor: new Editor(),
       viewPlugin: new ViewPlugin(),
       engine: new Engine(true),
-      isInitialized: false
+      isInitialized: false,
+      decisionSupportResult: false
     };
   },
   mutations: {
     setInitialized(state) {
       state.isInitialized = true;
+    },
+    setDecisionSupportResult(state, decisionSupportResult) {
+      state.decisionSupportResult = decisionSupportResult;
     }
   }
 };
