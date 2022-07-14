@@ -87,7 +87,7 @@
 
   import { InterfaceTypePlugin } from "@baklavajs/plugin-interface-types";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
-  import HistogramOption from "./components/histogramOption.vue";
+  import HistogramOption from "./components/HistogramOption.vue";
   import colors from "vuetify/lib/util/colors";
   import { MathNode } from "./nodes/MathNode";
   import { SumNode } from "./nodes/SumNode";
