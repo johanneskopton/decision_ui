@@ -11,6 +11,7 @@ import ModelStore from "./model_store";
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
 
 import NodeEditor from "./NodeEditor.vue";
+import ResultsDashboard from "./components/ResultsDashboard.vue";
 
 Vue.use(VueRouter);
 Vue.use(BaklavaVuePlugin);
@@ -35,6 +36,10 @@ const routes = [
   {
     path: "/modeling",
     component: NodeEditor
+  },
+  {
+    path: "/results",
+    component: ResultsDashboard
   }
 ];
 
