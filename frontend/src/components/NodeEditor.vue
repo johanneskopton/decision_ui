@@ -77,6 +77,34 @@
       </template>
       <span>Run</span>
     </v-tooltip>
+    <v-snackbar v-model="network_error_msg" :timeout="2000" color="error">
+      <!--<v-icon>mdi-server-network-off</v-icon>-->
+      No connection to server!
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="network_error_msg = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar v-model="network_success_msg" :timeout="2000" color="secondary">
+      <!--<v-icon>mdi-chart-histogram</v-icon>-->
+      decisionSupport successfully executed!
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="network_error_msg = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -99,7 +127,9 @@
     //components: { HintOverlay },
     data() {
       return {
-        loading_mc: false
+        loading_mc: false,
+        network_error_msg: false,
+        network_success_msg: false
       };
     },
     created() {
@@ -190,13 +220,21 @@
         axios
           .post("http://localhost:8000/api/v1/decision_support", model)
           .then(response => this.receiveResults(response))
-          .catch(function(error) {
-            console.log(error);
-          });
+          .catch(response => this.receiveResultsError(response));
       },
       receiveResults(response) {
-        console.log(response);
         this.loading_mc = false;
+        console.log(response);
+        if (response.status == 200) {
+          this.network_success_msg = true;
+        }
+      },
+      receiveResultsError(response) {
+        this.loading_mc = false;
+        console.log(response);
+        if (response.code == "ERR_NETWORK") {
+          this.network_error_msg = true;
+        }
       }
     }
   };
