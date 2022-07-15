@@ -27,10 +27,9 @@
     methods: {
       drawHist: function() {
         var ctx = this.$refs.hist.getContext("2d");
-        var data = this.histData[Object.keys(this.histData)[0]];
-        var bin_counts = data.values;
-        var bins = data.bins;
-        this.graph = histogram(this.graph, ctx, bins, bin_counts);
+        var bins = this.histData.bins;
+        var density = this.histData.density;
+        this.graph = histogram(this.graph, ctx, bins, density);
       }
     }
   };
