@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import Chart from "chart.js";
   import get_bins from "../get_bins";
+  import histogram from "../histogram";
 
   export default {
     props: {
@@ -61,76 +61,10 @@
             .map((_, idx) => start + idx * step);
         }
 
-        var hist = get_bins(data);
-        var labels = hist.bins;
-        var bins = hist.bin_counts;
-
-        var baseColor = "rgba(255, 255, 255, 1)";
-        var baseColor2 = "rgba(255, 255, 255, 0.2)";
-
-        if (this.graph) this.graph.destroy();
-        this.graph = Chart.Bar(ctx, {
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                data: bins,
-                categoryPercentage: 1.0,
-                barPercentage: 1.1,
-                backgroundColor: "#CE93D8" // TODO: make dynamic (vuetify)
-              }
-            ]
-          },
-          options: {
-            scales: {
-              xAxes: [
-                {
-                  ticks: {
-                    maxRotation: 90,
-                    minRotation: 0,
-                    autoSkip: true,
-                    maxTicksLimit: 7,
-                    fontColor: baseColor,
-                    callback: function(value, _, values) {
-                      var tickDistance = values[1] - values[0];
-                      var numDecimal =
-                        -1 * Math.floor(Math.log10(tickDistance));
-                      numDecimal = Math.max(numDecimal, 0);
-                      return value.toFixed(numDecimal);
-                    }
-                  },
-                  gridLines: {
-                    color: baseColor2,
-                    zeroLineColor: baseColor
-                  }
-                }
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    fontColor: baseColor,
-                    maxTicksLimit: 4
-                  },
-                  gridLines: {
-                    color: baseColor2,
-                    zeroLineColor: baseColor
-                  }
-                }
-              ]
-            },
-            legend: {
-              display: false
-            },
-            tooltips: {
-              enabled: false
-            },
-            aspectRatio: 1.41,
-            hover: { mode: null },
-            options: {
-              events: []
-            }
-          }
-        });
+        var hist_data = get_bins(data);
+        var bins = hist_data.bins;
+        var bin_counts = hist_data.bin_counts;
+        this.graph = histogram(this.graph, ctx, bins, bin_counts, true);
       }
     }
   };
