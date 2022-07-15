@@ -18,13 +18,15 @@ class DecisionSupportWrapper:
     def get_hist(self):
         df = pd.read_csv(self.translator.results_file.name)
         res = dict()
+        res["density"] = dict()
+        combined_df = pd.concat([df[col] for col in df.columns])
+        _, combined_edges = np.histogram(list(combined_df), bins=100)
+        res["bins"] = combined_edges.tolist()
         for column in df:
             mc_runs = list(df[column])
-            hist = np.histogram(mc_runs, bins=20, density=True)
-            res[column] = {
-                "values": hist[0].tolist(),
-                "bins": hist[1].tolist(),
-            }
+            hist_vals, _ = np.histogram(
+                mc_runs, bins=combined_edges, density=True)
+            res["density"][column] = hist_vals.tolist()
         return res
 
     def get_r_script(self):
