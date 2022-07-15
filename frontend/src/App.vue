@@ -65,6 +65,7 @@
     position: absolute;
     left: 56px;
     right: 0px;
+    display: flex;
   }
   .theme--light.v-icon {
     color: #9e9e9e;
