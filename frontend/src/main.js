@@ -10,12 +10,20 @@ import ModelStore from "./model_store";
 
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
 
+import hljs from "highlight.js/lib/core";
+import r from "highlight.js/lib/languages/r";
+import highlightjs from "@highlightjs/vue-plugin";
+import "highlight.js/styles/github.css";
+
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
 
 Vue.use(VueRouter);
 Vue.use(BaklavaVuePlugin);
 Vue.use(Vuex);
+
+hljs.registerLanguage("r", r);
+Vue.use(highlightjs);
 
 Vue.config.productionTip = false;
 Vue.config.devtools = false;
