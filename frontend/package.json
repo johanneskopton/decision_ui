@@ -13,6 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@highlightjs/vue-plugin": "^1.0.2",
     "@vue/babel-preset-app": "4.5.11",
     "axios": "^0.27.2",
     "baklavajs": "1.8.2",
