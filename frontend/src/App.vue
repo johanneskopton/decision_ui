@@ -30,6 +30,16 @@
               Results dashboard
             </v-list-item-title>
           </v-list-item>
+          <v-list-item to="/code" link>
+            <v-list-item-icon>
+              <v-icon>
+                mdi-language-r
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              R-Code
+            </v-list-item-title>
+          </v-list-item>
         </v-list-item-group>
       </v-list>
       <!--

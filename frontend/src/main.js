@@ -17,6 +17,7 @@ import "highlight.js/styles/github.css";
 
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
+import CodeDisplay from "./components/CodeDisplay.vue";
 
 Vue.use(VueRouter);
 Vue.use(BaklavaVuePlugin);
@@ -48,6 +49,10 @@ const routes = [
   {
     path: "/results",
     component: ResultsDashboard
+  },
+  {
+    path: "/code",
+    component: CodeDisplay
   }
 ];
 
