@@ -99,7 +99,7 @@ ProfitResult <- Profit\n"
 
 def test_write_script():
     translator = Translator(model)
-    translator.write_script()
+    translator.translate_to_files()
     r_script_template_file = "model.R"
     r_script_template = templateEnv.get_template(r_script_template_file)
     r_script_target = r_script_template.render(
@@ -119,7 +119,7 @@ def test_write_script():
 
 def test_execute_r_mc():
     translator = Translator(model)
-    translator.write_script()
+    translator.translate_to_files()
 
     subprocess.run(["Rscript", translator.r_script_file.name])
     df = pd.read_csv(translator.results_file.name)

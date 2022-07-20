@@ -10,7 +10,7 @@ from decision_backend.model import RawModel
 class DecisionSupportWrapper:
     def __init__(self, raw_model: RawModel):
         self.translator = Translator(raw_model)
-        self.translator.write_script()
+        self.translator.translate_to_files()
 
     def run(self):
         subprocess.run(["Rscript", self.translator.r_script_file.name])

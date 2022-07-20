@@ -96,7 +96,7 @@ class Translator:
             self.estimates_df = pd.concat(
                 [self.estimates_df, variable], ignore_index=True)
 
-    def write_script(self):
+    def translate_to_files(self):
         self.estimates_file = tempfile.NamedTemporaryFile(
             "w+t", delete=False, suffix=".csv", prefix="decision_ui_estimate_")
         self.results_file = tempfile.NamedTemporaryFile(
