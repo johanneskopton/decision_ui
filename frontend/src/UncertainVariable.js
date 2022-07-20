@@ -31,6 +31,31 @@ export const UVType = {
       let distribution = gaussian(mean, variance);
       return distribution.ppf(Math.random());
     }
+  },
+  posnorm: {
+    id: 3,
+    name: "posnorm",
+    params: ["lower", "upper"],
+    checks: [
+      params => {
+        return params["lower"] < params["upper"];
+      }
+    ],
+    most_likely: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      return Math.max(0, mean);
+    },
+    random_sample: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      let std = (params["upper"] - mean) / q95_Z;
+      let variance = std ** 2;
+      let distribution = gaussian(mean, variance);
+      let sample = -1;
+      while (sample < 0) {
+        sample = distribution.ppf(Math.random());
+      }
+      return sample;
+    }
   }
   /*Bernoulli: {
     id: 1,
