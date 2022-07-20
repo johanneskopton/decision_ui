@@ -80,8 +80,18 @@ class Translator:
             if node.type != "UncertainInput":
                 continue
             distribution = node.options["Probability distribution"]
-            lower = self._get_interface_by_name(node, "lower")["value"]
-            upper = self._get_interface_by_name(node, "upper")["value"]
+            if distribution == "deterministic":
+                # rename, since in decisionSupport it is incomprehensibly
+                # called "const"
+                distribution = "const"
+                # set upper and lower to the value since in decisionSupport
+                # it needs to be this way..
+                value = self._get_interface_by_name(node, "value")["value"]
+                lower = value
+                upper = value
+            else:
+                lower = self._get_interface_by_name(node, "lower")["value"]
+                upper = self._get_interface_by_name(node, "upper")["value"]
             lower, upper = self._process_numeric([lower, upper])
             variable_name = node.variable_name
             label = node.name
