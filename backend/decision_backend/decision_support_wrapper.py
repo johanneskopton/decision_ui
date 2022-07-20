@@ -34,3 +34,6 @@ class DecisionSupportWrapper:
 
     def get_estimates(self):
         return open(self.translator.estimates_file.name, "r").read()
+
+    def clean(self):
+        self.translator.clean()

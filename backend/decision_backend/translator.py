@@ -119,7 +119,7 @@ class Translator:
     def clean(self):
         os.unlink(self.r_script_file.name)
         os.unlink(self.estimates_file.name)
-        # os.unlink(self.results_file.name)
+        os.unlink(self.results_file.name)
 
     def create_r_script(self, estimates_file, results_file):
         """ Generates the R script from the the model function and a jinja2 template.

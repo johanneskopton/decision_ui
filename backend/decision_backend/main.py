@@ -28,6 +28,7 @@ def root(model: RawModel):
     hist = dsw.get_hist()
     r_script = dsw.get_r_script()
     estimates = dsw.get_estimates()
+    dsw.clean()
 
     return {
         "hist": hist,
