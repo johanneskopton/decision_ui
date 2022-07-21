@@ -36,8 +36,6 @@
 </script>
 <style scoped>
   .hist-container {
-    padding: max(10px, 1%);
-    margin: max(10px, 1%);
     width: 50%;
   }
 </style>

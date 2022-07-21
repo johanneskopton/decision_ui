@@ -16,8 +16,7 @@
 <style lang="scss">
   @import "vuetify/src/styles/main.sass";
   .code-container {
-    padding: max(10px, 1%);
-    margin: max(10px, 1%);
+    width: 50%;
   }
   .hljs.r {
     background-color: white !important;
