@@ -1,24 +1,14 @@
 import Chart from "chart.js";
 
+import niceScale from "./helper/nice_scale";
+
 const colors = ["rgba(206, 147, 216, 0.7)", "rgba(77, 182, 172, 0.7)"];
 
 export default function(graph, ctx, bins, density, in_node = false) {
   if (in_node) {
     var baseColor = "rgba(255, 255, 255, 1)";
     var baseColor2 = "rgba(255, 255, 255, 0.2)";
-    var x_ticks = {
-      maxRotation: 90,
-      minRotation: 0,
-      autoSkip: true,
-      maxTicksLimit: 7,
-      fontColor: baseColor,
-      callback: function(value, _, values) {
-        var tickDistance = values[1] - values[0];
-        var numDecimal = -1 * Math.floor(Math.log10(tickDistance));
-        numDecimal = Math.max(numDecimal, 0);
-        return value.toFixed(numDecimal);
-      }
-    };
+    var max_ticks = 7;
     datasets = [
       {
         data: density,
@@ -30,19 +20,7 @@ export default function(graph, ctx, bins, density, in_node = false) {
   } else {
     const baseColor = "rgba(155, 155, 155, 1)";
     const baseColor2 = "rgba(155, 155, 155, 0.2)";
-    var x_ticks = {
-      maxRotation: 90,
-      minRotation: 0,
-      autoSkip: true,
-      maxTicksLimit: 15,
-      fontColor: baseColor,
-      callback: function(value, _, values) {
-        var tickDistance = values[1] - values[0];
-        var numDecimal = -1 * Math.floor(Math.log10(tickDistance));
-        numDecimal = Math.max(numDecimal, 0);
-        return value.toFixed(numDecimal);
-      }
-    };
+    var max_ticks = 15;
     var datasets = [];
     const n_variables = Object.keys(density).length;
     var i = 0;
@@ -59,6 +37,37 @@ export default function(graph, ctx, bins, density, in_node = false) {
           Object.keys(this.histData.density)[0]
         ];*/
   }
+
+  // Calculate X-ticks
+  var scale = niceScale(bins[0], bins[bins.length - 1], max_ticks);
+  console.log(scale);
+  var target_tick_values = [];
+  for (let i = 0; i < max_ticks; i++) {
+    target_tick_values[i] = scale.niceMinimum + scale.tickSpacing * i;
+  }
+  var tick_index = 1;
+  var x_ticks = {
+    maxRotation: 90,
+    minRotation: 0,
+    autoSkip: false,
+    maxTicksLimit: max_ticks,
+    fontColor: baseColor,
+    callback: function(value, _, values) {
+      //var tickDistance = values[1] - values[0];
+      //var tickDistance = scale.tickSpacing;
+      //var numDecimal = -1 * Math.floor(Math.log10(tickDistance));
+      //numDecimal = Math.max(numDecimal, 0);
+      //return value.toFixed(numDecimal);
+      let target_tick_value = target_tick_values[tick_index];
+      console.log(target_tick_values);
+      console.log(target_tick_value);
+      console.log(value);
+      if (value > target_tick_value) {
+        tick_index++;
+        return target_tick_value;
+      }
+    }
+  };
 
   if (graph) graph.destroy();
   return Chart.Bar(ctx, {
