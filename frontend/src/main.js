@@ -14,6 +14,7 @@ import hljs from "highlight.js/lib/core";
 import r from "highlight.js/lib/languages/r";
 import highlightjs from "@highlightjs/vue-plugin";
 import "highlight.js/styles/github.css";
+import VueExcelEditor from "vue-excel-editor";
 
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
@@ -22,6 +23,7 @@ import CodeDashboard from "./components/CodeDashboard.vue";
 Vue.use(VueRouter);
 Vue.use(BaklavaVuePlugin);
 Vue.use(Vuex);
+Vue.use(VueExcelEditor);
 
 hljs.registerLanguage("r", r);
 Vue.use(highlightjs);
