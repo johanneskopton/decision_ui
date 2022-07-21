@@ -9,7 +9,6 @@ var niceMin;
 var niceMax;
 
 export default function niceScale(min, max, max_ticks) {
-  console.log(min, max, max_ticks);
   minPoint = min;
   maxPoint = max;
   maxTicks = max_ticks;

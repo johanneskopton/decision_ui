@@ -40,7 +40,6 @@ export default function(graph, ctx, bins, density, in_node = false) {
 
   // Calculate X-ticks
   var scale = niceScale(bins[0], bins[bins.length - 1], max_ticks);
-  console.log(scale);
   var target_tick_values = [];
   for (let i = 0; i < max_ticks; i++) {
     target_tick_values[i] = scale.niceMinimum + scale.tickSpacing * i;
@@ -59,9 +58,6 @@ export default function(graph, ctx, bins, density, in_node = false) {
       //numDecimal = Math.max(numDecimal, 0);
       //return value.toFixed(numDecimal);
       let target_tick_value = target_tick_values[tick_index];
-      console.log(target_tick_values);
-      console.log(target_tick_value);
-      console.log(value);
       if (value > target_tick_value) {
         tick_index++;
         return target_tick_value;
