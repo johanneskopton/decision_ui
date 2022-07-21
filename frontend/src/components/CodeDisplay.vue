@@ -1,10 +1,8 @@
 <template>
-  <div class="r_code_dashboard">
-    <v-sheet color="white" elevation="1" class="code-container" rounded>
-      <!-- <pre>{{ rCode }}</pre> -->
-      <highlightjs language="r" :code="rCode" />
-    </v-sheet>
-  </div>
+  <v-sheet color="white" elevation="1" class="code-container" rounded>
+    <!-- <pre>{{ rCode }}</pre> -->
+    <highlightjs language="r" :code="rCode" />
+  </v-sheet>
 </template>
 <script>
   export default {
@@ -23,11 +21,6 @@
   }
   .hljs.r {
     background-color: white !important;
-  }
-  div.r_code_dashboard {
-    background-color: map-get($grey, "lighten-4");
-    width: 100%;
-    height: 100vh;
   }
   pre code.hljs.r {
     font-family: Roboto Mono, monospace !important;
