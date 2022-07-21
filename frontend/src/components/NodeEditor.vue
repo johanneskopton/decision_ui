@@ -270,4 +270,22 @@
   button.hoverable:hover .onhover {
     display: inherit;
   }
+
+  .node.error {
+    .__title {
+      background-color: var(--v-error-darken2);
+    }
+    .node-interface .dark-num-input {
+      background-color: var(--v-error-lighten1);
+      .__content:hover,
+      .__button:hover {
+        background-color: var(--v-error-lighten2);
+      }
+    }
+    .node-option {
+      .__selected {
+        background-color: var(--v-error-lighten1);
+      }
+    }
+  }
 </style>

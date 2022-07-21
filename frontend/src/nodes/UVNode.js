@@ -51,9 +51,15 @@ export class UVNode extends UncertainNode {
     let result;
     if (this.uv.is_valid) {
       result = this.uv.get_random_sample();
+      this.set_error(false);
     } else {
       result = NaN;
+      this.set_error(true);
     }
     return result;
+  }
+
+  set_error(is_error) {
+    this.customClasses = is_error ? "error" : "no_error";
   }
 }
