@@ -27,9 +27,14 @@ export class UVNode extends UncertainNode {
       this.uv_type = UVType[this.getOptionValue("Probability distribution")];
       this.uv_type.params.forEach(element => {
         if (!old_uv_type || !old_uv_type.params.includes(element)) {
-          this.addInputInterface(element, "NumberOption", 0, {
-            type: "deterministic"
-          });
+          this.addInputInterface(
+            element,
+            "NumberOption",
+            (element == "upper") * 1,
+            {
+              type: "deterministic"
+            }
+          );
         }
       });
       if (old_uv_type) {
