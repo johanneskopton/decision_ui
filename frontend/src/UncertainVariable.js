@@ -1,7 +1,14 @@
 import gaussian from "gaussian";
+import random_trunc_normal from "./helper/random_trunc_normal";
 
 // 95% quantile of the standard normal distribution
 const q95_Z = 1.6448536269514722;
+
+const numeric_tolerance = 1e-5;
+
+const lower_upper_check = params => {
+  return params["lower"] + numeric_tolerance < params["upper"];
+};
 
 export const UVType = {
   deterministic: {
@@ -16,11 +23,7 @@ export const UVType = {
     id: 2,
     name: "norm",
     params: ["lower", "upper"],
-    checks: [
-      params => {
-        return params["lower"] < params["upper"];
-      }
-    ],
+    checks: [lower_upper_check],
     most_likely: params => {
       return (params["lower"] + params["upper"]) / 2;
     },
@@ -37,8 +40,10 @@ export const UVType = {
     name: "posnorm",
     params: ["lower", "upper"],
     checks: [
+      lower_upper_check,
       params => {
-        return params["lower"] < params["upper"];
+        return params["lower"] > params["upper"] * 0.1;
+        let variance = std ** 2;
       }
     ],
     most_likely: params => {
@@ -47,14 +52,8 @@ export const UVType = {
     },
     random_sample: params => {
       let mean = (params["lower"] + params["upper"]) / 2;
-      let std = (params["upper"] - mean) / q95_Z;
-      let variance = std ** 2;
-      let distribution = gaussian(mean, variance);
-      let sample = -1;
-      while (sample < 0) {
-        sample = distribution.ppf(Math.random());
-      }
-      return sample;
+      let stdDev = (params["upper"] - mean) / q95_Z;
+      return random_trunc_normal({ range: [0, Infinity], mean, stdDev });
     }
   }
   /*Bernoulli: {
