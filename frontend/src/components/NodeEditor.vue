@@ -121,7 +121,7 @@
   import { SumNode } from "../nodes/SumNode";
   import { DisplayNode } from "../nodes/DisplayNode";
   import { ResultNode } from "../nodes/ResultNode";
-  import { UVNode } from "../nodes/UVNode";
+  import { EstimateNode } from "../nodes/EstimateNode";
   import { ChanceEventNode } from "../nodes/ChanceEventNode";
 
   export default {
@@ -159,8 +159,8 @@
         this.$store.state.model.editor.registerNodeType("Display", DisplayNode);
         this.$store.state.model.editor.registerNodeType("Result", ResultNode);
         this.$store.state.model.editor.registerNodeType(
-          "UncertainInput",
-          UVNode
+          "Estimate",
+          EstimateNode
         );
         this.$store.state.model.editor.registerNodeType("Sum", SumNode);
         this.$store.state.model.editor.registerNodeType(

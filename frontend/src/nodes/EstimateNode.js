@@ -1,11 +1,11 @@
 import { UVType, UV } from "../UncertainVariable";
 import { UncertainNode } from "./UncertainNode";
 
-export class UVNode extends UncertainNode {
+export class EstimateNode extends UncertainNode {
   constructor() {
     super();
-    this.type = "UncertainInput";
-    this.name = "UncertainInput";
+    this.type = "Estimate";
+    this.name = "Estimate";
     this.addOption(
       "Probability distribution",
       "SelectOption",

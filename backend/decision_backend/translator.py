@@ -77,7 +77,7 @@ class Translator:
                 "median",
                 "upper", ])
         for node in self.model.nodes:
-            if node.type != "UncertainInput":
+            if node.type != "Estimate":
                 continue
             distribution = node.options["Probability distribution"]
             if distribution == "deterministic":
@@ -171,7 +171,7 @@ class Translator:
         """
         res_str = ""
         node = self._get_node_by_variable_name(variable_name)
-        if node.type == "UncertainInput":
+        if node.type == "Estimate":
             return res_str
         res_str = self._translate_node(variable_name) + "\n" + res_str
         node = self._get_node_by_variable_name(variable_name)

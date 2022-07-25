@@ -134,7 +134,7 @@
       "customClasses": ""
     },
     {
-      "type": "UncertainInput",
+      "type": "Estimate",
       "id": "node_165608530570229",
       "name": "Yield (kg)",
       "options": [["Probability distribution", "norm"]],
@@ -174,7 +174,7 @@
       "customClasses": "no_error"
     },
     {
-      "type": "UncertainInput",
+      "type": "Estimate",
       "id": "node_165608538847533",
       "name": "Selling Price (Base)",
       "options": [["Probability distribution", "norm"]],
@@ -260,7 +260,7 @@
       "customClasses": ""
     },
     {
-      "type": "UncertainInput",
+      "type": "Estimate",
       "id": "node_165608553168951",
       "name": "Fixed Cost",
       "options": [["Probability distribution", "norm"]],
@@ -300,7 +300,7 @@
       "customClasses": "no_error"
     },
     {
-      "type": "UncertainInput",
+      "type": "Estimate",
       "id": "node_165608560819469",
       "name": "Cost Per Yield",
       "options": [["Probability distribution", "norm"]],
