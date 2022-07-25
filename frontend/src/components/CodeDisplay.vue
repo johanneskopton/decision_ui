@@ -17,6 +17,7 @@
   @import "vuetify/src/styles/main.sass";
   .code-container {
     width: 50%;
+    min-width: 700px;
   }
   .hljs.r {
     background-color: white !important;

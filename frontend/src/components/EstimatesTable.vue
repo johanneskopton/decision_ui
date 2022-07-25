@@ -27,6 +27,6 @@
 <style lang="scss">
   @import "vuetify/src/styles/main.sass";
   .table-container {
-    width: 40%;
+    width: 675px;
   }
 </style>
