@@ -177,7 +177,7 @@
         // add some nodes so the screen is not empty on startup
 
         const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
-        const node2 = this.addNodeWithCoordinates(DisplayNode, 400, 140);
+        const node2 = this.addNodeWithCoordinates(ResultNode, 400, 140);
         this.$store.state.model.editor.addConnection(
           node1.getInterface("Result"),
           node2.getInterface("Value")
