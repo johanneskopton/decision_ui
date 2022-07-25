@@ -21,7 +21,7 @@ model = RawModel(**model_dict)
 
 def test_create_translator():
     translator = Translator(model)
-    assert len(translator.model.nodes) == 12
+    assert len(translator.model.nodes) == 15
 
 
 def test_create_variable_name():
@@ -124,7 +124,7 @@ def test_execute_r_mc():
     subprocess.run(["Rscript", translator.r_script_file.name])
     df = pd.read_csv(translator.results_file.name)
     target_columns = {'y.ProfitResult',
-                      'y.PriceResult',
+                      'y.ProfitAltResult',
                       # 'x.Yield_kg',
                       # 'x.Selling_Price_Base',
                       # 'x.Fixed_Cost',

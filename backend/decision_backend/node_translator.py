@@ -34,9 +34,14 @@ def Display(args):
     return args["Value"]
 
 
+def Result(args):
+    return args["Value"]
+
+
 node_implementations = {
     "Math": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
-    "Display": Display
+    "Display": Display,
+    "Result": Result
 }

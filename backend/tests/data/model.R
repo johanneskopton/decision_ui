@@ -13,11 +13,13 @@ model_function <- function(){
 	Profit <- Revenue - Cost
 	ProfitResult <- Profit
 
-	# PriceResult
-	PriceResult <- Selling_Price
+	# ProfitAltResult
+	Variable_Cost_no_investment <- Variable_Cost * 5
+	Profit_2 <- Revenue - Variable_Cost_no_investment
+	ProfitAltResult <- Profit_2
 
 	# generate list of output variables
-	return(list(ProfitResult=ProfitResult, PriceResult=PriceResult))
+	return(list(ProfitResult=ProfitResult, ProfitAltResult=ProfitAltResult))
 }
 
 mc <- mcSimulation(estimate=input_estimates,

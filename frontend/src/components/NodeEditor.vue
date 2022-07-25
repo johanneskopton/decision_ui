@@ -120,6 +120,7 @@
   import { MathNode } from "../nodes/MathNode";
   import { SumNode } from "../nodes/SumNode";
   import { DisplayNode } from "../nodes/DisplayNode";
+  import { ResultNode } from "../nodes/ResultNode";
   import { UVNode } from "../nodes/UVNode";
   import { ChanceEventNode } from "../nodes/ChanceEventNode";
 
@@ -156,6 +157,7 @@
         // added by the user as well as saved & loaded.
         this.$store.state.model.editor.registerNodeType("Math", MathNode);
         this.$store.state.model.editor.registerNodeType("Display", DisplayNode);
+        this.$store.state.model.editor.registerNodeType("Result", ResultNode);
         this.$store.state.model.editor.registerNodeType(
           "UncertainInput",
           UVNode

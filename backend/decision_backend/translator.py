@@ -195,7 +195,7 @@ class Translator:
         output_var_str = ""
         for node in self.model.nodes:
             node_variable_name = node.variable_name
-            if node.type != "Display":
+            if node.type != "Result":
                 continue
             subgraph_str = self._translate_subgraph(
                 node_variable_name)
@@ -231,7 +231,7 @@ class Translator:
             del node["width"]
             del node["twoColumn"]
             del node["customClasses"]
-            if node["type"] == "Display":
+            if node["type"] in ["Display", "Result"]:
                 node["options"] = []
             for i, interface in enumerate(node["interfaces"]):
                 new_interface = {
