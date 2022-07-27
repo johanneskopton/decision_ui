@@ -1,5 +1,6 @@
 import { UVType, UV } from "../UncertainVariable";
 import { UncertainNode } from "./UncertainNode";
+import store from "../vuex_store";
 
 export class EstimateNode extends UncertainNode {
   constructor() {

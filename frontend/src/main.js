@@ -3,10 +3,8 @@
 
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Vuex from "vuex";
 import vuetify from "@/plugins/vuetify"; // path to vuetify export
 import App from "./App.vue";
-import ModelStore from "./model_store";
 
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
 
@@ -16,13 +14,13 @@ import highlightjs from "@highlightjs/vue-plugin";
 import "highlight.js/styles/github.css";
 import VueExcelEditor from "vue-excel-editor";
 
+import store from "./vuex_store";
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 
 Vue.use(VueRouter);
 Vue.use(BaklavaVuePlugin);
-Vue.use(Vuex);
 Vue.use(VueExcelEditor);
 
 hljs.registerLanguage("r", r);
@@ -32,12 +30,6 @@ Vue.config.productionTip = false;
 Vue.config.devtools = false;
 
 Vue.prototype.log = console.log;
-
-const store = new Vuex.Store({
-  modules: {
-    model: ModelStore
-  }
-});
 
 const routes = [
   {
