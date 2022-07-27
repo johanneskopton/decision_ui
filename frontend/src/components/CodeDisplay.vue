@@ -1,7 +1,10 @@
 <template>
   <v-sheet color="white" elevation="1" class="code-container" rounded>
     <!-- <pre>{{ rCode }}</pre> -->
-    <highlightjs language="r" :code="rCode" />
+    <highlightjs v-if="rCode" language="r" :code="rCode" />
+    <v-alert v-else type="info" elevation="2">
+      No R code to see.. Run the model first!
+    </v-alert>
   </v-sheet>
 </template>
 <script>
