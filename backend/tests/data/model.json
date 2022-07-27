@@ -137,7 +137,11 @@
       "type": "Estimate",
       "id": "node_165608530570229",
       "name": "Yield (kg)",
-      "options": [["Probability distribution", "norm"]],
+      "options": [
+        ["Probability distribution", "norm"],
+        ["lower", 30000],
+        ["upper", 50000]
+      ],
       "state": {},
       "interfaces": [
         [
@@ -148,20 +152,6 @@
               42010.13938624438, 46515.77208522757, 43248.79841888463,
               29665.295936674484
             ]
-          }
-        ],
-        [
-          "lower",
-          {
-            "id": "ni_165608530570331",
-            "value": 30000
-          }
-        ],
-        [
-          "upper",
-          {
-            "id": "ni_165608530570432",
-            "value": 50000
           }
         ]
       ],
@@ -177,7 +167,11 @@
       "type": "Estimate",
       "id": "node_165608538847533",
       "name": "Selling Price (Base)",
-      "options": [["Probability distribution", "norm"]],
+      "options": [
+        ["Probability distribution", "norm"],
+        ["lower", 1.8],
+        ["upper", 2.4]
+      ],
       "state": {},
       "interfaces": [
         [
@@ -188,20 +182,6 @@
               2.001903748751185, 1.9691886086823815, 2.1959597009286838,
               2.0628433598608193
             ]
-          }
-        ],
-        [
-          "lower",
-          {
-            "id": "ni_165608538847635",
-            "value": 1.8
-          }
-        ],
-        [
-          "upper",
-          {
-            "id": "ni_165608538847636",
-            "value": 2.4
           }
         ]
       ],
@@ -263,7 +243,11 @@
       "type": "Estimate",
       "id": "node_165608553168951",
       "name": "Fixed Cost",
-      "options": [["Probability distribution", "norm"]],
+      "options": [
+        ["Probability distribution", "norm"],
+        ["lower", 40],
+        ["upper", 50]
+      ],
       "state": {},
       "interfaces": [
         [
@@ -274,20 +258,6 @@
               46.96914944533614, 41.402408952984004, 41.37359354087663,
               42.26914513324492
             ]
-          }
-        ],
-        [
-          "lower",
-          {
-            "id": "ni_165608553169053",
-            "value": 40
-          }
-        ],
-        [
-          "upper",
-          {
-            "id": "ni_165608553169054",
-            "value": 50
           }
         ]
       ],
@@ -303,7 +273,11 @@
       "type": "Estimate",
       "id": "node_165608560819469",
       "name": "Cost Per Yield",
-      "options": [["Probability distribution", "norm"]],
+      "options": [
+        ["Probability distribution", "norm"],
+        ["lower", 0.2],
+        ["upper", 0.5]
+      ],
       "state": {},
       "interfaces": [
         [
@@ -314,20 +288,6 @@
               0.3326027856130098, 0.35240879492339017, 0.16170690550988923,
               0.4519555230718246
             ]
-          }
-        ],
-        [
-          "lower",
-          {
-            "id": "ni_165608560819471",
-            "value": 0.2
-          }
-        ],
-        [
-          "upper",
-          {
-            "id": "ni_165608560819472",
-            "value": 0.5
           }
         ]
       ],

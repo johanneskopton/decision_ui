@@ -28,20 +28,13 @@ export class EstimateNode extends UncertainNode {
       this.uv_type = UVType[this.getOptionValue("Probability distribution")];
       this.uv_type.params.forEach(element => {
         if (!old_uv_type || !old_uv_type.params.includes(element)) {
-          this.addInputInterface(
-            element,
-            "NumberOption",
-            (element == "upper") * 1,
-            {
-              type: "deterministic"
-            }
-          );
+          this.addOption(element, "NumberOption", (element == "upper") * 1);
         }
       });
       if (old_uv_type) {
         old_uv_type.params.forEach(element => {
           if (!this.uv_type.params.includes(element)) {
-            this.removeInterface(element);
+            this.removeOption(element);
           }
         });
       }
@@ -51,7 +44,7 @@ export class EstimateNode extends UncertainNode {
   calculate_single(_) {
     let params = new Object();
     this.uv_type.params.forEach(element => {
-      params[element] = this.getInterface(element).value;
+      params[element] = this.getOptionValue(element);
     });
     this.uv = new UV(this.uv_type, params);
     let result;
@@ -68,7 +61,7 @@ export class EstimateNode extends UncertainNode {
   _calculate() {
     var estimate_obj = {};
     this.uv_type.params.forEach(element => {
-      estimate_obj[element] = this.getInterface(element).value;
+      estimate_obj[element] = this.getOptionValue(element);
     });
     estimate_obj["label"] = this.name;
     estimate_obj["variable"] = this.name;
