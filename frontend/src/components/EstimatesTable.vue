@@ -19,14 +19,10 @@
   </v-sheet>
 </template>
 <script>
-  import csv_parser from "../helper/csv_parser";
-
   export default {
     computed: {
       estimatesData: function() {
-        return csv_parser(
-          this.$store.state.model.decisionSupportResult.estimates
-        );
+        return this.$store.state.model.estimates;
       }
     }
   };
