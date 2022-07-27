@@ -65,6 +65,29 @@ export class EstimateNode extends UncertainNode {
     return result;
   }
 
+  _calculate() {
+    var estimate_obj = {};
+    this.uv_type.params.forEach(element => {
+      estimate_obj[element] = this.getInterface(element).value;
+    });
+    estimate_obj["label"] = this.name;
+    estimate_obj["variable"] = this.name;
+    estimate_obj["distribution"] = this.getOptionValue(
+      "Probability distribution"
+    );
+    estimate_obj["median"] = "";
+    var name = this.name;
+    store.state.model.estimates = store.state.model.estimates.filter(function(
+      value,
+      index,
+      arr
+    ) {
+      return value["variable"] != this.name;
+    },
+    this);
+    store.state.model.estimates.push(estimate_obj);
+  }
+
   set_error(is_error) {
     this.customClasses = is_error ? "error" : "no_error";
   }

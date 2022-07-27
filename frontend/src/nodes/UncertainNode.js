@@ -7,6 +7,9 @@ export class UncertainNode extends NumericNode {
   }
 
   calculate() {
+    if (typeof this._calculate === "function") {
+      this._calculate();
+    }
     var result = [];
     var input_interfaces = this.inputInterfaces;
     var input_values = new Object();

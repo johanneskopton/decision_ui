@@ -9,7 +9,8 @@ export default {
       viewPlugin: new ViewPlugin(),
       engine: new Engine(true),
       isInitialized: false,
-      decisionSupportResult: false
+      decisionSupportResult: false,
+      estimates: []
     };
   },
   mutations: {
