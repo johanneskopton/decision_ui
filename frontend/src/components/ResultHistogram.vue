@@ -1,6 +1,9 @@
 <template>
   <v-sheet color="white" elevation="1" class="hist-container" rounded>
-    <canvas id="hist" ref="hist" width="200" />
+    <canvas v-if="histData != null" id="hist" ref="hist" width="200" />
+    <v-alert v-else type="info" elevation="2">
+      No histogram to see.. Run the model first!
+    </v-alert>
   </v-sheet>
 </template>
 <script>
@@ -13,7 +16,11 @@
     },
     computed: {
       histData: function() {
-        return this.$store.state.model.decisionSupportResult.hist;
+        if (this.$store.state.model.decisionSupportResult) {
+          return this.$store.state.model.decisionSupportResult.hist;
+        } else {
+          return null;
+        }
       }
     },
     watch: {
@@ -26,6 +33,9 @@
     },
     methods: {
       drawHist: function() {
+        if (this.histData == null) {
+          return;
+        }
         var ctx = this.$refs.hist.getContext("2d");
         var bins = this.histData.bins;
         var density = this.histData.density;
