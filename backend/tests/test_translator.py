@@ -104,7 +104,8 @@ def test_write_script():
     r_script_template = templateEnv.get_template(r_script_template_file)
     r_script_target = r_script_template.render(
         estimates_path=translator.estimates_file.name,
-        results_path=translator.results_file.name,)
+        results_path=translator.results_file.name,
+        evpi_path=translator.evpi_file.name)
     r_script = open(translator.r_script_file.name, "r").read()
 
     csv_target = open(os.path.join(

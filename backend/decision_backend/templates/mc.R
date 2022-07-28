@@ -12,4 +12,12 @@ mc <- mcSimulation(estimate=input_estimates,
 		numberOfModelRuns=10000,
 		functionSyntax='plainNames')
 
+{% if is_estimate %}mc_table <- data.frame(mc$x, mc$y)
+evpi <- multi_EVPI(mc=mc_table, first_out_var = "{{ first_out_var }}", write_table = FALSE, outfolder = NA)
+evpi_res = data.frame(variable = evpi[[1]]$variable)
+for (i in 1:length(evpi)){
+  evpi_res[names(evpi)[i]] = evpi[[i]]$EVPI
+}
+write_csv(evpi_res, "{{ evpi_path }}")
+{% endif %}
 write_csv(data.frame(mc["y"]), "{{ results_path }}")

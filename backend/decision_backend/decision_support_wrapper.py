@@ -29,6 +29,13 @@ class DecisionSupportWrapper:
             res["density"][column] = hist_vals.tolist()
         return res
 
+    def get_evpi(self):
+        df = pd.read_csv(self.translator.evpi_file.name)
+        res = []
+        for i, row in df.iterrows():
+            res.append(row.to_dict())
+        return(res)
+
     def get_r_script(self):
         return open(self.translator.r_script_file.name, "r").read()
 

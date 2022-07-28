@@ -111,36 +111,51 @@ class Translator:
             "w+t", delete=False, suffix=".csv", prefix="decision_ui_estimate_")
         self.results_file = tempfile.NamedTemporaryFile(
             "w+t", delete=False, suffix=".csv", prefix="decision_ui_result_")
+        self.evpi_file = tempfile.NamedTemporaryFile(
+            "w+t", delete=False, suffix=".csv", prefix="decision_ui_evpi_")
         self.r_script_file = tempfile.NamedTemporaryFile(
             "w+t", delete=False, suffix=".R", prefix="decision_ui_script_")
         self.extract_estimates()
-        self.create_r_script(self.estimates_file.name, self.results_file.name)
+        self.create_r_script(
+            self.estimates_file.name,
+            self.results_file.name,
+            self.evpi_file.name)
         try:
             self.r_script_file.write(self.r_script)
             self.r_script_file.flush()
             self.estimates_df.to_csv(self.estimates_file.name)
             self.estimates_file.flush()
             self.results_file.flush()
+            self.evpi_file.flush()
         finally:
             self.r_script_file.close()
             self.estimates_file.close()
             self.results_file.close()
+            self.evpi_file.close()
 
     def clean(self):
         os.unlink(self.r_script_file.name)
         os.unlink(self.estimates_file.name)
         os.unlink(self.results_file.name)
+        os.unlink(self.evpi_file.name)
 
-    def create_r_script(self, estimates_file, results_file):
+    def create_r_script(self, estimates_file, results_file, evpi_file):
         """ Generates the R script from the the model function and a jinja2 template.
         Needs extract_estimates to be run first!
         """
         mc_template = templateEnv.get_template("mc.R")
+
+        for node in self.model.nodes:
+            if node.type == "Result":
+                first_out_var = node.variable_name
+                break
         res_str = mc_template.render(
             estimates_path=estimates_file,
             model_function=self._get_model_function(),
             results_path=results_file,
-            is_estimate=len(self.estimates_df) > 0
+            evpi_path=evpi_file,
+            is_estimate=len(self.estimates_df) > 0,
+            first_out_var=first_out_var
         )
         self.r_script = res_str
 
