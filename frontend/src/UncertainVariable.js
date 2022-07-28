@@ -11,14 +11,14 @@ const lower_upper_check = params => {
 };
 
 export const UVType = {
-  deterministic: {
+  /*deterministic: {
     id: 0,
     name: "deterministic",
     params: ["value"],
     checks: [],
     most_likely: params => params.value,
     random_sample: params => params.value
-  },
+  },*/
   norm: {
     id: 2,
     name: "norm",
