@@ -24,7 +24,7 @@ model_function <- function(){
 
 mc <- mcSimulation(estimate=input_estimates,
 		model_function=model_function,
-		numberOfModelRuns=10000,
+		numberOfModelRuns=1000,
 		functionSyntax='plainNames')
 
 mc_table <- data.frame(mc$x, mc$y)

@@ -9,7 +9,7 @@ input_estimates <- estimate(c("const"), c(0), c(0))
 
 mc <- mcSimulation(estimate=input_estimates,
 		model_function=model_function,
-		numberOfModelRuns=10000,
+		numberOfModelRuns=1000,
 		functionSyntax='plainNames')
 
 {% if is_estimate %}mc_table <- data.frame(mc$x, mc$y)
