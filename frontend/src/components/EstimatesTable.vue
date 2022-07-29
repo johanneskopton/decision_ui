@@ -1,5 +1,6 @@
 <template>
-  <v-sheet color="white" elevation="1" class="table-container" rounded>
+  <v-card color="white" elevation="1" class="table-container" rounded>
+    <v-card-title>{{ title }}</v-card-title>
     <vue-excel-editor
       v-if="estimatesData.length > 0"
       v-model="estimatesData"
@@ -30,7 +31,7 @@
         No estimates from backend yet.. Run the model first!
       </span>
     </v-alert>
-  </v-sheet>
+  </v-card>
 </template>
 <script>
   import csv_parser from "../helper/csv_parser";
@@ -55,6 +56,9 @@
             return [];
           }
         }
+      },
+      title: function() {
+        return this.live ? "Estimate editor" : "Generated estimates";
       }
     },
     mounted: function() {

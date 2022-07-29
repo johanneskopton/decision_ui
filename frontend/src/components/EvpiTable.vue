@@ -1,6 +1,6 @@
 <template>
-  <v-sheet color="white" elevation="1" class="table-container" rounded>
-    <v-subheader>EVPI</v-subheader>
+  <v-card color="white" elevation="1" class="table-container" rounded>
+    <v-card-title>Expected Value Of Perfect Information (EVPI)</v-card-title>
     <vue-excel-editor v-if="evpi.length > 0" v-model="evpi" width="100%">
       <vue-excel-column readonly field="variable" label="variable" />
       <vue-excel-column
@@ -14,7 +14,7 @@
     <v-alert v-else type="info" elevation="2">
       No EVPI to see.. Run the model first!
     </v-alert>
-  </v-sheet>
+  </v-card>
 </template>
 <script>
   export default {

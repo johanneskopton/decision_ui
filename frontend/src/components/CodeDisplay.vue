@@ -1,11 +1,11 @@
 <template>
-  <v-sheet color="white" elevation="1" class="code-container" rounded>
-    <!-- <pre>{{ rCode }}</pre> -->
+  <v-card color="white" elevation="1" class="code-container" rounded>
+    <v-card-title>Generated R code</v-card-title>
     <highlightjs v-if="rCode" language="r" :code="rCode" />
     <v-alert v-else type="info" elevation="2">
       No R code to see.. Run the model first!
     </v-alert>
-  </v-sheet>
+  </v-card>
 </template>
 <script>
   export default {
