@@ -8,9 +8,19 @@
       <vue-excel-column readonly field="label" label="label" />
       <vue-excel-column readonly field="variable" label="variable" />
       <vue-excel-column readonly field="distribution" label="distribution" />
-      <vue-excel-column :change="onLowerChange" field="lower" label="lower" />
+      <vue-excel-column
+        :readonly="!live"
+        :change="onLowerChange"
+        field="lower"
+        label="lower"
+      />
       <vue-excel-column readonly field="median" label="median" />
-      <vue-excel-column :change="onUpperChange" field="upper" label="upper" />
+      <vue-excel-column
+        :readonly="!live"
+        :change="onUpperChange"
+        field="upper"
+        label="upper"
+      />
     </vue-excel-editor>
     <v-alert v-else type="info" elevation="2">
       No estimates yet..
