@@ -60,7 +60,8 @@ export default function(graph, ctx, bins, density, in_node = false) {
       let target_tick_value = target_tick_values[tick_index];
       if (value > target_tick_value) {
         tick_index++;
-        return target_tick_value;
+        let target_tick_value_rounded = +target_tick_value.toFixed(5);
+        return target_tick_value_rounded;
       }
     }
   };
