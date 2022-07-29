@@ -57,6 +57,20 @@
         }
       }
     },
+    mounted: function() {
+      this.$store.state.model.engine.calculate();
+      var estimate_names = [];
+      this.$store.state.model.editor.nodes.forEach(node => {
+        if (node.type == "Estimate") {
+          estimate_names.push(node.name);
+        }
+      });
+      this.$store.state.model.estimates = this.$store.state.model.estimates.filter(
+        function(value) {
+          return estimate_names.includes(value["variable"]);
+        }
+      );
+    },
     methods: {
       onLowerChange: function(newVal, oldVal, row) {
         this.$store.state.model.editor.nodes.forEach(node => {
