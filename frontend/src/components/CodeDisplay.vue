@@ -24,6 +24,7 @@
   }
   .hljs.r {
     background-color: white !important;
+    padding: 16px;
   }
   pre code.hljs.r {
     font-family: Roboto Mono, monospace !important;

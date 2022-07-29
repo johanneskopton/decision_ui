@@ -45,4 +45,7 @@
   .table-container {
     width: 675px;
   }
+  .vue-excel-editor {
+    margin: 16px;
+  }
 </style>

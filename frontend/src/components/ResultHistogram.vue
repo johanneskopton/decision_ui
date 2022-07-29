@@ -49,4 +49,7 @@
   .hist-container {
     width: 50%;
   }
+  canvas {
+    padding: 16px;
+  }
 </style>

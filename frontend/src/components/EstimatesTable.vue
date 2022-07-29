@@ -99,6 +99,9 @@
 <style lang="scss">
   @import "vuetify/src/styles/main.sass";
   .table-container {
-    width: 675px;
+    width: 707px;
+  }
+  .vue-excel-editor {
+    margin: 16px;
   }
 </style>
