@@ -20,6 +20,16 @@
               Model editor
             </v-list-item-title>
           </v-list-item>
+          <v-list-item to="/estimates" link>
+            <v-list-item-icon>
+              <v-icon>
+                mdi-table
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Estimates
+            </v-list-item-title>
+          </v-list-item>
           <v-list-item to="/results" link>
             <v-list-item-icon>
               <v-icon>

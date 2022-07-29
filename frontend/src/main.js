@@ -17,6 +17,7 @@ import VueExcelEditor from "vue-excel-editor";
 import store from "./vuex_store";
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
+import EstimatesDashboard from "./components/EstimatesDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 
 Vue.use(VueRouter);
@@ -39,6 +40,10 @@ const routes = [
   {
     path: "/modeling",
     component: NodeEditor
+  },
+  {
+    path: "/estimates",
+    component: EstimatesDashboard
   },
   {
     path: "/results",

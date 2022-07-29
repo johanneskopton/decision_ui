@@ -18,10 +18,28 @@
   </v-sheet>
 </template>
 <script>
+  import csv_parser from "../helper/csv_parser";
   export default {
+    props: {
+      live: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    },
     computed: {
       estimatesData: function() {
-        return this.$store.state.model.estimates;
+        if (this.live) {
+          return this.$store.state.model.estimates;
+        } else {
+          if (this.$store.state.model.decisionSupportResult) {
+            return csv_parser(
+              this.$store.state.model.decisionSupportResult.estimates
+            );
+          } else {
+            return [];
+          }
+        }
       }
     },
     methods: {
