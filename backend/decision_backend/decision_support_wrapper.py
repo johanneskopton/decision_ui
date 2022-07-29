@@ -30,7 +30,10 @@ class DecisionSupportWrapper:
         return res
 
     def get_evpi(self):
-        df = pd.read_csv(self.translator.evpi_file.name)
+        try:
+            df = pd.read_csv(self.translator.evpi_file.name)
+        except pd.errors.EmptyDataError:
+            return []
         res = []
         for i, row in df.iterrows():
             res.append(row.to_dict())
