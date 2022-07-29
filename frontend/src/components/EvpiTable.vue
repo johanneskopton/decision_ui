@@ -12,7 +12,7 @@
       />
     </vue-excel-editor>
     <v-alert v-else type="info" elevation="2">
-      No estimates yet..
+      No EVPI to see.. Run the model first!
     </v-alert>
   </v-sheet>
 </template>
@@ -20,7 +20,11 @@
   export default {
     computed: {
       evpi: function() {
-        return this.$store.state.model.decisionSupportResult.evpi;
+        if (this.$store.state.model.decisionSupportResult) {
+          return this.$store.state.model.decisionSupportResult.evpi;
+        } else {
+          return [];
+        }
       },
       result_vars: function() {
         var evpi_line = this.evpi[0];
