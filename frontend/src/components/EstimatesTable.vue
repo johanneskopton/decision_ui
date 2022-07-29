@@ -23,7 +23,12 @@
       />
     </vue-excel-editor>
     <v-alert v-else type="info" elevation="2">
-      No estimates yet..
+      <span v-if="live">
+        No estimates yet..
+      </span>
+      <span v-else>
+        No estimates from backend yet.. Run the model first!
+      </span>
     </v-alert>
   </v-sheet>
 </template>
