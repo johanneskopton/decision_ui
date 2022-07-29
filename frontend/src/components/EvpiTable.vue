@@ -15,6 +15,7 @@
         :field="result_var"
         :label="result_var"
         width="150px"
+        type="number"
       />
     </vue-excel-editor>
     <v-alert v-else type="info" elevation="2">

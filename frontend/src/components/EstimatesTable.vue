@@ -21,6 +21,7 @@
         :change="onLowerChange"
         field="lower"
         label="lower"
+        type="number"
       />
       <vue-excel-column readonly field="median" label="median" />
       <vue-excel-column
@@ -28,6 +29,7 @@
         :change="onUpperChange"
         field="upper"
         label="upper"
+        type="number"
       />
     </vue-excel-editor>
     <v-alert v-else type="info" elevation="2">
