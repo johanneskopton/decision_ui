@@ -1,13 +1,20 @@
 <template>
-  <v-card color="white" elevation="1" class="table-container" rounded>
+  <v-card
+    color="white"
+    elevation="1"
+    class="table-container"
+    :class="[live ? 'fullwidth' : 'narrow']"
+    rounded
+  >
     <v-card-title>{{ title }}</v-card-title>
-    <vue-excel-editor
-      v-if="estimatesData.length > 0"
-      v-model="estimatesData"
-      width="100%"
-    >
-      <vue-excel-column readonly field="label" label="label" />
-      <vue-excel-column readonly field="variable" label="variable" />
+    <vue-excel-editor v-if="estimatesData.length > 0" v-model="estimatesData">
+      <vue-excel-column readonly field="label" label="label" width="150px" />
+      <vue-excel-column
+        readonly
+        field="variable"
+        label="variable"
+        width="150px"
+      />
       <vue-excel-column readonly field="distribution" label="distribution" />
       <vue-excel-column
         :readonly="!live"
@@ -98,8 +105,11 @@
 
 <style lang="scss">
   @import "vuetify/src/styles/main.sass";
-  .table-container {
-    width: 707px;
+  .table-container.narrow {
+    width: 45%;
+  }
+  .table-container.fullwidth {
+    width: 80%;
   }
   .vue-excel-editor {
     margin: 16px;
