@@ -30,7 +30,7 @@
         var evpi_line = this.evpi[0];
         var res = [];
         Object.keys(evpi_line).forEach(key => {
-          if (key != "variable") {
+          if (key != "variable" && key != "$id") {
             res.push(key);
           }
         });
