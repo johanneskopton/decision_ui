@@ -64,13 +64,15 @@
     </v-navigation-drawer>
     <div class="main-window">
       <router-view />
+      <RunButton />
     </div>
   </v-app>
 </template>
 
 <script>
+  import RunButton from "./components/RunButton.vue";
   export default {
-    components: {},
+    components: { RunButton },
     data() {
       return {
         drawer: false,
