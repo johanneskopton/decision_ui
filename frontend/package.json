@@ -20,6 +20,7 @@
     "chart.js": "^2.9.4",
     "file-saver": "^2.0.5",
     "gaussian": "^1.2.0",
+    "numjs": "^0.16.1",
     "vue": "2.6.14",
     "vue-excel-editor": "^1.5.13",
     "vue-router": "^3.5.4",

@@ -8,8 +8,15 @@ export class UncertainNode extends NumericNode {
 
   calculate() {
     if (typeof this._calculate === "function") {
+      // additional operations, that only need to be executed once on every change
       this._calculate();
     }
+    var result = this.calculate_scalar();
+    this.getInterface("Result").value = result;
+    this.check_valid();
+  }
+
+  calculate_scalar() {
     var result = [];
     var input_interfaces = this.inputInterfaces;
     var input_values = new Object();
@@ -19,16 +26,20 @@ export class UncertainNode extends NumericNode {
     for (var i = 0; i < 1000; i++) {
       var input_values_sample = new Object();
       Object.keys(input_values).forEach(e => {
+        if (input_values[e] === null) {
+          input_values[e] = 0;
+        }
         if (input_values[e].length) {
+          // if input is probabilistic
           input_values_sample[e] = input_values[e][i];
         } else {
+          // if input is deterministic
           input_values_sample[e] = input_values[e];
         }
       });
+      // run one Monte Carlo sample
       result.push(this.calculate_single(input_values_sample));
     }
-
-    this.getInterface("Result").value = result;
-    this.check_valid();
+    return result;
   }
 }

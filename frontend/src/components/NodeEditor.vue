@@ -69,6 +69,8 @@
   import { ResultNode } from "../nodes/ResultNode";
   import { EstimateNode } from "../nodes/EstimateNode";
   import { ChanceEventNode } from "../nodes/ChanceEventNode";
+  import { VVNode } from "../nodes/VVNode";
+  import { NPVNode } from "../nodes/NPVNode";
 
   export default {
     //components: { HintOverlay },
@@ -87,7 +89,9 @@
         this.$store.state.model.editor.use(intfTypePlugin);
         // Define interface types
         intfTypePlugin.addType("probabilistic", colors.purple.accent1);
+        intfTypePlugin.addType("probabilistic_series", colors.teal.accent1);
         intfTypePlugin.addType("deterministic", colors.shades.white);
+        intfTypePlugin.addType("deterministic_int", colors.grey.lighten1);
 
         // Show a minimap in the top right corner
         this.$store.state.model.viewPlugin.enableMinimap = false;
@@ -102,6 +106,8 @@
           EstimateNode
         );
         this.$store.state.model.editor.registerNodeType("Sum", SumNode);
+        this.$store.state.model.editor.registerNodeType("VV", VVNode);
+        this.$store.state.model.editor.registerNodeType("NPV", NPVNode);
         this.$store.state.model.editor.registerNodeType(
           "ChanceEvent",
           ChanceEventNode
