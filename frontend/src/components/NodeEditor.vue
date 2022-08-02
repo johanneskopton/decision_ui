@@ -64,6 +64,7 @@
   import HistogramOption from "./HistogramOption.vue";
   import colors from "vuetify/lib/util/colors";
   import { MathNode } from "../nodes/MathNode";
+  import { SeriesMathNode } from "../nodes/MathNodeSeries";
   import { SumNode } from "../nodes/SumNode";
   import { DisplayNode } from "../nodes/DisplayNode";
   import { ResultNode } from "../nodes/ResultNode";
@@ -106,11 +107,15 @@
           EstimateNode
         );
         this.$store.state.model.editor.registerNodeType("Sum", SumNode);
-        this.$store.state.model.editor.registerNodeType("VV", VVNode);
-        this.$store.state.model.editor.registerNodeType("NPV", NPVNode);
         this.$store.state.model.editor.registerNodeType(
           "ChanceEvent",
           ChanceEventNode
+        );
+        this.$store.state.model.editor.registerNodeType("VV", VVNode);
+        this.$store.state.model.editor.registerNodeType("NPV", NPVNode);
+        this.$store.state.model.editor.registerNodeType(
+          "SeriesMath",
+          SeriesMathNode
         );
 
         // register custom options
