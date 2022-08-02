@@ -62,6 +62,7 @@
   import { InterfaceTypePlugin } from "@baklavajs/plugin-interface-types";
   import { OptionPlugin } from "@baklavajs/plugin-options-vue";
   import HistogramOption from "./HistogramOption.vue";
+  import SeriesDiagramOption from "./SeriesDiagramOption.vue";
   import colors from "vuetify/lib/util/colors";
   import { MathNode } from "../nodes/MathNode";
   import { SeriesMathNode } from "../nodes/MathNodeSeries";
@@ -72,6 +73,7 @@
   import { ChanceEventNode } from "../nodes/ChanceEventNode";
   import { VVNode } from "../nodes/VVNode";
   import { NPVNode } from "../nodes/NPVNode";
+  import { SeriesDisplayNode } from "../nodes/SeriesDisplayNode";
 
   export default {
     //components: { HintOverlay },
@@ -117,11 +119,19 @@
           "SeriesMath",
           SeriesMathNode
         );
+        this.$store.state.model.editor.registerNodeType(
+          "SeriesDisplay",
+          SeriesDisplayNode
+        );
 
         // register custom options
         this.$store.state.model.viewPlugin.registerOption(
           "HistogramOption",
           HistogramOption
+        );
+        this.$store.state.model.viewPlugin.registerOption(
+          "SeriesDiagramOption",
+          SeriesDiagramOption
         );
 
         // add some nodes so the screen is not empty on startup
