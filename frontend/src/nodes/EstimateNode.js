@@ -77,8 +77,4 @@ export class EstimateNode extends UncertainNode {
     this);
     store.state.model.estimates.push(estimate_obj);
   }
-
-  set_error(is_error) {
-    this.customClasses = is_error ? "error" : "no_error";
-  }
 }
