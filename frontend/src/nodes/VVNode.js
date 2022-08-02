@@ -5,7 +5,7 @@ import nj from "numjs";
 export class VVNode extends UncertainSeriesNode {
   constructor() {
     super();
-    this.type = "ValueVarier";
+    this.type = "VV";
     this.name = "ValueVarier";
     this.addInputInterface("var_mean", "NumberOption", 1, {
       type: "probabilistic"

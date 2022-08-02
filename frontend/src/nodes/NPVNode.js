@@ -4,7 +4,7 @@ import nj from "numjs";
 export class NPVNode extends UncertainNode {
   constructor() {
     super();
-    this.type = "Net Present Value";
+    this.type = "NPV";
     this.name = "Net Present Value";
     this.addInputInterface("x", undefined, undefined, {
       type: "probabilistic_series"
