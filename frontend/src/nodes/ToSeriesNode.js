@@ -40,7 +40,6 @@ export class ToSeriesNode extends UncertainSeriesNode {
   }
 
   calculate_single(input) {
-    var result;
     const TimestepMethod = this.getOptionValue("TimestepMethod");
     if (TimestepMethod == "every") {
       return nj.ones([input.n]).multiply(input.value);
