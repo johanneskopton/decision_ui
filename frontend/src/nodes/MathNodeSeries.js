@@ -5,10 +5,10 @@ export class SeriesMathNode extends UncertainSeriesNode {
     super();
     this.type = "SeriesMath";
     this.name = "Math";
-    this.addInputInterface("A", "NumberOption", 1, {
+    this.addInputInterface("A", undefined, null, {
       type: "probabilistic_series"
     });
-    this.addInputInterface("B", "NumberOption", 10, {
+    this.addInputInterface("B", undefined, null, {
       type: "probabilistic_series"
     });
     this.addOption("Operation", "SelectOption", "Add", undefined, {
