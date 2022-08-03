@@ -4,7 +4,6 @@ export default function(graph, ctx, data) {
   var baseColor = "rgba(255, 255, 255, 1)";
   var baseColor2 = "rgba(255, 255, 255, 0.2)";
   var series_labels = [...Array(data.length).keys()];
-  console.log(series_labels);
   var datasets = [
     {
       data: data,

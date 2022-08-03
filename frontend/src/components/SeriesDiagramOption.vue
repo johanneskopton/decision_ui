@@ -26,7 +26,6 @@
     },
     watch: {
       value: function(newVal) {
-        console.log(newVal);
         if (Array.isArray(newVal.value) && typeof newVal.value[0] == "object") {
           this.is_data = true;
           this.draw_diagram();
