@@ -41,15 +41,17 @@ export class EstimateNode extends UncertainNode {
     }
   }
 
-  calculate_single(_) {
+  calculate_scalar(MC_RUNS) {
     let params = new Object();
     this.uv_type.params.forEach(element => {
       params[element] = this.getOptionValue(element);
     });
     this.uv = new UV(this.uv_type, params);
-    let result;
+    let result = [];
     if (this.uv.is_valid) {
-      result = this.uv.get_random_sample();
+      for (let i = 0; i < MC_RUNS; i++) {
+        result.push(this.uv.get_random_sample());
+      }
       this.set_error(false);
     } else {
       result = NaN;
