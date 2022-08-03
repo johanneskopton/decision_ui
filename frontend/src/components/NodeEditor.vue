@@ -74,6 +74,7 @@
   import { VVNode } from "../nodes/VVNode";
   import { NPVNode } from "../nodes/NPVNode";
   import { SeriesDisplayNode } from "../nodes/SeriesDisplayNode";
+  import { ToSeriesNode } from "../nodes/ToSeriesNode";
 
   export default {
     //components: { HintOverlay },
@@ -114,6 +115,10 @@
           ChanceEventNode
         );
         this.$store.state.model.editor.registerNodeType("VV", VVNode);
+        this.$store.state.model.editor.registerNodeType(
+          "ToSeries",
+          ToSeriesNode
+        );
         this.$store.state.model.editor.registerNodeType("NPV", NPVNode);
         this.$store.state.model.editor.registerNodeType(
           "SeriesMath",
