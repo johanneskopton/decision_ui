@@ -96,6 +96,7 @@ def NPV(args):
 
 node_implementations = {
     "Math": Math,
+    "SeriesMath": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
     "Display": Display,
