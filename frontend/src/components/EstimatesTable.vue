@@ -23,7 +23,7 @@
         label="lower"
         type="number"
       />
-      <vue-excel-column readonly field="median" label="median" />
+      <!--<vue-excel-column readonly field="median" label="median" />-->
       <vue-excel-column
         :readonly="!live"
         :change="onUpperChange"

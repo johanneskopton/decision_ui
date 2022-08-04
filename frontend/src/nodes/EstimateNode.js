@@ -75,7 +75,7 @@ export class EstimateNode extends UncertainNode {
     estimate_obj["distribution"] = this.getOptionValue(
       "Probability distribution"
     );
-    estimate_obj["median"] = "";
+    // estimate_obj["median"] = "";
     store.state.model.estimates = store.state.model.estimates.filter(function(
       value
     ) {
