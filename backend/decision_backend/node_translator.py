@@ -77,6 +77,16 @@ def ValueVarier(args):
         )
 
 
+def ToSeries(args):
+    if args["TimestepMethod"] == "every":
+        return "rep({}, {})".format(args["value"], args["n"])
+    elif args["TimestepMethod"] == "as defined":
+        return (
+            "rep({}, {})".format(0, args["n"]),
+            "[{}] <- {}".format(args["timestep"]+1, args["value"])
+        )
+
+
 def NPV(args):
     return "discount({}, {}, calculate_NPV=TRUE)".format(
         args["x"],
@@ -91,5 +101,6 @@ node_implementations = {
     "Display": Display,
     "Result": Result,
     "ValueVarier": ValueVarier,
-    "NPV": NPV
+    "NPV": NPV,
+    "ToSeries": ToSeries
 }
