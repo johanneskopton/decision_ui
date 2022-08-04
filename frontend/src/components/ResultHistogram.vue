@@ -1,8 +1,8 @@
 <template>
   <v-card color="white" elevation="1" class="hist-container" rounded>
     <v-card-title>Result histogram</v-card-title>
-    <canvas v-if="histData != null" id="hist" ref="hist" width="200" />
-    <v-alert v-else type="info" elevation="2">
+    <canvas v-show="histData != null" id="hist" ref="hist" width="200" />
+    <v-alert v-show="histData == null" type="info" elevation="2">
       No histogram to see.. Run the model first!
     </v-alert>
   </v-card>
