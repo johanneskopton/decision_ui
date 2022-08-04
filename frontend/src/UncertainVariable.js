@@ -54,6 +54,29 @@ export const UVType = {
       let stdDev = (params["upper"] - mean) / q95_Z;
       return random_trunc_normal({ range: [0, Infinity], mean, stdDev });
     }
+  },
+  tnorm_0_1: {
+    id: 3,
+    name: "tnorm_0_1",
+    params: ["lower", "upper"],
+    checks: [
+      lower_upper_check,
+      params => {
+        return params["lower"] > params["upper"] * 0.1;
+      },
+      params => {
+        return params["lower"] + (1 - params["lower"]) * 0.9 > params["upper"];
+      }
+    ],
+    most_likely: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      return Math.max(0, mean);
+    },
+    random_sample: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      let stdDev = (params["upper"] - mean) / q95_Z;
+      return random_trunc_normal({ range: [0, 1], mean, stdDev });
+    }
   }
   /*Bernoulli: {
     id: 1,
