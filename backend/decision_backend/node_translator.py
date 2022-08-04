@@ -55,11 +55,19 @@ def ValueVarier(args):
         )
 
 
+def NPV(args):
+    return "discount({}, {}, calculate_NPV=TRUE)".format(
+        args["x"],
+        args["discount"]
+    )
+
+
 node_implementations = {
     "Math": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
     "Display": Display,
     "Result": Result,
-    "ValueVarier": ValueVarier
+    "ValueVarier": ValueVarier,
+    "NPV": NPV
 }
