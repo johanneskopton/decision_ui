@@ -65,7 +65,7 @@
   import SeriesDiagramOption from "./SeriesDiagramOption.vue";
   import colors from "vuetify/lib/util/colors";
   import { MathNode } from "../nodes/MathNode";
-  import { SeriesMathNode } from "../nodes/MathNodeSeries";
+  import { SeriesMathNode } from "../nodes/SeriesMathNode";
   import { SumNode } from "../nodes/SumNode";
   import { DisplayNode } from "../nodes/DisplayNode";
   import { ResultNode } from "../nodes/ResultNode";

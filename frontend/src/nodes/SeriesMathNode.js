@@ -1,14 +1,14 @@
-import { UncertainSeriesNode } from "./UncertainSeriesNode";
+import { SeriesUncertainNode } from "./SeriesUncertainNode";
 
-export class SeriesMathNode extends UncertainSeriesNode {
+export class SeriesMathNode extends SeriesUncertainNode {
   constructor() {
     super();
     this.type = "SeriesMath";
     this.name = "Math";
-    this.addInputInterface("A", undefined, null, {
+    this.addInputInterface("A", undefined, NaN, {
       type: "probabilistic_series"
     });
-    this.addInputInterface("B", undefined, null, {
+    this.addInputInterface("B", undefined, NaN, {
       type: "probabilistic_series"
     });
     this.addOption("Operation", "SelectOption", "Add", undefined, {
