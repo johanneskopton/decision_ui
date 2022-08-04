@@ -38,10 +38,28 @@ def Result(args):
     return args["Value"]
 
 
+def ValueVarier(args):
+    if args["trend"] == 0:
+        return "vv(var_mean={}, var_CV={}, n={})".format(
+            args["var_mean"],
+            args["var_CV"],
+            args["n"]
+        )
+    else:
+        return "vv(var_mean={}, var_CV={}, n={}, {}_trend={})".format(
+            args["var_mean"],
+            args["var_CV"],
+            args["n"],
+            args["TrendType"],
+            args["trend"]
+        )
+
+
 node_implementations = {
     "Math": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
     "Display": Display,
-    "Result": Result
+    "Result": Result,
+    "ValueVarier": ValueVarier
 }
