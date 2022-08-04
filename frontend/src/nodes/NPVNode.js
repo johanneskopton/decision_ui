@@ -5,7 +5,7 @@ export class NPVNode extends UncertainNode {
   constructor() {
     super();
     this.type = "NPV";
-    this.name = "Net Present Value";
+    this.name = "NetPresentValue";
     this.addInputInterface("x", undefined, undefined, {
       type: "probabilistic_series"
     });
