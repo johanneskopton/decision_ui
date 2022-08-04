@@ -38,6 +38,11 @@ export class EstimateNode extends UncertainNode {
           }
         });
       }
+      if (this.getOptionValue("Probability distribution") == "deterministic") {
+        this.getInterface("Result").type = "deterministic";
+      } else {
+        this.getInterface("Result").type = "probabilistic";
+      }
     }
   }
 
