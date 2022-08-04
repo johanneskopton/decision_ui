@@ -99,6 +99,7 @@ node_implementations = {
     "SeriesMath": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
+    "SeriesChanceEvent": ChanceEvent,
     "Display": Display,
     "Result": Result,
     "ValueVarier": ValueVarier,
