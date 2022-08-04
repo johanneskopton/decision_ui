@@ -43,7 +43,6 @@ export const UVType = {
       lower_upper_check,
       params => {
         return params["lower"] > params["upper"] * 0.1;
-        let variance = std ** 2;
       }
     ],
     most_likely: params => {
