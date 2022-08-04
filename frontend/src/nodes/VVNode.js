@@ -47,6 +47,7 @@ export class VVNode extends SeriesUncertainNode {
     }
 
     for (let i = 0; i < input.n; i++) {
+      let variance = ((mean[i] * input.var_CV) / 100) ** 2;
       let distribution = gaussian(mean[i], variance);
       result.push(distribution.ppf(Math.random()));
     }
