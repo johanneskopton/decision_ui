@@ -19,7 +19,7 @@ export class NPVNode extends UncertainNode {
     var i = 0;
     if (input.x) {
       input.x.tolist().forEach(e => {
-        result += e * (1 - input.discount / 100) ** i;
+        result += e / (1 + input.discount / 100) ** i;
         i++;
       });
       return result;
