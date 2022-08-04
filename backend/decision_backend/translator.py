@@ -145,6 +145,10 @@ class Translator:
         """
         mc_template = templateEnv.get_template("mc.R")
 
+        n_estimates = len(self.estimates_df)
+        n_prob_estimates = (
+            self.estimates_df["distribution"] != "const").sum(axis=0)
+
         for node in self.model.nodes:
             if node.type == "Result":
                 first_out_var = node.variable_name
@@ -154,7 +158,8 @@ class Translator:
             model_function=self._get_model_function(),
             results_path=results_file,
             evpi_path=evpi_file,
-            is_estimate=len(self.estimates_df) > 0,
+            is_estimate=n_estimates > 0,
+            do_evpi=n_prob_estimates > 0,
             first_out_var=first_out_var
         )
         self.r_script = res_str

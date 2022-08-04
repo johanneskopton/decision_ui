@@ -12,7 +12,7 @@ mc <- mcSimulation(estimate=input_estimates,
 		numberOfModelRuns=1000,
 		functionSyntax='plainNames')
 
-{% if is_estimate %}mc_table <- data.frame(mc$x, mc$y)
+{% if do_evpi %}mc_table <- data.frame(mc$x, mc$y)
 evpi <- multi_EVPI(mc=mc_table, first_out_var = "{{ first_out_var }}", write_table = FALSE, outfolder = NA)
 evpi_res = data.frame(variable = evpi[[1]]$variable)
 for (i in 1:length(evpi)){
