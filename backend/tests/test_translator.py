@@ -126,10 +126,6 @@ def test_execute_r_mc():
     df = pd.read_csv(translator.results_file.name)
     target_columns = {'y.ProfitResult',
                       'y.ProfitAltResult',
-                      # 'x.Yield_kg',
-                      # 'x.Selling_Price_Base',
-                      # 'x.Fixed_Cost',
-                      # 'x.Cost_Per_Yield',
                       }
 
     translator.clean()
