@@ -14,9 +14,14 @@ export class UncertainNode extends NumericNode {
       // not every mc run
       this._calculate();
     }
-    var result = this.calculate_scalar(MC_RUNS);
-    this.getInterface("Result").value = result;
-    this.check_valid();
+    if (this.check_valid()) {
+      this.set_error(false);
+      let result = this.calculate_scalar(MC_RUNS);
+      this.getInterface("Result").value = result;
+    } else {
+      this.set_error(true);
+      this.getInterface("Result").value = [NaN];
+    }
   }
 
   calculate_scalar(mc_runs) {
