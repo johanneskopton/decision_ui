@@ -63,6 +63,11 @@ export class EstimateNode extends UncertainNode {
   _calculate() {
     var estimate_obj = {};
     this.uv_type.params.forEach(element => {
+      if (element == "value") {
+        let value = this.getOptionValue(element);
+        estimate_obj["lower"] = value;
+        estimate_obj["upper"] = value;
+      }
       estimate_obj[element] = this.getOptionValue(element);
     });
     estimate_obj["label"] = this.name;

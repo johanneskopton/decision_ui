@@ -88,16 +88,26 @@
       onLowerChange: function(newVal, oldVal, row) {
         this.$store.state.model.editor.nodes.forEach(node => {
           if (node.type == "Estimate" && node.name == row.variable) {
-            node.options.get("lower").value = Number(newVal);
             node.calculate_single();
+            let distribution = node.getOptionValue("Probability distribution");
+            if (distribution == "deterministic") {
+              node.options.get("value").value = Number(newVal);
+            } else {
+              node.options.get("lower").value = Number(newVal);
+            }
           }
         });
       },
       onUpperChange: function(newVal, oldVal, row) {
         this.$store.state.model.editor.nodes.forEach(node => {
           if (node.type == "Estimate" && node.name == row.variable) {
-            node.options.get("upper").value = Number(newVal);
             node.calculate_single();
+            let distribution = node.getOptionValue("Probability distribution");
+            if (distribution == "deterministic") {
+              node.options.get("value").value = Number(newVal);
+            } else {
+              node.options.get("upper").value = Number(newVal);
+            }
           }
         });
       }
