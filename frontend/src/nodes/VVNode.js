@@ -5,7 +5,7 @@ import nj from "numjs";
 export class VVNode extends SeriesUncertainNode {
   constructor() {
     super();
-    this.type = "VV";
+    this.type = "ValueVarier";
     this.name = "ValueVarier";
     this.addOption("TrendType", "SelectOption", "absolute", undefined, {
       items: ["absolute", "relative"]

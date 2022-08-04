@@ -115,7 +115,7 @@
           "ChanceEvent",
           ChanceEventNode
         );
-        this.$store.state.model.editor.registerNodeType("VV", VVNode);
+        this.$store.state.model.editor.registerNodeType("ValueVarier", VVNode);
         this.$store.state.model.editor.registerNodeType(
           "ToSeries",
           ToSeriesNode
