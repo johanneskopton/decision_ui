@@ -1,7 +1,7 @@
-import { UncertainSeriesNode } from "./UncertainSeriesNode";
+import { SeriesUncertainNode } from "./SeriesUncertainNode";
 import nj from "numjs";
 
-export class ToSeriesNode extends UncertainSeriesNode {
+export class ToSeriesNode extends SeriesUncertainNode {
   constructor() {
     super();
     this.type = "ToSeries";

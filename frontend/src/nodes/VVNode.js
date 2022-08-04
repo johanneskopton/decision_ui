@@ -1,8 +1,8 @@
-import { UncertainSeriesNode } from "./UncertainSeriesNode";
+import { SeriesUncertainNode } from "./SeriesUncertainNode";
 import gaussian from "gaussian";
 import nj from "numjs";
 
-export class VVNode extends UncertainSeriesNode {
+export class VVNode extends SeriesUncertainNode {
   constructor() {
     super();
     this.type = "VV";
