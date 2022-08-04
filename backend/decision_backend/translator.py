@@ -177,7 +177,13 @@ class Translator:
         input_variable_names.update(node.options)
         node_type = node.type
         r_right_side = node_implementations[node_type](input_variable_names)
-        r_line = "{} <- {}".format(variable_name, r_right_side)
+        if type(r_right_side) == str:
+            r_line = "{} <- {}".format(variable_name, r_right_side)
+        elif type(r_right_side) == tuple:
+            r_line = "{} <- {}\n{}{}".format(variable_name,
+                                             r_right_side[0],
+                                             variable_name,
+                                             r_right_side[1])
         return r_line
 
     def _translate_subgraph(self, variable_name):

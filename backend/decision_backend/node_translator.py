@@ -1,5 +1,27 @@
 import string
 
+"""
+Each function is the implementation of one node:
+
+If it returns a string, it is interpreted as the right side of
+the R assignment like `a <- {right_side}`.
+
+If it returns a tuple of strings, it is interpreted as follows:
+The first element is treated like described above.
+The second element is treated as the right side in a following row:
+```
+a <- {first_right_side}
+a{second_right_side}
+```
+
+This way something like
+```
+a = rep(0, 10)
+a[3] = 5
+```
+can be implemented.
+"""
+
 
 def Math(args):
     operators = {
