@@ -167,7 +167,7 @@ class Translator:
                 continue
             connection = self._get_connection_from_interface(interface["id"])
             if connection is None:
-                term = interface["value"]
+                term = np.around(interface["value"], 7)
             else:
                 input_result_interface_id = connection["from"]
                 source_node = self._get_node_from_result_interface(
