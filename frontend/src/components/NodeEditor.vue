@@ -71,6 +71,7 @@
   import { ResultNode } from "../nodes/ResultNode";
   import { EstimateNode } from "../nodes/EstimateNode";
   import { ChanceEventNode } from "../nodes/ChanceEventNode";
+  import { SeriesChanceEventNode } from "../nodes/SeriesChanceEventNode";
   import { VVNode } from "../nodes/VVNode";
   import { NPVNode } from "../nodes/NPVNode";
   import { SeriesDisplayNode } from "../nodes/SeriesDisplayNode";
@@ -123,6 +124,10 @@
         this.$store.state.model.editor.registerNodeType(
           "SeriesMath",
           SeriesMathNode
+        );
+        this.$store.state.model.editor.registerNodeType(
+          "SeriesChanceEvent",
+          SeriesChanceEventNode
         );
         this.$store.state.model.editor.registerNodeType(
           "SeriesDisplay",
