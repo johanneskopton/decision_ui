@@ -35,6 +35,10 @@ def Math(args):
     return "{} {} {}".format(args["A"], operator, args["B"])
 
 
+def Round(args):
+    return "{}({})".format(args["Operation"], args["x"])
+
+
 def Sum(args):
     res_str = args["A"]
     for i in string.ascii_uppercase[1:]:
@@ -104,6 +108,8 @@ def NPV(args):
 
 node_implementations = {
     "Math": Math,
+    "Round": Round,
+    "RoundDeterministic": Round,
     "SeriesMath": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
