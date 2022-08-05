@@ -92,11 +92,15 @@
         // The interface type plugin allows for custom interface types
         const intfTypePlugin = new InterfaceTypePlugin();
         this.$store.state.model.editor.use(intfTypePlugin);
+
         // Define interface types
         intfTypePlugin.addType("probabilistic", colors.purple.accent1);
         intfTypePlugin.addType("probabilistic_series", colors.teal.accent1);
         intfTypePlugin.addType("deterministic", colors.shades.white);
         intfTypePlugin.addType("deterministic_int", colors.grey.lighten1);
+
+        // Define type conversions
+        intfTypePlugin.addConversion("deterministic", "probabilistic", v => v);
 
         // Show a minimap in the top right corner
         this.$store.state.model.viewPlugin.enableMinimap = false;
