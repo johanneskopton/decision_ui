@@ -28,7 +28,7 @@ export class ToSeriesNode extends SeriesUncertainNode {
     ) {
       this.timestep_option = true;
       this.addInputInterface("timestep", "IntegerOption", 0, {
-        type: "deterministic_int"
+        type: "probabilistic_int"
       });
     } else if (
       this.getOptionValue("TimestepMethod") == "every" &&
