@@ -1,4 +1,5 @@
 import string
+import numpy as np
 
 """
 Each function is the implementation of one node:
@@ -81,10 +82,17 @@ def ToSeries(args):
     if args["TimestepMethod"] == "every":
         return "rep({}, {})".format(args["value"], args["n"])
     elif args["TimestepMethod"] == "as defined":
-        return (
-            "rep({}, {})".format(0, args["n"]),
-            "[{}] <- {}".format(args["timestep"]+1, args["value"])
-        )
+        timestep = args["timestep"]
+        if type(timestep) in [int, float, np.int64]:
+            return (
+                "rep({}, {})".format(0, args["n"]),
+                "[{}] <- {}".format(args["timestep"]+1, args["value"])
+            )
+        else:
+            return (
+                "rep({}, {})".format(0, args["n"]),
+                "[{}+1] <- {}".format(args["timestep"], args["value"])
+            )
 
 
 def NPV(args):
