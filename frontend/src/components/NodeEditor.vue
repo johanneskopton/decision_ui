@@ -76,6 +76,8 @@
   import { NPVNode } from "../nodes/NPVNode";
   import { SeriesDisplayNode } from "../nodes/SeriesDisplayNode";
   import { ToSeriesNode } from "../nodes/ToSeriesNode";
+  import { RoundNode } from "../nodes/RoundNode";
+  import { DetRoundNode } from "../nodes/DetRoundNode";
 
   export default {
     //components: { HintOverlay },
@@ -95,12 +97,33 @@
 
         // Define interface types
         intfTypePlugin.addType("probabilistic", colors.purple.accent1);
+        intfTypePlugin.addType("probabilistic_int", colors.purple.lighten4);
         intfTypePlugin.addType("probabilistic_series", colors.teal.accent1);
-        intfTypePlugin.addType("deterministic", colors.shades.white);
-        intfTypePlugin.addType("deterministic_int", colors.grey.lighten1);
+        intfTypePlugin.addType("deterministic", colors.amber.accent1);
+        intfTypePlugin.addType("deterministic_int", colors.amber.lighten5);
 
         // Define type conversions
         intfTypePlugin.addConversion("deterministic", "probabilistic", v => v);
+        intfTypePlugin.addConversion(
+          "deterministic_int",
+          "probabilistic_int",
+          v => v
+        );
+        intfTypePlugin.addConversion(
+          "deterministic_int",
+          "probabilistic",
+          v => v
+        );
+        intfTypePlugin.addConversion(
+          "deterministic_int",
+          "deterministic",
+          v => v
+        );
+        intfTypePlugin.addConversion(
+          "probabilistic_int",
+          "probabilistic",
+          v => v
+        );
 
         // Show a minimap in the top right corner
         this.$store.state.model.viewPlugin.enableMinimap = false;
@@ -108,6 +131,11 @@
         // register the nodes we have defined, so they can be
         // added by the user as well as saved & loaded.
         this.$store.state.model.editor.registerNodeType("Math", MathNode);
+        this.$store.state.model.editor.registerNodeType("Round", RoundNode);
+        this.$store.state.model.editor.registerNodeType(
+          "RoundDeterministic",
+          DetRoundNode
+        );
         this.$store.state.model.editor.registerNodeType("Display", DisplayNode);
         this.$store.state.model.editor.registerNodeType("Result", ResultNode);
         this.$store.state.model.editor.registerNodeType(
