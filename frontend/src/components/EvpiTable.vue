@@ -18,12 +18,14 @@
         type="number"
       />
     </vue-excel-editor>
-    <v-alert v-else type="info" elevation="2">
+    <!--<v-alert v-else type="info" elevation="2">
       No EVPI to see.. Run the model first!
-    </v-alert>
+    </v-alert>-->
+    <RunButton get-evpi :evpi-set="evpi.length > 0" />
   </v-card>
 </template>
 <script>
+  import RunButton from "./RunButton.vue";
   export default {
     computed: {
       evpi: function() {
@@ -46,7 +48,8 @@
         });
         return res;
       }
-    }
+    },
+    components: { RunButton }
   };
 </script>
 

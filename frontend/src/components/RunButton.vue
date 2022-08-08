@@ -4,23 +4,32 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           class="ma-2 hoverable"
-          fab
+          :fab="!getEvpi"
           dark
           large
-          bottom
-          right
+          :bottom="!getEvpi"
+          :right="!getEvpi"
           color="primary"
           @click="callBackend"
           v-bind="attrs"
           v-on="on"
           :loading="loading_mc"
         >
-          <v-icon dark class="onhover">
+          <span v-if="getEvpi" class="button_text"> Calculate EVPI</span>
+          <v-icon v-if="!getEvpi" dark class="onhover">
             mdi-rocket-launch-outline
           </v-icon>
-          <v-icon dark class="onnohover">
+          <v-icon v-if="!getEvpi" dark class="onnohover">
             mdi-rocket-outline
           </v-icon>
+          <div v-else>
+            <v-icon v-if="!evpiSet" dark>
+              mdi-table-question
+            </v-icon>
+            <v-icon v-else dark>
+              mdi-table-refresh
+            </v-icon>
+          </div>
         </v-btn>
       </template>
       <span>Run</span>
@@ -58,6 +67,16 @@
 <script>
   import axios from "axios";
   export default {
+    props: {
+      getEvpi: {
+        type: Boolean,
+        default: false
+      },
+      evpiSet: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         loading_mc: false,
@@ -67,10 +86,11 @@
     },
     methods: {
       callBackend() {
-        var model = this.$store.state.model.editor.save();
         this.loading_mc = true;
+        var model = this.$store.state.model.editor.save();
+        var route = this.getEvpi ? "/v1/evpi" : "/v1/monte_carlo";
         axios
-          .post("http://localhost:8000/api/v1/decision_support", model)
+          .post("http://localhost:8000/api" + route, model)
           .then(response => this.receiveResults(response))
           .catch(response => this.receiveResultsError(response));
       },
@@ -109,5 +129,9 @@
   button.hoverable .onnohover,
   button.hoverable:hover .onhover {
     display: inherit;
+  }
+
+  .button_text {
+    margin-right: 1em;
   }
 </style>
