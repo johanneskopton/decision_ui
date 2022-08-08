@@ -27,7 +27,10 @@
   export default {
     computed: {
       evpi: function() {
-        if (this.$store.state.model.decisionSupportResult) {
+        if (
+          this.$store.state.model.decisionSupportResult &&
+          this.$store.state.model.decisionSupportResult.evpi
+        ) {
           return this.$store.state.model.decisionSupportResult.evpi;
         } else {
           return [];

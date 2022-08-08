@@ -57,7 +57,10 @@
         if (this.live) {
           return this.$store.state.model.estimates;
         } else {
-          if (this.$store.state.model.decisionSupportResult) {
+          if (
+            this.$store.state.model.decisionSupportResult &&
+            this.$store.state.model.decisionSupportResult.estimates
+          ) {
             return csv_parser(
               this.$store.state.model.decisionSupportResult.estimates
             );

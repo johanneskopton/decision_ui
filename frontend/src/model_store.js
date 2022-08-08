@@ -18,7 +18,14 @@ export default {
       state.isInitialized = true;
     },
     setDecisionSupportResult(state, decisionSupportResult) {
-      state.decisionSupportResult = decisionSupportResult;
+      if (!state.decisionSupportResult) {
+        state.decisionSupportResult = decisionSupportResult;
+      } else {
+        state.decisionSupportResult = {
+          ...state.decisionSupportResult,
+          ...decisionSupportResult
+        };
+      }
     }
   }
 };
