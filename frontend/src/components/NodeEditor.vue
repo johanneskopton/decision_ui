@@ -79,6 +79,7 @@
   import { RoundNode } from "../nodes/RoundNode";
   import { DetRoundNode } from "../nodes/DetRoundNode";
   import { ComparisonNode } from "../nodes/ComparisonNode";
+  import { SeriesComparisonNode } from "../nodes/SeriesComparisonNode";
 
   export default {
     //components: { HintOverlay },
@@ -161,6 +162,10 @@
         this.$store.state.model.editor.registerNodeType(
           "SeriesMath",
           SeriesMathNode
+        );
+        this.$store.state.model.editor.registerNodeType(
+          "SeriesComparison",
+          SeriesComparisonNode
         );
         this.$store.state.model.editor.registerNodeType(
           "SeriesChanceEvent",
