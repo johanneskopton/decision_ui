@@ -20,20 +20,39 @@ app.add_middleware(
 )
 
 
-@app.post("/api/v1/decision_support")
-def root(model: RawModel):
+@app.post("/api/v1/monte_carlo")
+def monte_carlo(model: RawModel):
 
     dsw = DecisionSupportWrapper(model, 50000)
     dsw.run()
     hist = dsw.get_hist()
     r_script = dsw.get_r_script()
     estimates = dsw.get_estimates()
-    evpi = dsw.get_evpi()
+    # evpi = dsw.get_evpi()
     dsw.clean()
 
     return {
         "hist": hist,
         "r_script": r_script,
         "estimates": estimates,
+        # "evpi": evpi
+    }
+
+
+@app.post("/api/v1/evpi")
+def evpi(model: RawModel):
+
+    dsw = DecisionSupportWrapper(model, 1000, do_evpi=True)
+    dsw.run()
+    # hist = dsw.get_hist()
+    # r_script = dsw.get_r_script()
+    # estimates = dsw.get_estimates()
+    evpi = dsw.get_evpi()
+    dsw.clean()
+
+    return {
+        # "hist": hist,
+        # "r_script": r_script,
+        # "estimates": estimates,
         "evpi": evpi
     }
