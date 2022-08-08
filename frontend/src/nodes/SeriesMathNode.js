@@ -16,6 +16,14 @@ export class SeriesMathNode extends SeriesUncertainNode {
     });
   }
 
+  check_valid() {
+    let A = this.getInterface("A").value[0];
+    let B = this.getInterface("B").value[0];
+    return (
+      typeof A == "object" && typeof B == "object" && A.shape[0] == B.shape[0]
+    );
+  }
+
   calculate_single(input) {
     const operations = {
       Add: (A, B) => A.add(B),
@@ -23,19 +31,7 @@ export class SeriesMathNode extends SeriesUncertainNode {
       Multiply: (A, B) => A.multiply(B),
       Divide: (A, B) => A.divide(B)
     };
-    var result;
     const operation = this.getOptionValue("Operation");
-    if (
-      typeof input.A == "object" &&
-      typeof input.B == "object" &&
-      input.A.shape[0] == input.B.shape[0]
-    ) {
-      result = operations[operation](input.A, input.B);
-      this.set_error(false);
-      return result;
-    } else {
-      this.set_error(true);
-      return NaN;
-    }
+    return operations[operation](input.A, input.B);
   }
 }
