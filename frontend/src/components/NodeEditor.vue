@@ -78,6 +78,7 @@
   import { ToSeriesNode } from "../nodes/ToSeriesNode";
   import { RoundNode } from "../nodes/RoundNode";
   import { DetRoundNode } from "../nodes/DetRoundNode";
+  import { ComparisonNode } from "../nodes/ComparisonNode";
 
   export default {
     //components: { HintOverlay },
@@ -131,6 +132,10 @@
         // register the nodes we have defined, so they can be
         // added by the user as well as saved & loaded.
         this.$store.state.model.editor.registerNodeType("Math", MathNode);
+        this.$store.state.model.editor.registerNodeType(
+          "Comparison",
+          ComparisonNode
+        );
         this.$store.state.model.editor.registerNodeType("Round", RoundNode);
         this.$store.state.model.editor.registerNodeType(
           "RoundDeterministic",

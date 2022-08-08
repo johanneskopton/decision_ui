@@ -35,6 +35,11 @@ def Math(args):
     return "{} {} {}".format(args["A"], operator, args["B"])
 
 
+def Comparison(args):
+    operator = args["Operation"]
+    return "({} {} {}) * 1".format(args["A"], operator, args["B"])
+
+
 def Round(args):
     return "{}({})".format(args["Operation"], args["x"])
 
@@ -108,6 +113,7 @@ def NPV(args):
 
 node_implementations = {
     "Math": Math,
+    "Comparison": Comparison,
     "Round": Round,
     "RoundDeterministic": Round,
     "SeriesMath": Math,
