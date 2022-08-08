@@ -18,8 +18,11 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 
 
 class Translator:
-    def __init__(self, model):
+    def __init__(self, model, mc_runs, do_evpi=False):
         self.model = self._strip_model(model)
+        self.mc_runs = mc_runs
+        self.do_evpi = do_evpi
+
         self.estimates_df = None
         self.r_script = None
 
@@ -159,8 +162,9 @@ class Translator:
             results_path=results_file,
             evpi_path=evpi_file,
             is_estimate=n_estimates > 0,
-            do_evpi=n_prob_estimates > 0,
-            first_out_var=first_out_var
+            do_evpi=n_prob_estimates > 0 and self.do_evpi,
+            first_out_var=first_out_var,
+            mc_runs=self.mc_runs
         )
         self.r_script = res_str
 

@@ -23,7 +23,7 @@ app.add_middleware(
 @app.post("/api/v1/decision_support")
 def root(model: RawModel):
 
-    dsw = DecisionSupportWrapper(model)
+    dsw = DecisionSupportWrapper(model, 50000)
     dsw.run()
     hist = dsw.get_hist()
     r_script = dsw.get_r_script()

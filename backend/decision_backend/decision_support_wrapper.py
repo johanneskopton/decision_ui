@@ -8,8 +8,13 @@ from decision_backend.model import RawModel
 
 
 class DecisionSupportWrapper:
-    def __init__(self, raw_model: RawModel):
-        self.translator = Translator(raw_model)
+    def __init__(
+            self,
+            raw_model: RawModel,
+            mc_runs: int,
+            do_evpi: bool = False,
+    ):
+        self.translator = Translator(raw_model, mc_runs, do_evpi)
         self.translator.translate_to_files()
 
     def run(self):
