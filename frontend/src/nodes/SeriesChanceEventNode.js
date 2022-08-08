@@ -19,10 +19,12 @@ export class SeriesChanceEventNode extends SeriesUncertainNode {
   }
 
   check_valid() {
-    console.log(this.getInterface("value_if").value);
+    let value_if = this.getInterface("value_if").value[0];
+    let value_if_not = this.getInterface("value_if_not").value[0];
     if (
-      typeof this.getInterface("value_if").value == "object" &&
-      typeof this.getInterface("value_if_not").value == "object"
+      typeof value_if == "object" &&
+      typeof value_if_not == "object" &&
+      value_if.shape[0] == value_if_not.shape[0]
     ) {
       return true;
     } else {
