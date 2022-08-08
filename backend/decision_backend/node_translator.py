@@ -113,11 +113,11 @@ def NPV(args):
 
 node_implementations = {
     "Math": Math,
+    "SeriesMath": Math,
     "Comparison": Comparison,
     "SeriesComparison": Comparison,
     "Round": Round,
     "RoundDeterministic": Round,
-    "SeriesMath": Math,
     "Sum": Sum,
     "ChanceEvent": ChanceEvent,
     "SeriesChanceEvent": ChanceEvent,
