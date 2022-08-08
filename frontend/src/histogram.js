@@ -20,7 +20,7 @@ export default function(graph, ctx, bins, density, in_node = false) {
   } else {
     const baseColor = "rgba(155, 155, 155, 1)";
     const baseColor2 = "rgba(155, 155, 155, 0.2)";
-    var max_ticks = 18;
+    var max_ticks = 10;
     var datasets = [];
     const n_variables = Object.keys(density).length;
     var i = 0;
