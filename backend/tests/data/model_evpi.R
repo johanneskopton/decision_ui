@@ -24,8 +24,15 @@ model_function <- function(){
 
 mc <- mcSimulation(estimate=input_estimates,
 		model_function=model_function,
-		numberOfModelRuns=100,
+		numberOfModelRuns=10,
 		functionSyntax='plainNames')
 
+mc_table <- data.frame(mc$x, mc$y)
+evpi <- multi_EVPI(mc=mc_table, first_out_var = "ProfitResult", write_table = FALSE, outfolder = NA)
+evpi_res = data.frame(variable = evpi[[1]]$variable)
+for (i in 1:length(evpi)){
+  evpi_res[names(evpi)[i]] = evpi[[i]]$EVPI
+}
+write_csv(evpi_res, "{{ evpi_path }}")
 
 write_csv(data.frame(mc["y"]), "{{ results_path }}")
