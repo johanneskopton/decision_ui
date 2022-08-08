@@ -11,7 +11,7 @@
     width: 100%;
     height: 100vh;
   }
-  div.dashboard .v-sheet {
+  div.dashboard .v-card {
     padding: max(10px, 1%);
     margin: max(10px, 1%);
     float: left;
