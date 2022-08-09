@@ -25,6 +25,7 @@ class DecisionSupportWrapper:
         res = dict()
         res["density"] = dict()
         combined_df = pd.concat([df[col] for col in df.columns])
+        combined_df = combined_df[combined_df.notnull()]
         _, combined_edges = np.histogram(list(combined_df), bins=100)
         res["bins"] = combined_edges.tolist()
         for column in df:
