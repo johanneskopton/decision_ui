@@ -29,7 +29,9 @@ setup(
         "numpy",
         "jinja2",
         "fastapi",
-        "pydantic"
+        "pydantic",
+        "fastapi-users[sqlalchemy]",
+        "aiosqlite"
     ],
     extras_require={
         "dev": [
