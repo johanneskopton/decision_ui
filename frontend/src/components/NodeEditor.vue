@@ -235,16 +235,6 @@
 <style lang="scss">
   @import "../style/baklava.scss";
 
-  .floating_btn_group {
-    position: absolute;
-    bottom: 16px;
-    z-index: 5;
-  }
-
-  .floating_btn_group.left {
-    left: 16px;
-  }
-
   .node.error {
     .__title {
       background-color: var(--v-error-darken2);

@@ -101,4 +101,14 @@
   .theme--light.v-icon {
     color: #9e9e9e;
   }
+
+  .floating_btn_group {
+    position: absolute;
+    bottom: 16px;
+    z-index: 5;
+  }
+
+  .floating_btn_group.left {
+    left: 16px;
+  }
 </style>
