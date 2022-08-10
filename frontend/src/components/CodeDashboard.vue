@@ -44,7 +44,6 @@
     components: { Dashboard, CodeDisplay, EstimatesTable },
     computed: {
       isCalculated: function() {
-        console.log(this.$store.state.model.decisionSupportResult.estimates);
         return (
           typeof this.$store.state.model.decisionSupportResult.r_script !==
             "undefined" &&
