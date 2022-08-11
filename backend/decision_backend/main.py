@@ -51,7 +51,7 @@ app.include_router(
 
 
 @app.post("/api/v1/monte_carlo")
-def monte_carlo(model: RawModel):
+def monte_carlo(model: RawModel, user: User = Depends(current_active_user)):
 
     dsw = DecisionSupportWrapper(model, 50000)
     dsw.run()
