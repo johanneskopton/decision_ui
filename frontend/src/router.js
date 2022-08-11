@@ -6,6 +6,7 @@ import EstimatesDashboard from "./components/EstimatesDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 import Workspace from "./Workspace.vue";
 import login from "./components/Login.vue";
+import Register from "./components/Register.vue";
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: "/login/",
     component: login
+  },
+  {
+    path: "/register/",
+    component: Register
   },
   {
     path: "/",
