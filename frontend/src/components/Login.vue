@@ -13,7 +13,10 @@
                 name="email"
                 label="Email"
                 type="text"
-                suffix="@uni-bonn.de"
+                v-model="email"
+                :rules="[rules.required]"
+                :error-messages="errorMessages"
+                :error="!!errorMessages"
               />
               <v-text-field
                 id="password"
@@ -24,20 +27,40 @@
                 :rules="[rules.required]"
                 :type="showPass ? 'text' : 'password'"
                 @click:append="showPass = !showPass"
+                v-model="password"
               />
             </v-form>
           </v-card-text>
           <v-card-actions>
+            <p class="infotext">
+              New here?
+              <router-link to="/register">Create a free account!</router-link>
+            </p>
             <v-spacer />
-            <v-btn color="primary" to="/">Login</v-btn>
+            <v-btn color="primary" @click="login">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
+    <v-snackbar v-model="network_error_msg" :timeout="2000" color="error">
+      <!--<v-icon>mdi-server-network-off</v-icon>-->
+      No connection to server!
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="network_error_msg = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+  import axios from "axios";
   export default {
     data() {
       return {
@@ -48,10 +71,56 @@
           required(value) {
             return !!value || "Required.";
           }
-        }
+        },
+        network_error_msg: false,
+        errorMessages: ""
       };
+    },
+    methods: {
+      login: function() {
+        const formData = new FormData();
+        formData.set("username", this.email);
+        formData.set("password", this.password);
+        axios
+          .post(
+            process.env.BACKEND_BASE_URL + "/api/auth/jwt/login",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data"
+              }
+            }
+          )
+          .then(this.onResponse)
+          .catch(this.onError);
+      },
+      onResponse: function(response) {
+        console.log(response);
+        if (response.statusText === "OK") {
+          let token = response.data.access_token;
+          this.$store.commit("login", { email: this.email, token });
+          this.$router.push("/workspace");
+        }
+      },
+      onError: function(error) {
+        if (error.code === "ERR_NETWORK") {
+          this.network_error_msg = true;
+          return;
+        } else if (error.code === "ERR_BAD_REQUEST") {
+          if (error.response.statusText === "Not Found") {
+            this.errorMessages = "Wrong email or password";
+            return;
+          }
+        }
+        console.log(error);
+      }
     }
   };
 </script>
 
-<style></style>
+<style>
+  .infotext {
+    margin-left: 10px;
+    margin-bottom: 5px !important;
+  }
+</style>
