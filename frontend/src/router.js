@@ -5,7 +5,7 @@ import ResultsDashboard from "./components/ResultsDashboard.vue";
 import EstimatesDashboard from "./components/EstimatesDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 import Workspace from "./Workspace.vue";
-import login from "./components/Login.vue";
+import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 
 const routes = [
@@ -37,7 +37,7 @@ const routes = [
   },
   {
     path: "/login/",
-    component: login
+    component: Login
   },
   {
     path: "/register/",
