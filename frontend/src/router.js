@@ -5,6 +5,7 @@ import ResultsDashboard from "./components/ResultsDashboard.vue";
 import EstimatesDashboard from "./components/EstimatesDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 import Workspace from "./Workspace.vue";
+import login from "./components/Login.vue";
 
 const routes = [
   {
@@ -32,6 +33,14 @@ const routes = [
         component: CodeDashboard
       }
     ]
+  },
+  {
+    path: "/login/",
+    component: login
+  },
+  {
+    path: "/",
+    redirect: "/login/"
   }
 ];
 
