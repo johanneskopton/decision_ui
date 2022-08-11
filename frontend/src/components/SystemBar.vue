@@ -1,5 +1,5 @@
 <template>
-  <v-system-bar height="30px">
+  <v-system-bar height="30px" class="systembar">
     <v-spacer />
     <v-icon v-if="token">mdi-account</v-icon>
     <v-icon v-else>mdi-account-off</v-icon>
@@ -19,3 +19,10 @@
     }
   };
 </script>
+<style>
+  .systembar {
+    position: absolute;
+    width: 100%;
+    z-index: 7;
+  }
+</style>
