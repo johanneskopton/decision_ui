@@ -1,5 +1,6 @@
 <template>
   <div>
+    <SystemBar />
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -71,8 +72,9 @@
 
 <script>
   import RunButton from "./components/RunButton.vue";
+  import SystemBar from "./components/SystemBar.vue";
   export default {
-    components: { RunButton },
+    components: { RunButton, SystemBar },
     data() {
       return {
         drawer: false,
