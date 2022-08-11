@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <SystemBar />
+  <div class="workspace-container">
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -71,10 +70,9 @@
 </template>
 
 <script>
-  import RunButton from "./components/RunButton.vue";
-  import SystemBar from "./components/SystemBar.vue";
+  import RunButton from "./RunButton.vue";
   export default {
-    components: { RunButton, SystemBar },
+    components: { RunButton },
     data() {
       return {
         drawer: false,
@@ -103,5 +101,14 @@
 
   .floating_btn_group.left {
     left: 16px;
+  }
+
+  .workspace-container {
+    top: 30px;
+    position: relative;
+  }
+
+  .v-navigation-drawer {
+    top: 30px !important;
   }
 </style>
