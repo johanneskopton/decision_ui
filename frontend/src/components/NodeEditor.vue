@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100vh; width: 100vw">
+  <div class="node-editor-container">
     <!--<hint-overlay />-->
     <baklava-editor :plugin="$store.state.model.viewPlugin" />
     <v-sheet
@@ -234,6 +234,10 @@
 
 <style lang="scss">
   @import "../style/baklava.scss";
+  .node-editor-container {
+    height: calc(100vh - 30px);
+    width: 100vw;
+  }
 
   .node.error {
     .__title {
