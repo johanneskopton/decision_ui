@@ -70,7 +70,7 @@ def monte_carlo(model: RawModel, user: User = Depends(current_active_user)):
 
 
 @app.post("/api/v1/evpi")
-def evpi(model: RawModel):
+def evpi(model: RawModel, user: User = Depends(current_active_user)):
 
     dsw = DecisionSupportWrapper(model, 1000, do_evpi=True)
     dsw.run()
