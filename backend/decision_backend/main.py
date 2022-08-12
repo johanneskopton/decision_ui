@@ -88,11 +88,6 @@ def evpi(model: RawModel, user: User = Depends(current_active_user)):
     }
 
 
-@app.get("/api/authenticated-route")
-async def authenticated_route(user: User = Depends(current_active_user)):
-    return {"message": f"Hello {user.email}!"}
-
-
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
