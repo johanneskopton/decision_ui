@@ -62,6 +62,35 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-dialog v-model="noPermissionDialog" max-width="290">
+      <v-card>
+        <v-card-title class="text-h5">
+          Not authorized
+        </v-card-title>
+
+        <v-card-text>
+          In order to make backend calls (i. e. run the heavy calculations on
+          our servers), you need to be logged in.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+
+          <v-btn color="grey" text @click="noPermissionDialog = false">
+            cancel
+          </v-btn>
+
+          <v-btn
+            color="primary"
+            text
+            @click="noPermissionDialog = false"
+            to="/login"
+          >
+            Login
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -81,7 +110,8 @@
       return {
         loading_mc: false,
         network_error_msg: false,
-        network_success_msg: false
+        network_success_msg: false,
+        noPermissionDialog: false
       };
     },
     methods: {
@@ -110,8 +140,10 @@
       receiveResultsError(response) {
         this.loading_mc = false;
         console.log(response);
-        if (response.code == "ERR_NETWORK") {
+        if (response.code === "ERR_NETWORK") {
           this.network_error_msg = true;
+        } else if (response.code === "ERR_BAD_REQUEST") {
+          this.noPermissionDialog = true;
         }
       }
     }
