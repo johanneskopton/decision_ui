@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
-from decision_backend import db_models, schemas
+from decision_backend import schemas
+from decision_backend.db import DecisionModel
 
 
 def get_decision_models(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(db_models.DecisionModel).offset(skip).limit(limit).all()
+    return db.query(DecisionModel).offset(skip).limit(limit).all()
 
 
 def create_user_decision_model(
@@ -11,7 +12,7 @@ def create_user_decision_model(
         decision_model: schemas.DecisionModelCreate,
         user_id: int
 ):
-    db_decision_model = db_models.DecisionModel(
+    db_decision_model = db.DecisionModel(
         **decision_model.dict(), owner_id=user_id)
     db.add(db_decision_model)
     db.commit()

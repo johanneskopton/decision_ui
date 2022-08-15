@@ -23,7 +23,7 @@ class UserRead(schemas.BaseUser[UUID]):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    items: List[DecisionModel] = []
+    decision_models: List[DecisionModel] = []
 
     class Config:
         orm_mode = True

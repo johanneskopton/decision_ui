@@ -6,20 +6,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from decision_backend.users import auth_backend, current_active_user
 from decision_backend.users import fastapi_users
 from decision_backend.schemas import UserCreate, UserRead, UserUpdate
-from decision_backend.db import User  # , create_db_and_tables
+from decision_backend.db import User, create_db_and_tables
 from decision_backend.model import RawModel
 from decision_backend.decision_support_wrapper import DecisionSupportWrapper
-from decision_backend import crud, db, schemas
-from decision_backend.db import SessionLocal, engine
+from decision_backend import crud, schemas
+from decision_backend.db import async_session_maker
+import uuid
 
-db.Base.metadata.create_all(bind=engine)
+# db.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
 
 # Dependency
 def get_db():
-    db = SessionLocal()
+    db = async_session_maker()
     try:
         yield db
     finally:
@@ -109,7 +110,7 @@ def evpi(model: RawModel, user: User = Depends(current_active_user)):
     response_model=schemas.DecisionModel
 )
 def create_item_for_user(
-    user_id: int,
+    user_id: uuid.UUID,
     decision_model: schemas.DecisionModelCreate,
     db: Session = Depends(get_db)
 ):
@@ -119,15 +120,19 @@ def create_item_for_user(
                                            )
 
 
-@app.get("/api/v1/decision_models/", response_model=List[schemas.DecisionModel])
-def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    decision_model = crud.get_items(db, skip=skip, limit=limit)
+@app.get(
+    "/api/v1/decision_models/",
+    response_model=List[schemas.DecisionModel],
+)
+def read_decision_models(skip: int = 0,
+                         limit: int = 100,
+                         db: Session = Depends(get_db)
+                         ):
+    decision_model = crud.get_decision_models(db, skip=skip, limit=limit)
     return decision_model
 
 
-"""
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
     await create_db_and_tables()
-"""
