@@ -27,7 +27,6 @@ class DecisionModel(Base):
     __tablename__ = "decision_model"
     id = Column(Integer, primary_key=True, index=True)
     content = Column(String)
-    is_active = Column(Boolean, default=True)
     owner_id = Column(UUIDType, ForeignKey("user.id"))
 
     owner = relationship("User", back_populates="decision_models")

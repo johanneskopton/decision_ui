@@ -19,12 +19,12 @@ app = FastAPI()
 
 
 # Dependency
-def get_db():
+async def get_db():
     db = async_session_maker()
     try:
         yield db
     finally:
-        db.close()
+        await db.close()
 
 
 origins = [
@@ -109,15 +109,15 @@ def evpi(model: RawModel, user: User = Depends(current_active_user)):
     "/api/v1/users/{user_id}/decision_model/",
     response_model=schemas.DecisionModel
 )
-def create_item_for_user(
+async def create_item_for_user(
     user_id: uuid.UUID,
     decision_model: schemas.DecisionModelCreate,
     db: Session = Depends(get_db)
 ):
-    return crud.create_user_decision_model(db=db,
-                                           decision_model=decision_model,
-                                           user_id=user_id
-                                           )
+    return await crud.create_user_decision_model(db=db,
+                                                 decision_model=decision_model,
+                                                 user_id=user_id
+                                                 )
 
 
 @app.get(

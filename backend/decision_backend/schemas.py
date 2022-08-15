@@ -15,7 +15,9 @@ class DecisionModelCreate(DecisionModelBase):
 class DecisionModel(DecisionModelBase):
     id: int
     owner_id: UUID
-    is_active: bool
+
+    class Config:
+        orm_mode = True
 
 
 class UserRead(schemas.BaseUser[UUID]):
