@@ -17,4 +17,5 @@ async def create_user_decision_model(
         **decision_model.dict(), owner_id=user_id)
     db.add(db_decision_model)
     await db.flush()
+    await db.commit()
     return db_decision_model
