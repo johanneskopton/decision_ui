@@ -1,6 +1,7 @@
 from fastapi_users import schemas
 from pydantic import BaseModel
 from typing import List
+from uuid import UUID
 
 
 class DecisionModelBase(BaseModel):
@@ -13,11 +14,11 @@ class DecisionModelCreate(DecisionModelBase):
 
 class DecisionModel(DecisionModelBase):
     id: int
-    owner_id: int
+    owner_id: UUID
     is_active: bool
 
 
-class UserRead(schemas.BaseUser[int]):
+class UserRead(schemas.BaseUser[UUID]):
     pass
 
 

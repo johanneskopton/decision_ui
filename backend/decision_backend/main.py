@@ -6,13 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from decision_backend.users import auth_backend, current_active_user
 from decision_backend.users import fastapi_users
 from decision_backend.schemas import UserCreate, UserRead, UserUpdate
-from decision_backend.db import User, create_db_and_tables
+from decision_backend.db import User  # , create_db_and_tables
 from decision_backend.model import RawModel
 from decision_backend.decision_support_wrapper import DecisionSupportWrapper
 from decision_backend import crud, db, schemas
-from decision_backend.db import SessionLocal, sync_engine
+from decision_backend.db import SessionLocal, engine
 
-db.Base.metadata.create_all(bind=sync_engine)
+db.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -105,7 +105,7 @@ def evpi(model: RawModel, user: User = Depends(current_active_user)):
 
 
 @app.post(
-    "/api/v1/users/{user_id}/decision_models/",
+    "/api/v1/users/{user_id}/decision_model/",
     response_model=schemas.DecisionModel
 )
 def create_item_for_user(
@@ -119,13 +119,15 @@ def create_item_for_user(
                                            )
 
 
-@app.get("/items/", response_model=List[schemas.Item])
+@app.get("/api/v1/decision_models/", response_model=List[schemas.DecisionModel])
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = crud.get_items(db, skip=skip, limit=limit)
-    return items
+    decision_model = crud.get_items(db, skip=skip, limit=limit)
+    return decision_model
 
 
+"""
 @app.on_event("startup")
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
     await create_db_and_tables()
+"""

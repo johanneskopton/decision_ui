@@ -31,7 +31,8 @@ setup(
         "fastapi",
         "pydantic",
         "fastapi-users[sqlalchemy]",
-        "aiosqlite"
+        "aiosqlite",
+        "sqlalchemy_utils"
     ],
     extras_require={
         "dev": [
