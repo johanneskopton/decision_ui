@@ -1,13 +1,29 @@
+from typing import List
+from sqlalchemy.orm import Session
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from decision_backend.users import auth_backend, current_active_user, fastapi_users
+
+from decision_backend.users import auth_backend, current_active_user
+from decision_backend.users import fastapi_users
 from decision_backend.schemas import UserCreate, UserRead, UserUpdate
 from decision_backend.db import User, create_db_and_tables
-
 from decision_backend.model import RawModel
 from decision_backend.decision_support_wrapper import DecisionSupportWrapper
+from decision_backend import crud, db, schemas
+from decision_backend.db import SessionLocal, sync_engine
+
+db.Base.metadata.create_all(bind=sync_engine)
 
 app = FastAPI()
+
+
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 origins = [
@@ -86,6 +102,27 @@ def evpi(model: RawModel, user: User = Depends(current_active_user)):
         # "estimates": estimates,
         "evpi": evpi
     }
+
+
+@app.post(
+    "/api/v1/users/{user_id}/decision_models/",
+    response_model=schemas.DecisionModel
+)
+def create_item_for_user(
+    user_id: int,
+    decision_model: schemas.DecisionModelCreate,
+    db: Session = Depends(get_db)
+):
+    return crud.create_user_decision_model(db=db,
+                                           decision_model=decision_model,
+                                           user_id=user_id
+                                           )
+
+
+@app.get("/items/", response_model=List[schemas.Item])
+def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    items = crud.get_items(db, skip=skip, limit=limit)
+    return items
 
 
 @app.on_event("startup")
