@@ -3,19 +3,21 @@
     <v-row justify="center" align="center">
       <v-card>
         <v-toolbar color="secondary" dark>
+          <!--
           <v-app-bar-nav-icon />
+          -->
 
           <v-toolbar-title>My files</v-toolbar-title>
-
+          <!--
           <v-spacer />
 
-          <v-btn icon>
+          <v-btn disabled icon>
             <v-icon>mdi-magnify</v-icon>
           </v-btn>
 
-          <v-btn icon>
+          <v-btn disabled icon>
             <v-icon>mdi-view-module</v-icon>
-          </v-btn>
+          </v-btn> -->
         </v-toolbar>
 
         <v-list subheader two-line>
