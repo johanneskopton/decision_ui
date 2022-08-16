@@ -33,8 +33,12 @@
     position: relative;
   }
   div.fileview .v-card {
-    padding: max(10px, 1%);
     margin: max(10px, 1%);
-    float: left;
+  }
+  .v-btn--right {
+    position: absolute;
+    bottom: 8px;
+    z-index: 5;
+    right: 8px;
   }
 </style>
