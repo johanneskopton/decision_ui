@@ -106,17 +106,17 @@ def evpi(model: RawModel, user: User = Depends(current_active_user)):
 
 
 @app.post(
-    "/api/v1/users/{user_id}/decision_model/",
+    "/api/v1/decision_model/",
     response_model=schemas.DecisionModel
 )
 async def create_item_for_user(
-    user_id: uuid.UUID,
     decision_model: schemas.DecisionModelCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user: User = Depends(current_active_user)
 ):
     return await crud.create_user_decision_model(db=db,
                                                  decision_model=decision_model,
-                                                 user_id=user_id
+                                                 user=user
                                                  )
 
 

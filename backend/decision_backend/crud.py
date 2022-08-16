@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy.future import select
 from decision_backend import schemas
 from decision_backend.db import DecisionModel
-from uuid import UUID
 
 
 async def get_decision_models(db: Session, skip: int = 0, limit: int = 100):
@@ -20,10 +19,9 @@ async def get_user_decision_models(db: Session, user: schemas.UserRead):
 async def create_user_decision_model(
         db: Session,
         decision_model: schemas.DecisionModelCreate,
-        user_id: UUID
-):
+        user: schemas.UserRead):
     db_decision_model = DecisionModel(
-        **decision_model.dict(), owner_id=user_id)
+        **decision_model.dict(), owner_id=user.id)
     db.add(db_decision_model)
     await db.flush()
     await db.commit()
