@@ -1,5 +1,6 @@
 <template>
   <v-system-bar height="30px" class="systembar">
+    {{ this.$store.state.model.name }}
     <v-spacer />
     <v-icon v-if="token">mdi-account</v-icon>
     <v-icon v-else>mdi-account-off</v-icon>
