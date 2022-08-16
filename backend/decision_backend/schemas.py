@@ -5,6 +5,8 @@ from uuid import UUID
 
 
 class DecisionModelBase(BaseModel):
+    name: str
+    saved: int
     content: str
 
 

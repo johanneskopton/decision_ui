@@ -26,6 +26,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 class DecisionModel(Base):
     __tablename__ = "decision_model"
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    saved = Column(Integer)
     content = Column(String)
     owner_id = Column(UUIDType, ForeignKey("user.id"))
 
