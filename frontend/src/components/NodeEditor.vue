@@ -51,7 +51,7 @@
         </template>
         <span>Upload</span>
       </v-tooltip>
-      <SaveButton></SaveButton>
+      <SaveButton />
     </v-sheet>
   </div>
 </template>
