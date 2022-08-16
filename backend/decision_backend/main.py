@@ -124,12 +124,15 @@ async def create_item_for_user(
     "/api/v1/decision_models/",
     response_model=List[schemas.DecisionModel],
 )
-def read_decision_models(skip: int = 0,
-                         limit: int = 100,
-                         db: Session = Depends(get_db)
-                         ):
-    decision_model = crud.get_decision_models(db, skip=skip, limit=limit)
-    return decision_model
+ async def read_decision_models(skip: int = 0,
+                               limit: int = 100,
+                               db: Session = Depends(get_db)
+                               ):
+    decision_models = await crud.get_decision_models(db,
+                                                     skip=skip,
+                                                     limit=limit)
+    print(decision_models)
+    return decision_models
 
 
 @app.on_event("startup")
