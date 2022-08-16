@@ -10,7 +10,9 @@ export default {
       engine: new Engine(true),
       isInitialized: false,
       decisionSupportResult: false,
-      estimates: []
+      estimates: [],
+      lastSaved: undefined,
+      name: undefined
     };
   },
   mutations: {
