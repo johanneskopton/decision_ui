@@ -34,15 +34,16 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title v-text="model.content" />
-              <v-list-item-subtitle v-text="model.id" />
+              <v-list-item-title v-text="model.name" />
+              <v-list-item-subtitle v-text="nodeCount(model.content)" />
             </v-list-item-content>
-
+            <!--
             <v-list-item-action>
               <v-btn icon>
                 <v-icon color="grey lighten-1">mdi-information</v-icon>
               </v-btn>
             </v-list-item-action>
+            -->
           </v-list-item>
         </v-list>
       </v-card>
@@ -62,6 +63,9 @@
       this.query_models();
     },
     methods: {
+      nodeCount(content) {
+        return String(JSON.parse(content).nodes.length) + " nodes";
+      },
       query_models() {
         var token = this.$store.state.user.access_token;
         axios
