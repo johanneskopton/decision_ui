@@ -21,7 +21,12 @@
         </v-toolbar>
 
         <v-list subheader two-line>
-          <v-list-item v-for="model in models" :key="model.content">
+          <v-list-item
+            v-for="model in models"
+            :key="model.content"
+            link
+            @click="open(model)"
+          >
             <v-list-item-avatar>
               <v-icon class="grey lighten-1" dark>
                 mdi-file
@@ -74,6 +79,12 @@
       },
       receiveResultsError(response) {
         console.log(response);
+      },
+      open(model) {
+        this.$store.state.model.name = model.name;
+        this.$store.dispatch("initModel");
+        this.$store.state.model.editor.load(JSON.parse(model.content));
+        this.$router.push("/user/workspace");
       }
     }
   };
