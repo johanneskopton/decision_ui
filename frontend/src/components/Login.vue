@@ -99,7 +99,7 @@
         if (response.statusText === "OK") {
           let token = response.data.access_token;
           this.$store.commit("login", { email: this.email, token });
-          this.$router.push("/workspace");
+          this.$router.push("/user/files");
         }
       },
       onError: function(error) {

@@ -1,13 +1,12 @@
 <template>
   <div>
     <SystemBar />
-    <Workspace />
+    <router-view />
   </div>
 </template>
 <script>
-  import Workspace from "./Workspace.vue";
   import SystemBar from "./SystemBar.vue";
   export default {
-    components: { Workspace, SystemBar }
+    components: { SystemBar }
   };
 </script>

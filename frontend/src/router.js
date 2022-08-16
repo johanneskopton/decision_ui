@@ -7,34 +7,47 @@ import CodeDashboard from "./components/CodeDashboard.vue";
 import UserArea from "./components/UserArea.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
+import Workspace from "./components/Workspace.vue";
+import FileView from "./components/FileView.vue";
 
 const routes = [
   {
-    path: "/workspace/",
+    path: "/user/",
     component: UserArea,
     children: [
       {
-        path: "",
-        redirect: "modeling"
+        path: "workspace",
+        component: Workspace,
+        children: [
+          {
+            path: "",
+            redirect: "modeling"
+          },
+          {
+            path: "modeling",
+            component: NodeEditor
+          },
+          {
+            path: "estimates",
+            component: EstimatesDashboard
+          },
+          {
+            path: "results",
+            component: ResultsDashboard
+          },
+          {
+            path: "code",
+            component: CodeDashboard
+          }
+        ]
       },
       {
-        path: "modeling",
-        component: NodeEditor
-      },
-      {
-        path: "estimates",
-        component: EstimatesDashboard
-      },
-      {
-        path: "results",
-        component: ResultsDashboard
-      },
-      {
-        path: "code",
-        component: CodeDashboard
+        path: "files",
+        component: FileView
       }
     ]
   },
+
   {
     path: "/login/",
     component: Login
