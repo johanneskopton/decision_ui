@@ -10,7 +10,7 @@
     >
       <v-list flat dense nav>
         <v-list-item-group v-model="selectedItem" color="primary accent-1">
-          <v-list-item to="/workspace/modeling" link>
+          <v-list-item to="/user/workspace/modeling" link>
             <v-list-item-icon>
               <v-icon :rotate="90">
                 mdi-graph mdi-rotate-90
@@ -20,7 +20,7 @@
               Model editor
             </v-list-item-title>
           </v-list-item>
-          <v-list-item to="/workspace/estimates" link>
+          <v-list-item to="/user/workspace/estimates" link>
             <v-list-item-icon>
               <v-icon>
                 mdi-table
@@ -30,7 +30,7 @@
               Estimates
             </v-list-item-title>
           </v-list-item>
-          <v-list-item to="/workspace/results" link>
+          <v-list-item to="/user/workspace/results" link>
             <v-list-item-icon>
               <v-icon>
                 mdi-chart-histogram
@@ -40,7 +40,7 @@
               Results dashboard
             </v-list-item-title>
           </v-list-item>
-          <v-list-item to="/workspace/code" link>
+          <v-list-item to="/user/workspace/code" link>
             <v-list-item-icon>
               <v-icon>
                 mdi-language-r
