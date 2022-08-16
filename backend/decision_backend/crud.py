@@ -11,6 +11,12 @@ async def get_decision_models(db: Session, skip: int = 0, limit: int = 100):
     return result.scalars().all()
 
 
+async def get_user_decision_models(db: Session, user: schemas.UserRead):
+    q = select(DecisionModel).where(DecisionModel.owner_id == user.id)
+    result = await db.execute(q)
+    return result.scalars().all()
+
+
 async def create_user_decision_model(
         db: Session,
         decision_model: schemas.DecisionModelCreate,
