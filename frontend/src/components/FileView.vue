@@ -1,6 +1,19 @@
 <template>
   <div class="fileview">
     <FileList />
+    <v-btn
+      right
+      dark
+      fab
+      color="primary"
+      to="/user/workspace"
+      class="ma-2"
+      large
+    >
+      <v-icon dark>
+        mdi-file-plus
+      </v-icon>
+    </v-btn>
   </div>
 </template>
 <script>
