@@ -8,8 +8,12 @@
       mini-variant
       permanent
     >
-      <v-list flat dense nav>
-        <v-list-item-group v-model="selectedItem" color="primary accent-1">
+      <v-list flat dense nav height="100%">
+        <v-list-item-group
+          v-model="selectedItem"
+          color="primary accent-1"
+          class="d-flex flex-column"
+        >
           <v-list-item to="/user/workspace/modeling" link>
             <v-list-item-icon>
               <v-icon :rotate="90">
@@ -48,6 +52,21 @@
             </v-list-item-icon>
             <v-list-item-title>
               R-Code
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/user/files"
+            class="mt-auto"
+            link
+            v-if="$store.state.user.access_token"
+          >
+            <v-list-item-icon>
+              <v-icon>
+                mdi-file-multiple
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>
+              Files
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -110,5 +129,13 @@
 
   .v-navigation-drawer {
     top: 30px !important;
+  }
+
+  .v-list-item {
+    flex: 0;
+  }
+
+  .v-list-item-group {
+    height: calc(100% - 30px);
   }
 </style>
