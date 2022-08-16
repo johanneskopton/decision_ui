@@ -24,7 +24,7 @@
             </v-icon>
           </v-btn>
         </template>
-        <span>Save</span>
+        <span>Download</span>
       </v-tooltip>
       <input
         type="file"
@@ -49,7 +49,7 @@
             </v-icon>
           </v-btn>
         </template>
-        <span>Load</span>
+        <span>Upload</span>
       </v-tooltip>
     </v-sheet>
   </div>
