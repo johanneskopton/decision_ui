@@ -1,7 +1,15 @@
 <template>
   <v-dialog v-model="nameDialog" scrollable max-width="300px" v-if="token">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="ma-2" text dark color="secondary" v-bind="attrs" v-on="on">
+      <v-btn
+        class="ma-2"
+        text
+        dark
+        color="secondary"
+        v-bind="attrs"
+        v-on="on"
+        @click="openDialog"
+      >
         <v-icon dark>
           mdi-content-save-outline
         </v-icon>
@@ -72,6 +80,9 @@
       },
       receiveResultsError(response) {
         console.log(response);
+      },
+      openDialog() {
+        this.modelName = this.$store.state.model.name;
       }
     }
   };
