@@ -60,147 +60,17 @@
   //import HintOverlay from "./HintOverlay.vue";
   import { saveAs } from "file-saver";
 
-  import { InterfaceTypePlugin } from "@baklavajs/plugin-interface-types";
-  import { OptionPlugin } from "@baklavajs/plugin-options-vue";
-  import HistogramOption from "./HistogramOption.vue";
-  import SeriesDiagramOption from "./SeriesDiagramOption.vue";
-  import colors from "vuetify/lib/util/colors";
-  import { MathNode } from "../nodes/MathNode";
-  import { SeriesMathNode } from "../nodes/SeriesMathNode";
-  import { SumNode } from "../nodes/SumNode";
-  import { DisplayNode } from "../nodes/DisplayNode";
-  import { ResultNode } from "../nodes/ResultNode";
-  import { EstimateNode } from "../nodes/EstimateNode";
-  import { ChanceEventNode } from "../nodes/ChanceEventNode";
-  import { SeriesChanceEventNode } from "../nodes/SeriesChanceEventNode";
-  import { VVNode } from "../nodes/VVNode";
-  import { NPVNode } from "../nodes/NPVNode";
-  import { SeriesDisplayNode } from "../nodes/SeriesDisplayNode";
-  import { ToSeriesNode } from "../nodes/ToSeriesNode";
-  import { RoundNode } from "../nodes/RoundNode";
-  import { DetRoundNode } from "../nodes/DetRoundNode";
-  import { ComparisonNode } from "../nodes/ComparisonNode";
-  import { SeriesComparisonNode } from "../nodes/SeriesComparisonNode";
   import SaveButton from "./SaveButton.vue";
 
   export default {
     //components: { HintOverlay },
     created() {
       if (!this.$store.state.model.isInitialized) {
-        // Register the plugins
-        // The view plugin is used for rendering the nodes
-        this.$store.state.model.editor.use(this.$store.state.model.viewPlugin);
-        // The option plugin provides some default option UI elements
-        this.$store.state.model.editor.use(new OptionPlugin());
-        // The engine plugin calculates the nodes in the graph in the
-        // correct order using the "calculate" methods of the nodes
-        this.$store.state.model.editor.use(this.$store.state.model.engine);
-        // The interface type plugin allows for custom interface types
-        const intfTypePlugin = new InterfaceTypePlugin();
-        this.$store.state.model.editor.use(intfTypePlugin);
-        // Define interface types
-        intfTypePlugin.addType("probabilistic", colors.purple.accent1);
-        intfTypePlugin.addType("probabilistic_int", colors.purple.lighten4);
-        intfTypePlugin.addType("probabilistic_series", colors.teal.accent1);
-        intfTypePlugin.addType("deterministic", colors.amber.accent1);
-        intfTypePlugin.addType("deterministic_int", colors.amber.lighten5);
-        // Define type conversions
-        intfTypePlugin.addConversion("deterministic", "probabilistic", v => v);
-        intfTypePlugin.addConversion(
-          "deterministic_int",
-          "probabilistic_int",
-          v => v
-        );
-        intfTypePlugin.addConversion(
-          "deterministic_int",
-          "probabilistic",
-          v => v
-        );
-        intfTypePlugin.addConversion(
-          "deterministic_int",
-          "deterministic",
-          v => v
-        );
-        intfTypePlugin.addConversion(
-          "probabilistic_int",
-          "probabilistic",
-          v => v
-        );
-        // Show a minimap in the top right corner
-        this.$store.state.model.viewPlugin.enableMinimap = false;
-        // register the nodes we have defined, so they can be
-        // added by the user as well as saved & loaded.
-        this.$store.state.model.editor.registerNodeType("Math", MathNode);
-        this.$store.state.model.editor.registerNodeType(
-          "Comparison",
-          ComparisonNode
-        );
-        this.$store.state.model.editor.registerNodeType("Round", RoundNode);
-        this.$store.state.model.editor.registerNodeType(
-          "RoundDeterministic",
-          DetRoundNode
-        );
-        this.$store.state.model.editor.registerNodeType("Display", DisplayNode);
-        this.$store.state.model.editor.registerNodeType("Result", ResultNode);
-        this.$store.state.model.editor.registerNodeType(
-          "Estimate",
-          EstimateNode
-        );
-        this.$store.state.model.editor.registerNodeType("Sum", SumNode);
-        this.$store.state.model.editor.registerNodeType(
-          "ChanceEvent",
-          ChanceEventNode
-        );
-        this.$store.state.model.editor.registerNodeType("ValueVarier", VVNode);
-        this.$store.state.model.editor.registerNodeType(
-          "ToSeries",
-          ToSeriesNode
-        );
-        this.$store.state.model.editor.registerNodeType("NPV", NPVNode);
-        this.$store.state.model.editor.registerNodeType(
-          "SeriesMath",
-          SeriesMathNode
-        );
-        this.$store.state.model.editor.registerNodeType(
-          "SeriesComparison",
-          SeriesComparisonNode
-        );
-        this.$store.state.model.editor.registerNodeType(
-          "SeriesChanceEvent",
-          SeriesChanceEventNode
-        );
-        this.$store.state.model.editor.registerNodeType(
-          "SeriesDisplay",
-          SeriesDisplayNode
-        );
-        // register custom options
-        this.$store.state.model.viewPlugin.registerOption(
-          "HistogramOption",
-          HistogramOption
-        );
-        this.$store.state.model.viewPlugin.registerOption(
-          "SeriesDiagramOption",
-          SeriesDiagramOption
-        );
-        // add some nodes so the screen is not empty on startup
-        const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
-        const node2 = this.addNodeWithCoordinates(ResultNode, 400, 140);
-        this.$store.state.model.editor.addConnection(
-          node1.getInterface("Result"),
-          node2.getInterface("Value")
-        );
-        this.$store.commit("setInitialized");
+        this.$store.dispatch("initModel");
       }
       this.$store.state.model.engine.calculate();
     },
     methods: {
-      addNodeWithCoordinates(nodeType, x, y) {
-        const n = new nodeType();
-        this.$store.state.model.editor.addNode(n);
-        n.position.x = x;
-        n.position.y = y;
-        return n;
-      },
       saveGraph() {
         var blob = new Blob(
           [JSON.stringify(this.$store.state.model.editor.save(), null, 2)],
