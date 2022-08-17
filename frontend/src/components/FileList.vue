@@ -45,6 +45,13 @@
             </v-list-item-action>
             -->
           </v-list-item>
+          <v-list-item v-if="models.length == 0">
+            No models yet! Click on the
+            <v-icon light>
+              mdi-file-plus
+            </v-icon>
+            button below to create your first!
+          </v-list-item>
         </v-list>
       </v-card>
     </v-row>
