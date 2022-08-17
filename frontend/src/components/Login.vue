@@ -95,6 +95,10 @@
         errorMessages: ""
       };
     },
+    created() {
+      this.$store.state.user.email = false;
+      this.$store.state.user.access_token = false;
+    },
     methods: {
       login: function() {
         const formData = new FormData();
