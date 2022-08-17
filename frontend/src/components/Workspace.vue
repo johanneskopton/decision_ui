@@ -62,7 +62,7 @@
           >
             <v-list-item-icon>
               <v-icon>
-                mdi-file-multiple
+                mdi-format-list-text
               </v-icon>
             </v-list-item-icon>
             <v-list-item-title>
