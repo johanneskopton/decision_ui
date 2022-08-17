@@ -92,6 +92,11 @@
   import RunButton from "./RunButton.vue";
   export default {
     components: { RunButton },
+    created() {
+      if (!this.$store.state.model.isInitialized) {
+        this.$store.dispatch("initModel");
+      }
+    },
     data() {
       return {
         drawer: false,

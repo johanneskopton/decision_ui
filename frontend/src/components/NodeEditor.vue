@@ -65,9 +65,6 @@
   export default {
     //components: { HintOverlay },
     created() {
-      if (!this.$store.state.model.isInitialized) {
-        this.$store.dispatch("initModel");
-      }
       this.$store.state.model.engine.calculate();
     },
     methods: {
