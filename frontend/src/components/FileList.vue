@@ -23,7 +23,7 @@
         <v-list subheader two-line>
           <v-list-item
             v-for="model in models"
-            :key="model.content"
+            :key="model.saved"
             link
             @click="open(model)"
           >
