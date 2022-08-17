@@ -4,7 +4,7 @@
       v-model="drawer"
       app
       class="pt-4"
-      color="grey lighten-3"
+      color="secondary lighten-5"
       mini-variant
       permanent
     >
