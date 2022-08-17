@@ -93,7 +93,7 @@
       },
       onResponse: function(response) {
         if (response.statusText === "Created") {
-          console.log("yeah");
+          this.$router.push("/login");
         }
       },
       onError: function(error) {
