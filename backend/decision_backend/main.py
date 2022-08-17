@@ -146,3 +146,8 @@ async def read_decision_models(db: Session = Depends(get_db),
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
     await create_db_and_tables()
+
+
+@app.get("/api/test")
+async def main():
+    return {"message": "Hello World"}
