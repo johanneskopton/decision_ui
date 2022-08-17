@@ -1,13 +1,14 @@
 <template>
-  <v-app>
-    <node-editor />
-  </v-app>
+  <v-app><router-view /></v-app>
 </template>
 
-<script>
-  import NodeEditor from "./NodeEditor.vue";
+<style>
+  @import url("https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900");
+  @import url("https://fonts.googleapis.com/css?family=Roboto+Mono:400");
+  @import url("https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css");
 
-  export default {
-    components: { NodeEditor }
-  };
-</script>
+  body {
+    margin: 0;
+    font-family: Roboto !important;
+  }
+</style>

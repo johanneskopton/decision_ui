@@ -2,14 +2,14 @@
 @import 'vuetify/src/styles/main.sass';
 
 $color-primary: var(--v-primary-base);
-$color-node-background: var(--v-secondary-lighten3);
+$color-node-background: var(--v-nodes-lighten3);
 $color-pattern-default: map-get($shades, "white");
 $color-pattern-line: map-get($blue-grey, "lighten-5");
 $color-pattern-black: map-get($blue-grey, "lighten-5");
-$color-control-dark-background: var(--v-secondary-lighten1);
-$color-node-title-background: var(--v-secondary-base);
-$color-connection-default: var(--v-secondary-lighten3);
-$color-sidebar-background: var(--v-secondary-lighten1);
+$color-control-dark-background: var(--v-nodes-lighten1);
+$color-node-title-background: var(--v-nodes-base);
+$color-connection-default: var(--v-nodes-lighten3);
+$color-sidebar-background: var(--v-nodes-lighten1);
 $border-radius-control: 5px;
 $border-radius-node: 7px;
 $color-node-selected: var(--v-primary-lighten1);
@@ -18,7 +18,7 @@ $color-node-selected: var(--v-primary-lighten1);
 
 .dark-select {
     &>.__dropdown {
-            background: var(--v-secondary-base);
+            background: var(--v-nodes-base);
     }
 }
 .node {

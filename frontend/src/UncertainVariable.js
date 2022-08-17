@@ -1,7 +1,14 @@
 import gaussian from "gaussian";
+import random_trunc_normal from "./helper/random_trunc_normal";
 
 // 95% quantile of the standard normal distribution
 const q95_Z = 1.6448536269514722;
+
+const numeric_tolerance = 1e-5;
+
+const lower_upper_check = params => {
+  return params["lower"] + numeric_tolerance < params["upper"];
+};
 
 export const UVType = {
   deterministic: {
@@ -16,11 +23,7 @@ export const UVType = {
     id: 2,
     name: "norm",
     params: ["lower", "upper"],
-    checks: [
-      params => {
-        return params["lower"] < params["upper"];
-      }
-    ],
+    checks: [lower_upper_check],
     most_likely: params => {
       return (params["lower"] + params["upper"]) / 2;
     },
@@ -30,6 +33,49 @@ export const UVType = {
       let variance = std ** 2;
       let distribution = gaussian(mean, variance);
       return distribution.ppf(Math.random());
+    }
+  },
+  posnorm: {
+    id: 3,
+    name: "posnorm",
+    params: ["lower", "upper"],
+    checks: [
+      lower_upper_check,
+      params => {
+        return params["lower"] > params["upper"] * 0.1;
+      }
+    ],
+    most_likely: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      return Math.max(0, mean);
+    },
+    random_sample: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      let stdDev = (params["upper"] - mean) / q95_Z;
+      return random_trunc_normal({ range: [0, Infinity], mean, stdDev });
+    }
+  },
+  tnorm_0_1: {
+    id: 3,
+    name: "tnorm_0_1",
+    params: ["lower", "upper"],
+    checks: [
+      lower_upper_check,
+      params => {
+        return params["lower"] > params["upper"] * 0.1;
+      },
+      params => {
+        return params["lower"] + (1 - params["lower"]) * 0.9 > params["upper"];
+      }
+    ],
+    most_likely: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      return Math.max(0, mean);
+    },
+    random_sample: params => {
+      let mean = (params["lower"] + params["upper"]) / 2;
+      let stdDev = (params["upper"] - mean) / q95_Z;
+      return random_trunc_normal({ range: [0, 1], mean, stdDev });
     }
   }
   /*Bernoulli: {

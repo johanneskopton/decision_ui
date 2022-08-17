@@ -13,7 +13,8 @@ const opts = {
     themes: {
       light: {
         primary: colors.deepPurple,
-        secondary: colors.grey.darken3
+        secondary: colors.grey.darken2,
+        nodes: colors.grey.darken3
       }
     }
   }

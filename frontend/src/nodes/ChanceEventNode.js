@@ -8,7 +8,7 @@ export class ChanceEventNode extends UncertainNode {
     this.addInputInterface("chance", "NumberOption", 0, {
       min: 0,
       max: 1,
-      type: "deterministic"
+      type: "probabilistic"
     });
     this.addInputInterface("value_if", "NumberOption", 1, {
       type: "probabilistic"
