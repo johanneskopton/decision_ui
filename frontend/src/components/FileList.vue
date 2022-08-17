@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center" align="center">
       <v-card>
-        <v-toolbar color="secondary" dark>
+        <v-toolbar color="primary" dark>
           <!--
           <v-app-bar-nav-icon />
           -->
