@@ -32,7 +32,6 @@
     background-color: map-get($grey, "lighten-4");
     width: 100%;
     height: calc(100vh - 30px);
-    top: 30px;
     position: relative;
   }
   div.fileview .v-card {

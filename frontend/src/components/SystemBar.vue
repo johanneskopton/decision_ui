@@ -1,5 +1,5 @@
 <template>
-  <v-system-bar height="30px" class="systembar">
+  <v-system-bar height="30px">
     <v-icon v-if="token">mdi-account</v-icon>
     <v-icon v-else>mdi-account-off</v-icon>
     <span v-if="email">{{ email }}</span>
@@ -22,10 +22,11 @@
     }
   };
 </script>
-<style>
-  .systembar {
-    position: absolute;
-    width: 100%;
-    z-index: 7;
+<style lang="scss">
+  .v-system-bar {
+    background-color: var(--v-secondary-lighten4) !important;
+  }
+  .unsaved {
+    font-style: italic;
   }
 </style>

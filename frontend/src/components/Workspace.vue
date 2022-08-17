@@ -128,7 +128,6 @@
   }
 
   .workspace-container {
-    top: 30px;
     position: relative;
   }
 
