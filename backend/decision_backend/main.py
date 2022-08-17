@@ -11,7 +11,6 @@ from decision_backend.model import RawModel
 from decision_backend.decision_support_wrapper import DecisionSupportWrapper
 from decision_backend import crud, schemas
 from decision_backend.db import async_session_maker
-import uuid
 
 # db.Base.metadata.create_all(bind=engine)
 
