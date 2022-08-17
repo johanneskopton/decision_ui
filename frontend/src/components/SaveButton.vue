@@ -75,6 +75,7 @@
         console.log(response);
         if (response.statusText === "OK") {
           this.$store.state.model.lastSaved = Date.now();
+          this.$store.state.model.unsaved = false;
           this.$store.state.model.name = this.modelName;
         }
       },

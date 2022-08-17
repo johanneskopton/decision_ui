@@ -67,6 +67,16 @@
     created() {
       this.$store.state.model.engine.calculate();
     },
+    watch: {
+      model() {
+        this.$store.state.model.unsaved = true;
+      }
+    },
+    computed: {
+      model() {
+        return this.$store.state.model.editor.save();
+      }
+    },
     methods: {
       saveGraph() {
         var blob = new Blob(

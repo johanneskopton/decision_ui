@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
   <v-system-bar height="30px">
     <v-icon v-if="token">mdi-account</v-icon>
@@ -5,9 +6,19 @@
     <span v-if="email">{{ email }}</span>
     <span v-else>guest</span>
     <v-spacer />
-    {{ this.$store.state.model.name }}
+    <span v-if="token" :class="{ unsaved: $store.state.model.unsaved }">
+      {{ this.$store.state.model.name
+      }}<span v-if="$store.state.model.unsaved && $store.state.model.name"
+        >*
+      </span>
+    </span>
+    <span v-else>
+      <em>Unsaved model*</em>
+    </span>
     <v-spacer />
-    <router-link to="/login"><v-icon>mdi-logout-variant</v-icon></router-link>
+    <router-link to="/login">
+      <v-icon v-if="token">mdi-logout-variant</v-icon>
+    </router-link>
   </v-system-bar>
 </template>
 <script>

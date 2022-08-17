@@ -35,7 +35,8 @@ export default {
       decisionSupportResult: undefined,
       estimates: [],
       lastSaved: undefined,
-      name: undefined
+      name: undefined,
+      unsaved: false
     };
   },
   mutations: {
