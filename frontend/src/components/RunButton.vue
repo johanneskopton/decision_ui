@@ -118,10 +118,10 @@
       callBackend() {
         this.loading_mc = true;
         var model = this.$store.state.model.editor.save();
-        var route = this.getEvpi ? "/v1/evpi" : "/v1/monte_carlo";
+        var route = this.getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
         var token = this.$store.state.user.access_token;
         axios
-          .post("http://localhost:8000/api" + route, model, {
+          .post(process.env.BACKEND_BASE_URL + route, model, {
             headers: {
               Authorization: `Bearer ${token}`
             }
