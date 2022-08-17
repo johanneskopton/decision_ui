@@ -85,8 +85,8 @@
         console.log(response);
       },
       open(model) {
-        this.$store.state.model.name = model.name;
         this.$store.dispatch("initModel");
+        this.$store.state.model.name = model.name;
         this.$store.state.model.editor.load(JSON.parse(model.content));
         this.$router.push("/user/workspace");
       }

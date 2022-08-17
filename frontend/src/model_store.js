@@ -28,11 +28,11 @@ import { SeriesComparisonNode } from "./nodes/SeriesComparisonNode";
 export default {
   state() {
     return {
-      editor: new Editor(),
-      viewPlugin: new ViewPlugin(),
+      editor: undefined,
+      viewPlugin: undefined,
       engine: new Engine(true),
       isInitialized: false,
-      decisionSupportResult: false,
+      decisionSupportResult: undefined,
       estimates: [],
       lastSaved: undefined,
       name: undefined
@@ -55,6 +55,14 @@ export default {
   },
   actions: {
     initModel(context) {
+      context.state.editor = new Editor();
+      context.state.viewPlugin = new ViewPlugin();
+      // context.state.engine = new Engine();
+      context.state.decisionSupportResult = false;
+      context.state.estimates = [];
+      context.state.lastSaved = undefined;
+      context.state.name = undefined;
+
       // Register the plugins
       // The view plugin is used for rendering the nodes
       context.state.editor.use(context.state.viewPlugin);
