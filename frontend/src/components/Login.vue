@@ -33,8 +33,11 @@
           </v-card-text>
           <v-card-actions>
             <p class="infotext">
-              New here?
-              <router-link to="/register">Create a free account!</router-link>
+              New here? 🤗
+              <router-link to="/register">Create a free account!</router-link
+              ><br />
+              ..or
+              <router-link to="/user/workspace">try as a guest.</router-link>
             </p>
             <v-spacer />
             <v-btn color="primary" @click="login">Login</v-btn>
