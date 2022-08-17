@@ -53,8 +53,7 @@
   };
 </script>
 
-<style lang="scss">
-  @import "vuetify/src/styles/main.sass";
+<style>
   .table-container {
     width: 675px;
   }
