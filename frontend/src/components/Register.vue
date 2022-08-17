@@ -34,7 +34,7 @@
           <v-card-actions>
             <p class="infotext">
               If you already have an account, just
-              <router-link to="/login">Login</router-link>.
+              <router-link to="/login">login</router-link>.
             </p>
             <v-spacer />
             <v-btn color="primary" @click="register">Register</v-btn>
