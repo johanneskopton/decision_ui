@@ -2,7 +2,8 @@ export default {
   state() {
     return {
       email: false,
-      access_token: false
+      access_token: false,
+      register_success_msg: false
     };
   },
   mutations: {

@@ -59,6 +59,22 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-snackbar
+      v-model="$store.state.user.register_success_msg"
+      color="info"
+      :timeout="2000"
+    >
+      Registration complete! 🎉
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          text
+          v-bind="attrs"
+          @click="$store.state.user.register_success_msg = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 

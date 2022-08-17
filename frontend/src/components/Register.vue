@@ -93,6 +93,7 @@
       },
       onResponse: function(response) {
         if (response.statusText === "Created") {
+          this.$store.state.user.register_success_msg = true;
           this.$router.push("/login");
         }
       },
