@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center" align="center">
-      <v-card>
+      <v-card class="filelist">
         <v-toolbar color="primary" dark>
           <!--
           <v-app-bar-nav-icon />
@@ -102,7 +102,7 @@
 </script>
 
 <style>
-  .v-card {
+  .v-card.filelist {
     width: 60%;
     min-width: 300px;
   }
