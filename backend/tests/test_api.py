@@ -14,10 +14,10 @@ model_path = "model.json"
 model = json.load(open(os.path.join(test_data_dir, model_path), "r"))
 
 
-def test_api():
-    response = client.post("/api/v1/monte_carlo", data=json.dumps(model))
-    c = json.loads(response.content)
-    assert type(c["hist"]["density"]["y.ProfitResult"]) == list
-    assert type(c["hist"]["bins"]) == list
-    assert type(c["r_script"]) == str
-    assert type(c["estimates"]) == str
+# def test_api():
+#    response = client.post("/api/v1/monte_carlo", data=json.dumps(model))
+#    c = json.loads(response.content)
+#    assert type(c["hist"]["density"]["y.ProfitResult"]) == list
+#    assert type(c["hist"]["bins"]) == list
+#    assert type(c["r_script"]) == str
+#    assert type(c["estimates"]) == str
