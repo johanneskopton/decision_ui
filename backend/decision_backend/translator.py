@@ -268,7 +268,8 @@ class Translator:
                     "name": interface[0], "id": interface[1]["id"]}
                 if interface[0] == "Result" \
                         or interface[1]["id"] in target_interfaces:
-                    del interface[1]["value"]
+                    if "value" in interface[1].keys():
+                        del interface[1]["value"]
                 else:
                     new_interface["value"] = interface[1]["value"]
                 node["interfaces"][i] = new_interface

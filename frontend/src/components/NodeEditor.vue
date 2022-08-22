@@ -61,6 +61,7 @@
   import { saveAs } from "file-saver";
 
   import SaveButton from "./SaveButton.vue";
+  import clean_model_json from "../helper/clean_model_json";
 
   export default {
     //components: { HintOverlay },
@@ -79,12 +80,11 @@
     },
     methods: {
       saveGraph() {
-        var blob = new Blob(
-          [JSON.stringify(this.$store.state.model.editor.save(), null, 2)],
-          {
-            type: "application/json;charset=utf-8"
-          }
-        );
+        var model = this.$store.state.model.editor.save();
+        model = clean_model_json(model);
+        var blob = new Blob([JSON.stringify(model, null, 2)], {
+          type: "application/json;charset=utf-8"
+        });
         saveAs(blob, "graph.json");
       },
       loadGraph() {
