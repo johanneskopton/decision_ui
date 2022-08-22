@@ -95,6 +95,7 @@
 </template>
 <script>
   import axios from "axios";
+  import clean_model_json from "../helper/clean_model_json";
   export default {
     props: {
       getEvpi: {
@@ -118,6 +119,7 @@
       callBackend() {
         this.loading_mc = true;
         var model = this.$store.state.model.editor.save();
+        model = clean_model_json(model);
         var route = this.getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
         var token = this.$store.state.user.access_token;
         axios

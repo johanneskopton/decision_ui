@@ -18,10 +18,16 @@ model_path = "model.json"
 model_dict = json.load(open(os.path.join(test_data_dir, model_path), "r"))
 model = RawModel(**model_dict)
 
+model_path_clean = "model_clean.json"
+model_dict_clean = json.load(
+    open(os.path.join(test_data_dir, model_path_clean), "r"))
+model_clean = RawModel(**model_dict_clean)
+
 
 def test_create_translator():
-    translator = Translator(model, 100)
-    assert len(translator.model.nodes) == 15
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        assert len(translator.model.nodes) == 15
 
 
 def test_create_variable_name():
@@ -45,47 +51,53 @@ def test_create_variable_name():
 
 
 def test_extract_estimates():
-    translator = Translator(model, 100)
-    translator.extract_estimates()
-    assert type(translator.estimates_df) == pd.DataFrame
-    print(translator.estimates_df.loc[:, "upper"])
-    assert (translator.estimates_df.loc[:, "lower"] == [
-        30000, 1.8, 40, 0.2]).all()
-    assert (translator.estimates_df.loc[:, "upper"] == [
-        50000, 2.4, 50, 0.5]).all()
-    assert np.isnan(translator.estimates_df.loc[0, "median"])
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        translator.extract_estimates()
+        assert type(translator.estimates_df) == pd.DataFrame
+        print(translator.estimates_df.loc[:, "upper"])
+        assert (translator.estimates_df.loc[:, "lower"] == [
+            30000, 1.8, 40, 0.2]).all()
+        assert (translator.estimates_df.loc[:, "upper"] == [
+            50000, 2.4, 50, 0.5]).all()
+        assert np.isnan(translator.estimates_df.loc[0, "median"])
 
 
 def test_translate_math_node():
-    translator = Translator(model, 100)
-    r_line = translator._translate_node("Profit")
-    assert r_line == "Profit <- Revenue - Cost"
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        r_line = translator._translate_node("Profit")
+        assert r_line == "Profit <- Revenue - Cost"
 
 
 def test_translate_sum_node():
-    translator = Translator(model, 100)
-    r_line = translator._translate_node("Cost")
-    assert r_line == "Cost <- Variable_Cost + Fixed_Cost"
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        r_line = translator._translate_node("Cost")
+        assert r_line == "Cost <- Variable_Cost + Fixed_Cost"
 
 
 def test_translate_chance_event_node():
-    translator = Translator(model, 100)
-    r_line = translator._translate_node("Selling_Price")
-    target = "Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)"
-    assert r_line == target
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        r_line = translator._translate_node("Selling_Price")
+        target = "Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)"
+        assert r_line == target
 
 
 def test_translate_display_node():
-    translator = Translator(model, 100)
-    r_line = translator._translate_node("ProfitResult")
-    assert r_line == "ProfitResult <- Profit"
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        r_line = translator._translate_node("ProfitResult")
+        assert r_line == "ProfitResult <- Profit"
 
 
 def test_translate_subgraph():
-    translator = Translator(model, 100)
-    subgraph = translator._translate_subgraph("ProfitResult")
-    print(subgraph)
-    target = "\
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        subgraph = translator._translate_subgraph("ProfitResult")
+        print(subgraph)
+        target = "\
 Yield_t <- Yield_kg / 1000\n\
 Variable_Cost <- Yield_t * Cost_Per_Yield\n\
 Cost <- Variable_Cost + Fixed_Cost\n\
@@ -94,61 +106,64 @@ Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)\n\
 Revenue <- Selling_Price * Yield_t\n\
 Profit <- Revenue - Cost\n\
 ProfitResult <- Profit\n"
-    assert subgraph == target
+        assert subgraph == target
 
 
 def test_write_script():
-    translator = Translator(model, 100)
-    translator.translate_to_files()
-    r_script_template_file = "model.R"
-    r_script_template = templateEnv.get_template(r_script_template_file)
-    r_script_target = r_script_template.render(
-        estimates_path=translator.estimates_file.name,
-        results_path=translator.results_file.name,
-        evpi_path=translator.evpi_file.name)
-    r_script = open(translator.r_script_file.name, "r").read()
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        translator.translate_to_files()
+        r_script_template_file = "model.R"
+        r_script_template = templateEnv.get_template(r_script_template_file)
+        r_script_target = r_script_template.render(
+            estimates_path=translator.estimates_file.name,
+            results_path=translator.results_file.name,
+            evpi_path=translator.evpi_file.name)
+        r_script = open(translator.r_script_file.name, "r").read()
 
-    csv_target = open(os.path.join(
-        test_data_dir, "model.csv"), "r").read()
-    csv = open(translator.estimates_file.name, "r").read()
+        csv_target = open(os.path.join(
+            test_data_dir, "model.csv"), "r").read()
+        csv = open(translator.estimates_file.name, "r").read()
 
-    translator.clean()
+        translator.clean()
 
-    assert r_script == r_script_target
-    assert csv == csv_target
+        assert r_script == r_script_target
+        assert csv == csv_target
 
 
 def test_write_script_evpi():
-    translator = Translator(model, 10, do_evpi=True)
-    translator.translate_to_files()
-    r_script_template_file = "model_evpi.R"
-    r_script_template = templateEnv.get_template(r_script_template_file)
-    r_script_target = r_script_template.render(
-        estimates_path=translator.estimates_file.name,
-        results_path=translator.results_file.name,
-        evpi_path=translator.evpi_file.name)
-    r_script = open(translator.r_script_file.name, "r").read()
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 10, do_evpi=True)
+        translator.translate_to_files()
+        r_script_template_file = "model_evpi.R"
+        r_script_template = templateEnv.get_template(r_script_template_file)
+        r_script_target = r_script_template.render(
+            estimates_path=translator.estimates_file.name,
+            results_path=translator.results_file.name,
+            evpi_path=translator.evpi_file.name)
+        r_script = open(translator.r_script_file.name, "r").read()
 
-    csv_target = open(os.path.join(
-        test_data_dir, "model.csv"), "r").read()
-    csv = open(translator.estimates_file.name, "r").read()
+        csv_target = open(os.path.join(
+            test_data_dir, "model.csv"), "r").read()
+        csv = open(translator.estimates_file.name, "r").read()
 
-    translator.clean()
+        translator.clean()
 
-    assert r_script == r_script_target
-    assert csv == csv_target
+        assert r_script == r_script_target
+        assert csv == csv_target
 
 
 def test_execute_r_mc():
-    translator = Translator(model, 100)
-    translator.translate_to_files()
+    for this_model in [model, model_clean]:
+        translator = Translator(this_model, 100)
+        translator.translate_to_files()
 
-    subprocess.run(["Rscript", translator.r_script_file.name])
-    df = pd.read_csv(translator.results_file.name)
-    target_columns = {'y.ProfitResult',
-                      'y.ProfitAltResult',
-                      }
+        subprocess.run(["Rscript", translator.r_script_file.name])
+        df = pd.read_csv(translator.results_file.name)
+        target_columns = {'y.ProfitResult',
+                          'y.ProfitAltResult',
+                          }
 
-    translator.clean()
+        translator.clean()
 
-    assert set(df.columns) == target_columns
+        assert set(df.columns) == target_columns

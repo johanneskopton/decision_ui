@@ -36,6 +36,7 @@
 </template>
 <script>
   import axios from "axios";
+  import clean_model_json from "../helper/clean_model_json";
   export default {
     data() {
       return {
@@ -53,6 +54,7 @@
         if (!this.modelName) return;
         this.nameDialog = false;
         var model = this.$store.state.model.editor.save();
+        model = clean_model_json(model);
         let bodyContent = {
           content: JSON.stringify(model),
           name: this.modelName,
