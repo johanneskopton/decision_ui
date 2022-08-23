@@ -127,6 +127,13 @@ async def read_decision_models(db: Session = Depends(get_db),
     return(res)
 
 
+@app.delete("/api/v1/decision_models/{decision_model_id}")
+async def delete_decision_model(decision_model_id: int,
+                                db: Session = Depends(get_db),
+                                user: User = Depends(current_active_user)
+                                ):
+    return await crud.delete_decision_model(db, user, decision_model_id)
+
 # @app.get(
 #    "/api/v1/decision_models/",
 #    response_model=List[schemas.DecisionModel],

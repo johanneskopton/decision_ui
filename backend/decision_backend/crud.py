@@ -16,6 +16,20 @@ async def get_user_decision_models(db: Session, user: schemas.UserRead):
     return result.scalars().all()
 
 
+async def delete_decision_model(db: Session,
+                                user: schemas.UserRead,
+                                decision_model_id: int
+                                ):
+    q = select(DecisionModel).where(DecisionModel.owner_id ==
+                                    user.id).where(DecisionModel.id ==
+                                                   decision_model_id)
+    row = await db.execute(q)
+    row = row.scalar_one()
+    await db.delete(row)
+    await db.commit()
+    return
+
+
 async def create_user_decision_model(
         db: Session,
         decision_model: schemas.DecisionModelCreate,
