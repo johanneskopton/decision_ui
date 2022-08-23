@@ -37,13 +37,11 @@
               <v-list-item-title v-text="model.name" />
               <v-list-item-subtitle v-text="nodeCount(model.content)" />
             </v-list-item-content>
-            <!--
             <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-information</v-icon>
+              <v-btn icon @click.stop="deleteModel(model)">
+                <v-icon color="grey lighten-1">mdi-close-circle</v-icon>
               </v-btn>
             </v-list-item-action>
-            -->
           </v-list-item>
           <v-list-item v-if="models.length == 0">
             No models yet! Click on the
@@ -55,12 +53,16 @@
         </v-list>
       </v-card>
     </v-row>
+    <Confirm ref="confirmDelete" />
   </v-container>
 </template>
 
 <script>
   import axios from "axios";
+  import Confirm from "./Confirm.vue";
+
   export default {
+    components: { Confirm },
     data() {
       return {
         models: []
@@ -96,6 +98,32 @@
         this.$store.state.model.name = model.name;
         this.$store.state.model.editor.load(JSON.parse(model.content));
         this.$router.push("/user/workspace");
+      },
+      deleteModel(model) {
+        this.$refs.confirmDelete
+          .open(
+            "Delete",
+            "Are you sure you want to delete <code>" + model.name + "</code>?",
+            { color: "warning" }
+          )
+          .then(confirm => {
+            if (confirm) {
+              var token = this.$store.state.user.access_token;
+              axios
+                .delete(
+                  process.env.BACKEND_BASE_URL +
+                    "/api/v1/decision_models/" +
+                    model.id,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    }
+                  }
+                )
+                .then(this.query_models)
+                .catch(response => this.receiveResultsError(response));
+            }
+          });
       }
     }
   };

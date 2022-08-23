@@ -28,6 +28,7 @@
                 :type="showPass ? 'text' : 'password'"
                 @click:append="showPass = !showPass"
                 v-model="password"
+                @keyup.enter="login"
               />
             </v-form>
           </v-card-text>

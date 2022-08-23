@@ -18,6 +18,7 @@
     <v-spacer />
     <router-link to="/login">
       <v-icon v-if="token">mdi-logout-variant</v-icon>
+      <v-icon v-else>mdi-login-variant</v-icon>
     </router-link>
   </v-system-bar>
 </template>
