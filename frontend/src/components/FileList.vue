@@ -107,8 +107,22 @@
             { color: "warning" }
           )
           .then(confirm => {
-            console.log(confirm);
-            console.log(model.name);
+            if (confirm) {
+              var token = this.$store.state.user.access_token;
+              axios
+                .delete(
+                  process.env.BACKEND_BASE_URL +
+                    "/api/v1/decision_models/" +
+                    model.id,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`
+                    }
+                  }
+                )
+                .then(this.query_models)
+                .catch(response => this.receiveResultsError(response));
+            }
           });
       }
     }
