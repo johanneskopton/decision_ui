@@ -19,7 +19,11 @@
       <v-card-title>Model name:</v-card-title>
       <v-divider />
       <v-card-text>
-        <v-text-field v-model="modelName" />
+        <v-text-field
+          v-model="modelName"
+          autofocus
+          @keyup.enter="saveGraphUser()"
+        />
       </v-card-text>
       <v-divider />
       <v-card-actions>
