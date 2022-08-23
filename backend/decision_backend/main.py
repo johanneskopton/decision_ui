@@ -122,9 +122,7 @@ async def create_item_for_user(
 async def read_decision_models(db: Session = Depends(get_db),
                                user: User = Depends(current_active_user)
                                ):
-    res = await crud.get_user_decision_models(db, user)
-    print(res)
-    return(res)
+    return await crud.get_user_decision_models(db, user)
 
 
 @app.delete("/api/v1/decision_models/{decision_model_id}")
