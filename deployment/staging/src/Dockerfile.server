@@ -1,0 +1,20 @@
+FROM registry.gitlab.knopflogik.de/uni-bonn/decision-support-ui/base:latest
+
+RUN echo "Hello World"
+
+# copy code
+COPY code /root/workspace/code
+
+# install dependencies
+RUN cd /root/workspace/code/backend/bin && bash install.sh
+RUN cd /root/workspace/code/frontend/bin && bash install.sh
+RUN cd /root/workspace/code/server/bin && bash install.sh
+
+# build
+RUN cd /root/workspace/code/frontend/bin && bash build.sh
+RUN cd /root/workspace/code/server/bin && bash build.sh
+
+# start backend and frontend
+CMD concurrently \
+    "cd /root/workspace/code/backend/bin && bash run.sh" \
+    "cd /root/workspace/code/server/bin && bash run.sh"

@@ -1,0 +1,13 @@
+version: '3'
+services:
+
+  server:
+    depends_on:
+      - base
+    build:
+      context: ..
+      dockerfile: ./src/Dockerfile.server
+    ports:
+      - "0.0.0.0:8080:8080/tcp" 
+    volumes:
+      - ${WORKSPACE_DIR}:/root/workspace:z
