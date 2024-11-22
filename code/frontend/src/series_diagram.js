@@ -1,4 +1,4 @@
-import Chart from "chart.js";
+import Chart from "chart.js/auto";
 
 export default function(graph, ctx, data) {
   var baseColor = "rgba(255, 255, 255, 1)";

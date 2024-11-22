@@ -7,7 +7,13 @@
     </v-alert>
   </v-card>
 </template>
+
 <script>
+  // import hljs from "highlight.js/lib/core";
+  // import r from "highlight.js/lib/languages/r";
+  // import "highlight.js/styles/github.css";
+  // hljs.registerLanguage("r", r);
+
   export default {
     computed: {
       rCode: function() {
@@ -16,8 +22,9 @@
     }
   };
 </script>
+
 <style lang="scss">
-  @import "vuetify/src/styles/main.sass";
+  @use "vuetify/lib/styles/main.sass" as v;
   .code-container {
     width: 50%;
     min-width: 700px;

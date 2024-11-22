@@ -1,7 +1,8 @@
-import Vue from "vue";
-import Vuetify from "vuetify";
-import "vuetify/dist/vuetify.min.css";
-import colors from "vuetify/lib/util/colors";
+import 'vuetify/styles';
+
+import { createVuetify } from 'vuetify'
+
+import colors from "vuetify/util/colors";
 
 Vue.use(Vuetify);
 
@@ -20,4 +21,4 @@ const opts = {
   }
 };
 
-export default new Vuetify(opts);
+export default createVuetify(opts);

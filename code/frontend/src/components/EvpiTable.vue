@@ -39,8 +39,8 @@
         }
       },
       result_vars: function() {
-        var evpi_line = this.evpi[0];
-        var res = [];
+        const evpi_line = this.evpi[0];
+        const res = [];
         Object.keys(evpi_line).forEach(key => {
           if (key != "variable" && key != "$id") {
             res.push(key);

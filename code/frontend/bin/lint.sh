@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-cd .. && npm run watch
+cd .. && npm run lint

@@ -1,30 +1,37 @@
+<script setup lang="ts">
+
+import { BaklavaEditor } from "@baklavajs/renderer-vue";
+import "@baklavajs/themes/dist/syrup-dark.css";
+</script>
+
 <template>
   <div class="node-editor-container">
     <!--<hint-overlay />-->
-    <baklava-editor :plugin="$store.state.model.viewPlugin" />
+    <BaklavaEditor :view-model="$store.state.model.viewPlugin" />
     <v-sheet
-      class="floating_btn_group left"
+      class="button-container"
       color="white"
       elevation="4"
       rounded
     >
-      <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
+    <v-btn-toggle
+      multiple
+      class="button-toggle"
+    >
+      <v-tooltip location="top" text="Download">
+        <template v-slot:activator="{ props }">
           <v-btn
-            class="ma-2"
-            text
-            dark
+            class="ma-2 dark"
+            variant="text"
             color="secondary"
             @click="saveGraph"
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props"
           >
-            <v-icon dark>
+            <v-icon class="dark">
               mdi-tray-arrow-down
             </v-icon>
           </v-btn>
         </template>
-        <span>Download</span>
       </v-tooltip>
       <input
         type="file"
@@ -33,30 +40,28 @@
         style="display: none"
         @change="loadGraph"
       />
-      <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
+      <v-tooltip location="top" text="Upload">
+        <template v-slot:activator="{ props }">
           <v-btn
-            class="ma-2"
-            text
-            dark
+            class="ma-2 dark"
+            variant="text"
             color="secondary"
             @click="$refs.loadfile.click()"
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props"
           >
-            <v-icon dark>
+            <v-icon class="dark">
               mdi-tray-arrow-up
             </v-icon>
           </v-btn>
         </template>
-        <span>Upload</span>
       </v-tooltip>
       <SaveButton />
+      </v-btn-toggle>
     </v-sheet>
   </div>
 </template>
 
-<script>
+<script lang="ts">
   //import HintOverlay from "./HintOverlay.vue";
   import { saveAs } from "file-saver";
 
@@ -66,7 +71,7 @@
   export default {
     //components: { HintOverlay },
     created() {
-      this.$store.state.model.engine.calculate();
+      // this.$store.state.model.engine.calculate();
     },
     watch: {
       model() {
@@ -80,15 +85,15 @@
     },
     methods: {
       saveGraph() {
-        var model = this.$store.state.model.editor.save();
+        let model = this.$store.state.model.editor.save();
         model = clean_model_json(model);
-        var blob = new Blob([JSON.stringify(model, null, 2)], {
+        const blob = new Blob([JSON.stringify(model, null, 2)], {
           type: "application/json;charset=utf-8"
         });
         saveAs(blob, "graph.json");
       },
       loadGraph() {
-        var file = this.$el.querySelector("#loadfile").files[0];
+        const file = this.$el.querySelector("#loadfile").files[0];
         const reader = new FileReader();
         reader.addEventListener(
           "load",
@@ -104,11 +109,19 @@
   };
 </script>
 
-<style lang="scss">
-  @import "../style/baklava.scss";
+<style scoped lang="scss">
+  @use "../style/baklava.scss";
+  
   .node-editor-container {
-    height: calc(100vh - 30px);
-    width: 100vw;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .button-container {
+    position: absolute;
+    bottom: 1em;
+    right: 10em;
   }
 
   .node.error {

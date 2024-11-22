@@ -1,18 +1,14 @@
 <template>
-  <div>
-    <v-tooltip top>
-      <template v-slot:activator="{ on, attrs }">
+    <v-tooltip location="top">
+      <template v-slot:activator="{ props }">
         <v-btn
           class="ma-2 hoverable"
           :fab="!getEvpi"
           dark
-          large
-          :bottom="!getEvpi"
-          :right="!getEvpi"
+          size="large"
           color="primary"
           @click="callBackend"
-          v-bind="attrs"
-          v-on="on"
+          v-bind="props"
           :loading="loading_mc"
         >
           <span v-if="getEvpi" class="button_text"> Calculate EVPI</span>
@@ -40,7 +36,7 @@
       <template v-slot:action="{ attrs }">
         <v-btn
           color="white"
-          text
+          variant="text"
           v-bind="attrs"
           @click="network_error_msg = false"
         >
@@ -54,7 +50,7 @@
       <template v-slot:action="{ attrs }">
         <v-btn
           color="white"
-          text
+          variant="text"
           v-bind="attrs"
           @click="network_error_msg = false"
         >
@@ -76,13 +72,13 @@
         <v-card-actions>
           <v-spacer />
 
-          <v-btn color="grey" text @click="noPermissionDialog = false">
+          <v-btn color="grey" variant="text" @click="noPermissionDialog = false">
             cancel
           </v-btn>
 
           <v-btn
             color="primary"
-            text
+            variant="text"
             @click="noPermissionDialog = false"
             to="/login"
           >
@@ -91,7 +87,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
 </template>
 <script>
   import axios from "axios";
@@ -118,14 +113,14 @@
     methods: {
       callBackend() {
         this.loading_mc = true;
-        var model = this.$store.state.model.editor.save();
+        let model = this.$store.state.model.editor.save();
         model = clean_model_json(model);
-        var route = this.getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
-        var token = this.$store.state.user.access_token;
+        const route = this.getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
+        const token = this.$store.state.user.access_token;
         axios
-          .post(process.env.BACKEND_BASE_URL + route, model, {
+          .post(import.meta.env.VITE_BACKEND_BASE_URL + route, model, {
             headers: {
-              [process.env.BACKEND_AUTH_HEADER]: `Bearer ${token}`
+              [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${token}`
             }
           })
           .then(response => this.receiveResults(response))
@@ -152,8 +147,8 @@
   };
 </script>
 
-<style>
-  button.v-btn--right {
+<style scoped>
+  button.v-btn {
     position: absolute;
     bottom: 8px;
     z-index: 5;

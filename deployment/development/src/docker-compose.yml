@@ -8,6 +8,9 @@ services:
       context: ..
       dockerfile: ./src/Dockerfile.server
     ports:
+      - "0.0.0.0:8000:8000/tcp" 
       - "0.0.0.0:8080:8080/tcp" 
+      - "0.0.0.0:5173:5173/tcp" 
+      - "0.0.0.0:4173:4173/tcp" 
     volumes:
       - ${WORKSPACE_DIR}:/root/workspace:z

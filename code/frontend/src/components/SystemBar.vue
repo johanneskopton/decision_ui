@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
-  <v-system-bar height="30px">
+  <v-system-bar>
     <v-icon v-if="token">mdi-account</v-icon>
     <v-icon v-else>mdi-account-off</v-icon>
     <span v-if="email">{{ email }}</span>
@@ -35,8 +35,13 @@
   };
 </script>
 <style lang="scss">
-  .v-system-bar {
+  div.v-system-bar {
     background-color: var(--v-secondary-lighten4) !important;
+    position: relative !important;
+    border-bottom: solid 1px;
+    border-color: rgba(var(--v-border-color), var(--v-border-opacity));
+    height: auto !important;
+    padding: 0.5em 1.0em !important;
   }
   .unsaved {
     font-style: italic;

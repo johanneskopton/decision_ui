@@ -5,9 +5,11 @@
 </template>
 
 <style lang="scss">
-  @import "vuetify/src/styles/main.sass";
+  @use "sass:map";
+  @use "vuetify/lib/styles/main.sass" as v;
+
   div.dashboard {
-    background-color: map-get($grey, "lighten-4");
+    background-color: map.get(v.$grey, "lighten-4");
     width: 100%;
     height: calc(100vh - 30px);
   }

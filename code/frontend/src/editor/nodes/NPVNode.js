@@ -1,5 +1,4 @@
 import { UncertainNode } from "./UncertainNode";
-import nj from "numjs";
 
 export class NPVNode extends UncertainNode {
   constructor() {

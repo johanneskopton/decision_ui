@@ -1,6 +1,6 @@
 import { SeriesUncertainNode } from "./SeriesUncertainNode";
 import gaussian from "gaussian";
-import nj from "numjs";
+import nj from "@d4c/numjs";
 
 export class VVNode extends SeriesUncertainNode {
   constructor() {

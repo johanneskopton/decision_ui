@@ -1,13 +1,13 @@
 <template>
   <v-dialog v-model="nameDialog" scrollable max-width="300px" v-if="token">
-    <template v-slot:activator="{ on, attrs }">
+    <template v-slot:activator="{ props }">
       <v-btn
         class="ma-2"
-        text
+        variant="text"
         dark
         color="secondary"
-        v-bind="attrs"
-        v-on="on"
+       
+        v-bind="props"
         @click="openDialog"
       >
         <v-icon dark>
@@ -27,11 +27,11 @@
       </v-card-text>
       <v-divider />
       <v-card-actions>
-        <v-btn color="grey darken-1" text @click="nameDialog = false">
+        <v-btn color="grey-darken-1" variant="text" @click="nameDialog = false">
           Cancel
         </v-btn>
         <v-spacer />
-        <v-btn color="primary darken-1" text @click="saveGraphUser()">
+        <v-btn color="primary-darken-1" variant="text" @click="saveGraphUser()">
           Save
         </v-btn>
       </v-card-actions>
@@ -57,20 +57,20 @@
       saveGraphUser() {
         if (!this.modelName) return;
         this.nameDialog = false;
-        var model = this.$store.state.model.editor.save();
+        let model = this.$store.state.model.editor.save();
         model = clean_model_json(model);
-        let bodyContent = {
+        const bodyContent = {
           content: JSON.stringify(model),
           name: this.modelName,
           saved: Date.now()
         };
         axios
           .post(
-            process.env.BACKEND_BASE_URL + "/api/v1/decision_model/",
+            import.meta.env.VITE_BACKEND_BASE_URL + "/api/v1/decision_model/",
             bodyContent,
             {
               headers: {
-                [process.env.BACKEND_AUTH_HEADER]: `Bearer ${this.token}`
+                [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${this.token}`
               }
             }
           )

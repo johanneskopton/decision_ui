@@ -1,4 +1,4 @@
-import VueRouter from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router'
 
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
@@ -9,6 +9,7 @@ import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import Workspace from "./components/Workspace.vue";
 import FileView from "./components/FileView.vue";
+import Test from "./components/Test.vue";
 
 const routes = [
   {
@@ -21,7 +22,7 @@ const routes = [
         children: [
           {
             path: "",
-            redirect: "modeling"
+            redirect: "/user/workspace/modeling"
           },
           {
             path: "modeling",
@@ -59,12 +60,16 @@ const routes = [
   {
     path: "/",
     redirect: "/login/"
+  },
+  {
+    path: "/test",
+    component: Test
   }
 ];
 
-const router = new VueRouter({
-  routes // short for `routes: routes`
-  // mode: "history"
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
 });
 
 export default router;

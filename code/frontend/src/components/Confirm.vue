@@ -7,13 +7,13 @@
   >
     <v-card>
       <v-toolbar dark :color="options.color" dense flat>
-        <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
+        <v-toolbar-title class="text-white">{{ title }}</v-toolbar-title>
       </v-toolbar>
       <v-card-text v-show="!!message" class="pa-4" v-html="message" />
       <v-card-actions class="pt-0">
         <v-spacer />
-        <v-btn color="grey" text @click.native="cancel">Cancel</v-btn>
-        <v-btn :color="options.color" text @click.native="agree">Yes</v-btn>
+        <v-btn color="grey" variant="text" @click.native="cancel">Cancel</v-btn>
+        <v-btn :color="options.color" variant="text" @click.native="agree">Yes</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

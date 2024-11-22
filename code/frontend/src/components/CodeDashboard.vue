@@ -4,22 +4,22 @@
     <EstimatesTable />
 
     <v-sheet
-      class="floating_btn_group left"
+      class="floating_btn_group float-left"
       color="white"
       elevation="4"
       rounded
       v-if="isCalculated"
       @click="saveZip"
     >
-      <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
+      <v-tooltip location="top">
+        <template v-slot:activator="{ props }">
           <v-btn
             class="ma-2"
-            text
+            variant="text"
             dark
             color="secondary"
-            v-bind="attrs"
-            v-on="on"
+           
+            v-bind="props"
           >
             <v-icon dark>
               mdi-folder-download-outline
@@ -55,7 +55,7 @@
     methods: {
       saveZip: function() {
         const zip = new JSZip();
-        var r_script = this.$store.state.model.decisionSupportResult.r_script;
+        let r_script = this.$store.state.model.decisionSupportResult.r_script;
         r_script = r_script.replace(
           /\"\/tmp\/decision_ui_estimate_[a-z0-9].*\.csv\"/,
           '"estimates.csv"'

@@ -20,26 +20,26 @@
           </v-btn> -->
         </v-toolbar>
 
-        <v-list subheader two-line>
+        <v-list lines="two">
           <v-list-item
             v-for="model in models"
             :key="model.saved"
             link
             @click="open(model)"
           >
-            <v-list-item-avatar>
-              <v-icon class="grey lighten-1" dark>
+            <v-avatar>
+              <v-icon class="bg-grey-lighten-1 dark">
                 mdi-file
               </v-icon>
-            </v-list-item-avatar>
+            </v-avatar>
 
-            <v-list-item-content>
+            
               <v-list-item-title v-text="model.name" />
               <v-list-item-subtitle v-text="nodeCount(model.content)" />
-            </v-list-item-content>
+            
             <v-list-item-action>
               <v-btn icon @click.stop="deleteModel(model)">
-                <v-icon color="grey lighten-1">mdi-close-circle</v-icon>
+                <v-icon color="grey-lighten-1">mdi-close-circle</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -76,11 +76,11 @@
         return String(JSON.parse(content).nodes.length) + " nodes";
       },
       query_models() {
-        var token = this.$store.state.user.access_token;
+        const token = this.$store.state.user.access_token;
         axios
-          .get(process.env.BACKEND_BASE_URL + "/api/v1/decision_models/", {
+          .get(import.meta.env.VITE_BACKEND_BASE_URL + "/api/v1/decision_models/", {
             headers: {
-              [process.env.BACKEND_AUTH_HEADER]: `Bearer ${token}`
+              [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${token}`
             }
           })
           .then(response => this.receiveResults(response))
@@ -108,14 +108,14 @@
           )
           .then(confirm => {
             if (confirm) {
-              var token = this.$store.state.user.access_token;
+              const token = this.$store.state.user.access_token;
               axios
                 .delete(
                     "/api/v1/decision_models/" +
                     model.id,
                   {
                     headers: {
-                      [process.env.BACKEND_AUTH_HEADER]: `Bearer ${token}`
+                      [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${token}`
                     }
                   }
                 )

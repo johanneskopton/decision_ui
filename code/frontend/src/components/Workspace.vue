@@ -1,85 +1,34 @@
 <template>
   <div class="workspace-container">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      class="pt-4"
-      color="secondary lighten-5"
-      mini-variant
-      permanent
-    >
-      <v-list flat dense nav height="100%">
-        <v-list-item-group
-          v-model="selectedItem"
-          color="primary accent-1"
-          class="d-flex flex-column"
+    <v-navigation-drawer rail permanent>
+      <v-list density="compact" nav height="100%">
+        <v-list-item
+          to="/user/workspace/modeling"
+          prepend-icon="mdi-graph mdi-rotate-90"
         >
-          <v-list-item to="/user/workspace/modeling" link>
-            <v-list-item-icon>
-              <v-icon :rotate="90">
-                mdi-graph mdi-rotate-90
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              Model editor
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/user/workspace/estimates" link>
-            <v-list-item-icon>
-              <v-icon>
-                mdi-table
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              Estimates
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/user/workspace/results" link>
-            <v-list-item-icon>
-              <v-icon>
-                mdi-chart-histogram
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              Results dashboard
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/user/workspace/code" link>
-            <v-list-item-icon>
-              <v-icon>
-                mdi-language-r
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              R-Code
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            to="/user/files"
-            class="mt-auto"
-            link
-            v-if="$store.state.user.access_token"
-          >
-            <v-list-item-icon>
-              <v-icon>
-                mdi-format-list-text
-              </v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>
-              Files
-            </v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
+          <v-list-item-title>Model editor</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/user/workspace/estimates" prepend-icon="mdi-table">
+          <v-list-item-title>Estimates</v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/user/workspace/results"
+          prepend-icon="mdi-chart-histogram"
+        >
+          <v-list-item-title>Results dashboard</v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/user/workspace/code" prepend-icon="mdi-language-r">
+          <v-list-item-title>R-Code</v-list-item-title>
+        </v-list-item>
+        <v-list-item
+          to="/user/files"
+          class="mt-auto"
+          prepend-icon="mdi-format-list-text"
+          v-if="$store.state.user.access_token"
+        >
+          <v-list-item-title>Files</v-list-item-title>
+        </v-list-item>
       </v-list>
-      <!--
-      <v-avatar
-        v-for="n in 6"
-        :key="n"
-        :color="`grey ${n === 1 ? 'darken' : 'lighten'}-1`"
-        :size="n === 1 ? 36 : 20"
-        class="d-block text-center mx-auto mb-9"
-      />
-      -->
     </v-navigation-drawer>
     <div class="main-window">
       <router-view />
@@ -107,12 +56,24 @@
 </script>
 
 <style>
-  div.main-window {
-    position: absolute;
-    left: 56px;
-    right: 0px;
-    display: flex;
+  nav.v-navigation-drawer {
+    position: relative !important;
+    top: 0 !important;
   }
+
+  div.main-window {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  div.workspace-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
   .theme--light.v-icon {
     color: #9e9e9e;
   }
@@ -129,17 +90,5 @@
 
   .workspace-container {
     position: relative;
-  }
-
-  .v-navigation-drawer {
-    top: 30px !important;
-  }
-
-  .v-list-item {
-    flex: 0;
-  }
-
-  .v-list-item-group {
-    height: calc(100% - 30px);
   }
 </style>

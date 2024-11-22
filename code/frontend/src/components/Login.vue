@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid fill-height>
-    <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md4>
+  <v-container fluid class="fill-height">
+    <v-row justify="center" align="center">
+      <v-col class="mainColumn">
         <v-card class="elevation-12">
           <v-toolbar dark color="primary">
             <v-toolbar-title>Login</v-toolbar-title>
@@ -44,15 +44,15 @@
             <v-btn color="primary" @click="login">Login</v-btn>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
     <v-snackbar v-model="network_error_msg" :timeout="2000" color="error">
       <!--<v-icon>mdi-server-network-off</v-icon>-->
       No connection to server!
       <template v-slot:action="{ attrs }">
         <v-btn
           color="white"
-          text
+          variant="text"
           v-bind="attrs"
           @click="network_error_msg = false"
         >
@@ -68,7 +68,7 @@
       Registration complete! 🎉
       <template v-slot:action="{ attrs }">
         <v-btn
-          text
+          variant="text"
           v-bind="attrs"
           @click="$store.state.user.register_success_msg = false"
         >
@@ -101,13 +101,13 @@
       this.$store.state.user.access_token = false;
     },
     methods: {
-      login: function() {
+      login: function () {
         const formData = new FormData();
         formData.set("username", this.email);
         formData.set("password", this.password);
         axios
           .post(
-            process.env.BACKEND_BASE_URL + "/api/auth/jwt/login",
+            import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/jwt/login",
             formData,
             {
               headers: {
@@ -118,15 +118,15 @@
           .then(this.onResponse)
           .catch(this.onError);
       },
-      onResponse: function(response) {
+      onResponse: function (response) {
         console.log(response);
         if (response.status === 200) {
-          let token = response.data.access_token;
+          const token = response.data.access_token;
           this.$store.commit("login", { email: this.email, token });
           this.$router.push("/user/files");
         }
       },
-      onError: function(error) {
+      onError: function (error) {
         if (error.code === "ERR_NETWORK") {
           this.network_error_msg = true;
           return;
@@ -143,6 +143,10 @@
 </script>
 
 <style>
+  div.mainColumn {
+    max-width: 35em;
+  }
+
   .infotext {
     margin-left: 10px;
     margin-bottom: 5px !important;

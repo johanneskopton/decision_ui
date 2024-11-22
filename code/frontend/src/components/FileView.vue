@@ -2,13 +2,13 @@
   <div class="fileview">
     <FileList />
     <v-btn
-      right
+      location="right"
       dark
       fab
       color="primary"
       to="/user/workspace"
       class="ma-2"
-      large
+      size="large"
     >
       <v-icon dark>
         mdi-file-plus
@@ -16,6 +16,7 @@
     </v-btn>
   </div>
 </template>
+
 <script>
   import FileList from "./FileList.vue";
   export default {
@@ -27,9 +28,11 @@
 </script>
 
 <style lang="scss">
-  @import "vuetify/src/styles/main.sass";
+  @use "sass:map";
+  @use "vuetify/lib/styles/main.sass" as v;
+
   .fileview {
-    background-color: map-get($grey, "lighten-4");
+    background-color: map.get(v.$grey, "lighten-4");
     width: 100%;
     height: calc(100vh - 30px);
     position: relative;

@@ -7,7 +7,7 @@
 
 <script>
   import series_diagram from "../series_diagram";
-  import nj from "numjs";
+  import nj from "@d4c/numjs";
 
   export default {
     props: {
@@ -36,11 +36,11 @@
     },
     methods: {
       draw_diagram() {
-        var ctx = this.$refs.hist.getContext("2d");
-        var mc = this.value.value;
+        const ctx = this.$refs.hist.getContext("2d");
+        const mc = this.value.value;
         if (mc.length > 0 && typeof mc[0] == "object") {
           if (this.value.use_average) {
-            var averages = nj.zeros([mc[0].shape[0]]);
+            let averages = nj.zeros([mc[0].shape[0]]);
             mc.forEach(e => {
               averages = averages.add(e);
             });

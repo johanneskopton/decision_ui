@@ -42,7 +42,8 @@
     </v-alert>
   </v-card>
 </template>
-<script>
+
+<script lang="ts">
   import csv_parser from "../helper/csv_parser";
   export default {
     props: {
@@ -74,8 +75,9 @@
       }
     },
     mounted: function() {
-      this.$store.state.model.engine.calculate();
-      var estimate_names = [];
+      // this.$store.state.model.engine.calculate();
+      return;
+      const estimate_names = [];
       this.$store.state.model.editor.nodes.forEach(node => {
         if (node.type == "Estimate") {
           estimate_names.push(node.name);
@@ -91,7 +93,7 @@
       onLowerChange: function(newVal, oldVal, row) {
         this.$store.state.model.editor.nodes.forEach(node => {
           if (node.type == "Estimate" && node.name == row.variable) {
-            let distribution = node.getOptionValue("Probability distribution");
+            const distribution = node.getOptionValue("Probability distribution");
             if (distribution == "deterministic") {
               node.options.get("value").value = Number(newVal);
             } else {
@@ -104,7 +106,7 @@
       onUpperChange: function(newVal, oldVal, row) {
         this.$store.state.model.editor.nodes.forEach(node => {
           if (node.type == "Estimate" && node.name == row.variable) {
-            let distribution = node.getOptionValue("Probability distribution");
+            const distribution = node.getOptionValue("Probability distribution");
             if (distribution == "deterministic") {
               node.options.get("value").value = Number(newVal);
             } else {
@@ -119,7 +121,7 @@
 </script>
 
 <style lang="scss">
-  @import "vuetify/src/styles/main.sass";
+  @use "vuetify/lib/styles/main.sass" as v;
   .table-container.narrow {
     width: 45%;
   }

@@ -52,8 +52,8 @@
         this.is_prob = "det";
       },
       draw_hist() {
-        var ctx = this.$refs.hist.getContext("2d");
-        var data = this.value;
+        const ctx = this.$refs.hist.getContext("2d");
+        const data = this.value;
         function range(start, end, step = 1) {
           const len = Math.floor((end - start) / step) + 1;
           return Array(len)
@@ -61,9 +61,9 @@
             .map((_, idx) => start + idx * step);
         }
 
-        var hist_data = get_bins(data);
-        var bins = hist_data.bins;
-        var bin_counts = hist_data.bin_counts;
+        const hist_data = get_bins(data);
+        const bins = hist_data.bins;
+        const bin_counts = hist_data.bin_counts;
         this.graph = histogram(this.graph, ctx, bins, bin_counts, true);
       }
     }

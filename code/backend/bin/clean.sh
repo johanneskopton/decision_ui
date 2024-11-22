@@ -9,4 +9,5 @@ cd "$(dirname "$0")/../"
 rm -rf build
 rm -rf decision_backend.egg-info
 rm -rf .venv
+rm -rf .pytest_cache
 rm -f test.db

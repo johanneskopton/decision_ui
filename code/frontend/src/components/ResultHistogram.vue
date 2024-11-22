@@ -37,9 +37,9 @@
         if (this.histData == null) {
           return;
         }
-        var ctx = this.$refs.hist.getContext("2d");
-        var bins = this.histData.bins;
-        var density = this.histData.density;
+        const ctx = this.$refs.hist.getContext("2d");
+        const bins = this.histData.bins;
+        const density = this.histData.density;
         this.graph = histogram(this.graph, ctx, bins, density);
       }
     }

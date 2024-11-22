@@ -1,5 +1,5 @@
 import { SeriesUncertainNode } from "./SeriesUncertainNode";
-import nj from "numjs";
+import nj from "@d4c/numjs";
 
 export class SeriesComparisonNode extends SeriesUncertainNode {
   constructor() {

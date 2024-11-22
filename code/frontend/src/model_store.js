@@ -1,36 +1,46 @@
 import { Editor } from "@baklavajs/core";
-import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
-import { Engine } from "@baklavajs/plugin-engine";
-import { InterfaceTypePlugin } from "@baklavajs/plugin-interface-types";
-import { OptionPlugin } from "@baklavajs/plugin-options-vue";
+import { useBaklava } from "@baklavajs/renderer-vue";
+import { DependencyEngine } from "@baklavajs/engine";
+import { BaklavaInterfaceTypes } from "@baklavajs/interface-types";
+// import { OptionPlugin } from "@baklavajs/plugin-options-vue";
 
-import colors from "vuetify/lib/util/colors";
+import {
+  probabilisticType,
+  probabilisticIntegerType,
+  probabilisticSeriesType,
+  deterministicType,
+  deterministicIntegerType
+} from "./editor/types";
+
+import TestNode from "./editor/nodes/TestNode";
+
+import colors from "vuetify/util/colors";
 
 import HistogramOption from "./components/HistogramOption.vue";
 import SeriesDiagramOption from "./components/SeriesDiagramOption.vue";
-import { MathNode } from "./nodes/MathNode";
-import { SeriesMathNode } from "./nodes/SeriesMathNode";
-import { SumNode } from "./nodes/SumNode";
-import { DisplayNode } from "./nodes/DisplayNode";
-import { ResultNode } from "./nodes/ResultNode";
-import { EstimateNode } from "./nodes/EstimateNode";
-import { ChanceEventNode } from "./nodes/ChanceEventNode";
-import { SeriesChanceEventNode } from "./nodes/SeriesChanceEventNode";
-import { VVNode } from "./nodes/VVNode";
-import { NPVNode } from "./nodes/NPVNode";
-import { SeriesDisplayNode } from "./nodes/SeriesDisplayNode";
-import { ToSeriesNode } from "./nodes/ToSeriesNode";
-import { RoundNode } from "./nodes/RoundNode";
-import { DetRoundNode } from "./nodes/DetRoundNode";
-import { ComparisonNode } from "./nodes/ComparisonNode";
-import { SeriesComparisonNode } from "./nodes/SeriesComparisonNode";
+import { MathNode } from "./editor/nodes/MathNode";
+import { SeriesMathNode } from "./editor/nodes/SeriesMathNode";
+import { SumNode } from "./editor/nodes/SumNode";
+import { DisplayNode } from "./editor/nodes/DisplayNode";
+import { ResultNode } from "./editor/nodes/ResultNode";
+import { EstimateNode } from "./editor/nodes/EstimateNode";
+import { ChanceEventNode } from "./editor/nodes/ChanceEventNode";
+import { SeriesChanceEventNode } from "./editor/nodes/SeriesChanceEventNode";
+import { VVNode } from "./editor/nodes/VVNode";
+import { NPVNode } from "./editor/nodes/NPVNode";
+import { SeriesDisplayNode } from "./editor/nodes/SeriesDisplayNode";
+import { ToSeriesNode } from "./editor/nodes/ToSeriesNode";
+import { RoundNode } from "./editor/nodes/RoundNode";
+import { DetRoundNode } from "./editor/nodes/DetRoundNode";
+import { ComparisonNode } from "./editor/nodes/ComparisonNode";
+import { SeriesComparisonNode } from "./editor/nodes/SeriesComparisonNode";
 
 export default {
   state() {
     return {
       editor: undefined,
       viewPlugin: undefined,
-      engine: new Engine(true),
+      engine: undefined,
       isInitialized: false,
       decisionSupportResult: undefined,
       estimates: [],
@@ -57,7 +67,10 @@ export default {
   actions: {
     initModel(context) {
       context.state.editor = new Editor();
-      context.state.viewPlugin = new ViewPlugin();
+      context.state.editor.registerNodeType(TestNode);
+
+      context.state.engine = new DependencyEngine(context.state.editor);
+      context.state.viewPlugin = useBaklava(context.state.editor);
       // context.state.engine = new Engine();
       context.state.decisionSupportResult = false;
       context.state.estimates = [];
@@ -66,48 +79,36 @@ export default {
 
       // Register the plugins
       // The view plugin is used for rendering the nodes
-      context.state.editor.use(context.state.viewPlugin);
+      // context.state.editor.use(context.state.viewPlugin);
       // The option plugin provides some default option UI elements
-      context.state.editor.use(new OptionPlugin());
+      // context.state.editor.use(new OptionPlugin());
       // The engine plugin calculates the nodes in the graph in the
       // correct order using the "calculate" methods of the nodes
-      context.state.editor.use(context.state.engine);
+      // context.state.editor.use(context.state.engine);
       // The interface type plugin allows for custom interface types
-      const intfTypePlugin = new InterfaceTypePlugin();
-      context.state.editor.use(intfTypePlugin);
+      // const intfTypePlugin = new InterfaceTypePlugin();
+      // context.state.editor.use(intfTypePlugin);
       // Define interface types
-      intfTypePlugin.addType("probabilistic", colors.purple.accent1);
-      intfTypePlugin.addType("probabilistic_int", colors.purple.lighten4);
-      intfTypePlugin.addType("probabilistic_series", colors.teal.accent1);
-      intfTypePlugin.addType("deterministic", colors.amber.accent1);
-      intfTypePlugin.addType("deterministic_int", colors.amber.lighten5);
+
+      const types = new BaklavaInterfaceTypes(context.state.editor, {
+        viewPlugin: context.state.viewPlugin
+      });
+      types.addTypes(
+        probabilisticType,
+        probabilisticIntegerType,
+        probabilisticSeriesType,
+        deterministicType,
+        deterministicIntegerType
+      );
+
+      // types.addConversion()
       // Define type conversions
-      intfTypePlugin.addConversion("deterministic", "probabilistic", v => v);
-      intfTypePlugin.addConversion(
-        "deterministic_int",
-        "probabilistic_int",
-        v => v
-      );
-      intfTypePlugin.addConversion(
-        "deterministic_int",
-        "probabilistic",
-        v => v
-      );
-      intfTypePlugin.addConversion(
-        "deterministic_int",
-        "deterministic",
-        v => v
-      );
-      intfTypePlugin.addConversion(
-        "probabilistic_int",
-        "probabilistic",
-        v => v
-      );
+
       // Show a minimap in the top right corner
       context.state.viewPlugin.enableMinimap = false;
       // register the nodes we have defined, so they can be
       // added by the user as well as saved & loaded.
-      context.state.editor.registerNodeType("Math", MathNode);
+      /*context.state.editor.registerNodeType("Math", MathNode);
       context.state.editor.registerNodeType("Comparison", ComparisonNode);
       context.state.editor.registerNodeType("Round", RoundNode);
       context.state.editor.registerNodeType("RoundDeterministic", DetRoundNode);
@@ -129,6 +130,7 @@ export default {
         SeriesChanceEventNode
       );
       context.state.editor.registerNodeType("SeriesDisplay", SeriesDisplayNode);
+
       // register custom options
       context.state.viewPlugin.registerOption(
         "HistogramOption",
@@ -154,6 +156,7 @@ export default {
         node2.getInterface("Value")
       );
       context.commit("setInitialized");
+      */
     }
   }
 };
