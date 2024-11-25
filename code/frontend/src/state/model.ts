@@ -1,5 +1,5 @@
 import { Editor, type IEngine } from "@baklavajs/core";
-import { useBaklava, type IBaklavaViewModel } from "@baklavajs/renderer-vue";
+import { useBaklava, type IBaklavaViewModel, type ICommand } from "@baklavajs/renderer-vue";
 import { applyResult, DependencyEngine } from "@baklavajs/engine";
 import { BaklavaInterfaceTypes } from "@baklavajs/interface-types";
 // import { OptionPlugin } from "@baklavajs/plugin-options-vue";
@@ -80,6 +80,18 @@ const initializeModelState = (): ModelState => {
   editor.registerNodeType(ResultNode, { category: "Input / Output" });
   editor.registerNodeType(DebugNode, { category: "Display" });
   editor.registerNodeType(HistogramNode, { category: "Display" });
+
+  // add commands
+  type RefreshCommand = ICommand<string, [id: string]>;
+  viewPlugin.commandHandler.registerCommand<RefreshCommand>("RefreshCommand", {
+    canExecute: () => true,
+    execute: () => {
+      if (viewPlugin.editor.graph.nodes.length > 0) {
+        viewPlugin.editor.graph.nodes[0].events.update.emit(null);
+      }
+      return "";
+    }
+  });
 
   // initialize engine
   const engine = new DependencyEngine(editor);

@@ -1,38 +1,27 @@
 <script setup lang="ts">
-import { useUserStore } from "@/state/user";
-import RunButton from "./RunButton.vue";
+  import { useUserStore } from "@/state/user";
+  import RunButton from "./RunButton.vue";
 
-const userStore = useUserStore();
+  const userStore = useUserStore();
 </script>
 
 <template>
   <div class="workspace-container">
     <v-navigation-drawer rail permanent>
       <v-list density="compact" nav height="100%">
-        <v-list-item
-          to="/user/workspace/modeling"
-          prepend-icon="mdi-graph mdi-rotate-90"
-        >
+        <v-list-item to="/user/workspace/modeling" prepend-icon="mdi-graph mdi-rotate-90">
           <v-list-item-title>Model editor</v-list-item-title>
         </v-list-item>
         <v-list-item to="/user/workspace/estimates" prepend-icon="mdi-table">
           <v-list-item-title>Estimates</v-list-item-title>
         </v-list-item>
-        <v-list-item
-          to="/user/workspace/results"
-          prepend-icon="mdi-chart-histogram"
-        >
+        <v-list-item to="/user/workspace/results" prepend-icon="mdi-chart-histogram">
           <v-list-item-title>Results dashboard</v-list-item-title>
         </v-list-item>
         <v-list-item to="/user/workspace/code" prepend-icon="mdi-language-r">
           <v-list-item-title>R-Code</v-list-item-title>
         </v-list-item>
-        <v-list-item
-          to="/user/files"
-          class="mt-auto"
-          prepend-icon="mdi-format-list-text"
-          v-if="userStore.access_token"
-        >
+        <v-list-item v-if="userStore.login.token" to="/user/files" class="mt-auto" prepend-icon="mdi-format-list-text">
           <v-list-item-title>Files</v-list-item-title>
         </v-list-item>
       </v-list>

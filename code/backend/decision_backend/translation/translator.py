@@ -9,7 +9,13 @@ import logging
 from typing import Mapping, Any
 
 from decision_backend.translation.nodes import node_implementations
-from decision_backend.translation.model import StrippedModel, RawModel, ExtendedNode, RawNodeInterface, RawConnection
+from decision_backend.translation.model import (
+    StrippedModel,
+    RawModel,
+    ExtendedNode,
+    RawNodeInterface,
+    RawConnection,
+)
 from decision_backend.translation.constants import RESULT_NODE_TYPE, ESTIMATE_NODE_TYPE
 
 logger = logging.getLogger(__name__)
@@ -42,7 +48,9 @@ class Translator:
                 return node
         raise ValueError("Node '{}' does not exists.".format(variable_name))
 
-    def _get_source_node_from_connection(self, connection: RawConnection) -> ExtendedNode:
+    def _get_source_node_from_connection(
+        self, connection: RawConnection
+    ) -> ExtendedNode:
         for node in self.model.nodes:
             for _, output in node.outputs.items():
                 if output.id == connection.from_:
@@ -52,7 +60,6 @@ class Translator:
         for connection in self.model.connections:
             if connection.to == input.id:
                 return connection
-
 
     @staticmethod
     def _process_numeric(x):
@@ -151,9 +158,7 @@ class Translator:
         mc_template = templateEnv.get_template("mc.R")
 
         n_estimates = len(self.estimates_df)
-        n_prob_estimates = (self.estimates_df["distribution"] != "constant").sum(
-            axis=0
-        )
+        n_prob_estimates = (self.estimates_df["distribution"] != "constant").sum(axis=0)
 
         first_out_var = None
         for node in self.model.nodes:
@@ -175,15 +180,25 @@ class Translator:
 
     def _translate_node(self, variable_name):
         node = self._get_node_by_variable_name(variable_name)
+        print("translating node " + variable_name)
 
         input_variables: Mapping[str, Any] = {}
         for input_name, input in node.inputs.items():
+            print("translating input " + input_name)
             connection = self._get_connection_from_input(input)
-            if connection is None:
-                term = np.around(input.value, 7)
-            else:
+
+            # input is arbitrary (e.g. select choice)
+            term = input.value
+
+            # input is numeric
+            if isinstance(term, (int, float, complex)):
+                term = np.around(term, 7)
+
+            # input is connected to source node
+            if connection:
                 source_node = self._get_source_node_from_connection(connection)
                 term = source_node.variable_name
+
             input_variables[input_name] = term
 
         # input_variable_names.update(node.inputs)
@@ -273,7 +288,9 @@ class Translator:
 
             variable_name = self._create_variable_name(node.title, variable_names)
             variable_names.add(variable_name)
-            extended_nodes.append(ExtendedNode(**node.model_dump(), variable_name=variable_name))
+            extended_nodes.append(
+                ExtendedNode(**node.model_dump(), variable_name=variable_name)
+            )
 
         return StrippedModel(nodes=extended_nodes, connections=model.graph.connections)
 

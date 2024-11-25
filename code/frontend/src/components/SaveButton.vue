@@ -38,7 +38,7 @@
     axios
       .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/v1/decision_model/", bodyContent, {
         headers: {
-          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.access_token}`
+          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.login.token}`
         }
       })
       .then(response => receiveResults(response))
@@ -51,7 +51,7 @@
 </script>
 
 <template>
-  <v-dialog v-if="userStore.access_token" v-model="nameDialog" scrollable max-width="300px">
+  <v-dialog v-if="userStore.login.token" v-model="nameDialog" scrollable max-width="300px">
     <template v-slot:activator="{ props }">
       <v-btn class="ma-2" variant="text" color="secondary" v-bind="props" @click="openDialog">
         <v-icon> mdi-content-save-outline </v-icon>

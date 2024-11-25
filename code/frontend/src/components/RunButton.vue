@@ -7,7 +7,7 @@
   import { useModelStore, type DecisionSupportResult } from "../state/model";
   import { useUserStore } from "@/state/user";
 
-  const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi: boolean; evpiSet: boolean }>();
+  const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
 
   const modelStore = useModelStore();
   const userStore = useUserStore();
@@ -41,11 +41,10 @@
     let model = modelStore.baklava.editor.save();
     model = clean_model_json(model);
     const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
-    const token = userStore.access_token;
     axios
       .post(import.meta.env.VITE_BACKEND_BASE_URL + route, model, {
         headers: {
-          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${token}`
+          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.login.token}`
         }
       })
       .then(response => receiveResults(response))
@@ -78,15 +77,14 @@
   <v-snackbar v-model="network_error" :timeout="2000" color="error">
     <!--<v-icon>mdi-server-network-off</v-icon>-->
     No connection to server!
-    <template v-slot:actions>
+    <template #actions>
       <v-btn color="white" variant="text" @click="network_error = false"> Close </v-btn>
     </template>
   </v-snackbar>
   <v-snackbar v-model="network_success" :timeout="2000" color="secondary">
-    <!--<v-icon>mdi-chart-histogram</v-icon>-->
     decisionSupport successfully executed!
-    <template v-slot:actions>
-      <v-btn color="white" variant="text" @click="network_error = false"> Close </v-btn>
+    <template #actions>
+      <v-btn color="white" variant="text" @click="network_success = false"> Close </v-btn>
     </template>
   </v-snackbar>
   <v-dialog v-model="noPermissionDialog" max-width="290">

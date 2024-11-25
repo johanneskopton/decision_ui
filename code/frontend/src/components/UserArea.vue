@@ -1,10 +1,8 @@
-<template>
-    <SystemBar />
-    <router-view />
-</template>
-<script>
+<script setup lang="ts">
   import SystemBar from "./SystemBar.vue";
-  export default {
-    components: { SystemBar }
-  };
 </script>
+
+<template>
+  <SystemBar />
+  <router-view />
+</template>

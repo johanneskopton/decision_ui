@@ -1,15 +1,15 @@
-import { displayInSidebar, NodeInterface, SelectInterface } from "baklavajs";
+import { NodeInterface, SelectInterface } from "baklavajs";
 import { setType } from "@baklavajs/interface-types";
 
 import { probabilisticType } from "../types";
 import { BaseNode } from "./BaseNode";
 
-type SupportedOperationType = "Add" | "Subtract" | "Multiply" | "Divide";
-const SUPPORTED_OPERATIONS = ["Add", "Subtract", "Multiply", "Divide"] as SupportedOperationType[];
+type SupportedOperationType = "add" | "subtract" | "multiply" | "divide";
+const SUPPORTED_OPERATIONS = ["add", "subtract", "multiply", "divide"] as SupportedOperationType[];
 
 interface ProbabilisticMathInputs {
-  A: number[];
-  B: number[];
+  a: number[];
+  b: number[];
   operation: SupportedOperationType;
 }
 
@@ -17,31 +17,30 @@ interface ProbabilisticMathOutputs {
   sample: number[];
 }
 
-const MC_RUNS = 1000
+const MC_RUNS = 1000;
 
 export class ProbabilisticMathNode extends BaseNode<ProbabilisticMathInputs, ProbabilisticMathOutputs> {
-
-  public type = "Probabilistic Math";
+  public type = "Math";
 
   public get title() {
     return this.type;
-  };
+  }
 
   public inputs = {
-    A: (new NodeInterface<number[]>("A", [0.0])).use(setType, probabilisticType),
-    B: (new NodeInterface<number[]>("B", [0.0])).use(setType, probabilisticType),
-    operation: new SelectInterface<SupportedOperationType>("Operation", "Add", SUPPORTED_OPERATIONS).setPort(false),
-  }
+    a: new NodeInterface<number[]>("A", [0.0]).use(setType, probabilisticType),
+    b: new NodeInterface<number[]>("B", [0.0]).use(setType, probabilisticType),
+    operation: new SelectInterface<SupportedOperationType>("Operation", "add", SUPPORTED_OPERATIONS).setPort(false)
+  };
 
   public outputs = {
-    sample: new NodeInterface<number[]>("Sample", [0.0]).use(setType, probabilisticType),
-  }
+    sample: new NodeInterface<number[]>("Sample", [0.0]).use(setType, probabilisticType)
+  };
 
   private operations = {
-    Add: (A: number, B: number) => A + B,
-    Subtract: (A: number, B: number) => A - B,
-    Multiply: (A: number, B: number) => A * B,
-    Divide: (A: number, B: number) => A / B
+    add: (a: number, b: number) => a + b,
+    subtract: (a: number, b: number) => a - b,
+    multiply: (a: number, b: number) => a * b,
+    divide: (a: number, b: number) => a / b
   };
 
   public constructor() {
@@ -49,12 +48,11 @@ export class ProbabilisticMathNode extends BaseNode<ProbabilisticMathInputs, Pro
     this.initializeIo();
   }
 
-  protected _calculate({A, B, operation}: ProbabilisticMathInputs): ProbabilisticMathOutputs {
+  protected _calculate({ A, B, operation }: ProbabilisticMathInputs): ProbabilisticMathOutputs {
     const sample = [];
     for (let i = 0; i < MC_RUNS; i++) {
       sample.push(this.operations[operation](A[i], B[i]));
     }
     return { sample };
   }
-
 }

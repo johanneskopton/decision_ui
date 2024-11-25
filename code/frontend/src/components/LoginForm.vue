@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, ref } from "vue";
+  import { ref } from "vue";
   import axios, { AxiosError, type AxiosResponse } from "axios";
   import { useRouter } from "vue-router";
 
@@ -14,16 +14,11 @@
   const errorMessages = ref<string>("");
   const showPass = ref<boolean>(false);
 
-  onMounted(() => {
-    userStore.email = "";
-    userStore.access_token = "";
-  });
-
   const onResponse = (response: AxiosResponse) => {
     console.log(response);
     if (response.status === 200) {
       const token = response.data.access_token;
-      userStore.login(email.value, token);
+      userStore.doLogin(email.value, token);
       router.push("/user/files");
     }
   };

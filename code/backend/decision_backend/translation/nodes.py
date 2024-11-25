@@ -25,13 +25,8 @@ can be implemented.
 
 
 def Math(args):
-    operators = {
-        "Add": "+",
-        "Subtract": "-",
-        "Multiply": "*",
-        "Divide": "/"
-    }
-    operator = operators[args["Operation"]]
+    operators = {"add": "+", "subtract": "-", "multiply": "*", "divide": "/"}
+    operator = operators[args["operation"]]
     return "{} {} {}".format(args["A"], operator, args["B"])
 
 
@@ -56,9 +51,7 @@ def Sum(args):
 
 def ChanceEvent(args):
     return "chance_event({}, {}, {})".format(
-        args["chance"],
-        args["value_if"],
-        args["value_if_not"]
+        args["chance"], args["value_if"], args["value_if_not"]
     )
 
 
@@ -73,9 +66,7 @@ def Result(args):
 def ValueVarier(args):
     if args["trend"] == 0:
         return "vv(var_mean={}, var_CV={}, n={})".format(
-            args["var_mean"],
-            args["var_CV"],
-            args["n"]
+            args["var_mean"], args["var_CV"], args["n"]
         )
     else:
         return "vv(var_mean={}, var_CV={}, n={}, {}_trend={})".format(
@@ -83,7 +74,7 @@ def ValueVarier(args):
             args["var_CV"],
             args["n"],
             args["TrendType"],
-            args["trend"]
+            args["trend"],
         )
 
 
@@ -95,20 +86,17 @@ def ToSeries(args):
         if type(timestep) in [int, float, np.int64]:
             return (
                 "rep({}, {})".format(0, args["n"]),
-                "[{}] <- {}".format(args["timestep"]+1, args["value"])
+                "[{}] <- {}".format(args["timestep"] + 1, args["value"]),
             )
         else:
             return (
                 "rep({}, {})".format(0, args["n"]),
-                "[{}+1] <- {}".format(args["timestep"], args["value"])
+                "[{}+1] <- {}".format(args["timestep"], args["value"]),
             )
 
 
 def NPV(args):
-    return "discount({}, {}, calculate_NPV=TRUE)".format(
-        args["x"],
-        args["discount"]
-    )
+    return "discount({}, {}, calculate_NPV=TRUE)".format(args["x"], args["discount"])
 
 
 node_implementations = {
@@ -125,5 +113,5 @@ node_implementations = {
     "Result": Result,
     "ValueVarier": ValueVarier,
     "NPV": NPV,
-    "ToSeries": ToSeries
+    "ToSeries": ToSeries,
 }

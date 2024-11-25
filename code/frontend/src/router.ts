@@ -1,15 +1,14 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
 import EstimatesDashboard from "./components/EstimatesDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 import UserArea from "./components/UserArea.vue";
-import Login from "./components/Login.vue";
+import LoginForm from "./components/LoginForm.vue";
 import Register from "./components/Register.vue";
 import Workspace from "./components/Workspace.vue";
 import FileView from "./components/FileView.vue";
-import Test from "./components/Test.vue";
 
 const routes = [
   {
@@ -51,7 +50,7 @@ const routes = [
 
   {
     path: "/login/",
-    component: Login
+    component: LoginForm
   },
   {
     path: "/register/",
@@ -60,16 +59,12 @@ const routes = [
   {
     path: "/",
     redirect: "/login/"
-  },
-  {
-    path: "/test",
-    component: Test
   }
 ];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes
 });
 
 export default router;

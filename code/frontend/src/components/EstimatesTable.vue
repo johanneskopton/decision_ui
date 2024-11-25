@@ -4,7 +4,7 @@
   import { useModelStore, type EstimatesTableRow } from "../state/model";
   import csv_parser from "../helper/csv_parser";
 
-  const { live = false } = defineProps<{ live: boolean }>();
+  const { live = false } = defineProps<{ live?: boolean }>();
 
   const modelStore = useModelStore();
 

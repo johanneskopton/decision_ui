@@ -1,21 +1,28 @@
+import { useSessionStorage, type RemovableRef } from "@vueuse/core";
 import { defineStore } from "pinia";
 
-interface UserState {
+interface LoginState {
   email: string;
-  access_token: string;
+  token: string;
+}
+
+interface UserState {
+  login: RemovableRef<LoginState>;
   register_success_msg: boolean;
 }
 
 export const useUserStore = defineStore("user", {
-  state: (): UserState => ({
-    email: "",
-    access_token: "",
-    register_success_msg: false
-  }),
+  state: (): UserState => {
+    const login = useSessionStorage("login", { email: "", token: "" } as LoginState);
+
+    return {
+      login: login,
+      register_success_msg: false
+    };
+  },
   actions: {
-    login(email: string, token: string) {
-      this.email = email;
-      this.access_token = token;
+    doLogin(email: string, token: string) {
+      this.login = { email, token } as LoginState;
     }
   }
 });

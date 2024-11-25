@@ -11,12 +11,17 @@ from decision_backend.users import fastapi_users
 from decision_backend.schemas import UserCreate, UserRead, UserUpdate
 from decision_backend.db import User, create_db_and_tables
 from decision_backend.translation.model import RawModel
-from decision_backend.decision_support_wrapper import DecisionSupportWrapper, ExecutionError
+from decision_backend.decision_support_wrapper import (
+    DecisionSupportWrapper,
+    ExecutionError,
+)
 from decision_backend import crud, schemas
 from decision_backend.db import async_session_maker
 
 # db.Base.metadata.create_all(bind=engine)
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s:%(name)s:%(message)s")
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s %(levelname)s:%(name)s:%(message)s"
+)
 app = FastAPI()
 
 
@@ -39,9 +44,7 @@ app.add_middleware(
 
 
 app.include_router(
-    fastapi_users.get_auth_router(auth_backend),
-    prefix="/api/auth/jwt",
-    tags=["auth"]
+    fastapi_users.get_auth_router(auth_backend), prefix="/api/auth/jwt", tags=["auth"]
 )
 app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
@@ -64,6 +67,7 @@ app.include_router(
     tags=["users"],
 )
 
+
 @app.exception_handler(ExecutionError)
 async def unicorn_exception_handler(request: Request, error: ExecutionError):
     return JSONResponse(
@@ -72,7 +76,7 @@ async def unicorn_exception_handler(request: Request, error: ExecutionError):
             "r_script": error.r_script,
             "estimates": error.estimates,
             "stdout": error.stdout,
-            "stderr": error.stderr
+            "stderr": error.stderr,
         },
     )
 
@@ -115,36 +119,33 @@ def evpi(model: RawModel):
     }
 
 
-@app.post(
-    "/api/v1/decision_model/",
-    response_model=schemas.DecisionModel
-)
+@app.post("/api/v1/decision_model/", response_model=schemas.DecisionModel)
 async def create_item_for_user(
     decision_model: schemas.DecisionModelCreate,
     db: Session = Depends(get_db),
-    user: User = Depends(current_active_user)
+    user: User = Depends(current_active_user),
 ):
-    return await crud.create_user_decision_model(db=db,
-                                                 decision_model=decision_model,
-                                                 user=user
-                                                 )
+    return await crud.create_user_decision_model(
+        db=db, decision_model=decision_model, user=user
+    )
 
 
 @app.get(
     "/api/v1/decision_models/",
     response_model=List[schemas.DecisionModel],
 )
-async def read_decision_models(db: Session = Depends(get_db),
-                               user: User = Depends(current_active_user)
-                               ):
+async def read_decision_models(
+    db: Session = Depends(get_db), user: User = Depends(current_active_user)
+):
     return await crud.get_user_decision_models(db, user)
 
 
 @app.delete("/api/v1/decision_models/{decision_model_id}")
-async def delete_decision_model(decision_model_id: int,
-                                db: Session = Depends(get_db),
-                                user: User = Depends(current_active_user)
-                                ):
+async def delete_decision_model(
+    decision_model_id: int,
+    db: Session = Depends(get_db),
+    user: User = Depends(current_active_user),
+):
     return await crud.delete_decision_model(db, user, decision_model_id)
 
 
@@ -152,8 +153,3 @@ async def delete_decision_model(decision_model_id: int,
 async def on_startup():
     # Not needed if you setup a migration system like Alembic
     await create_db_and_tables()
-
-
-@app.get("/api/test")
-async def main():
-    return {"message": "Hello World"}
