@@ -1,25 +1,52 @@
-import { UVType, UV } from "../../UncertainVariable";
+import { UVType, UV } from "../../common/UncertainVariable";
 import { UncertainNode } from "./UncertainNode";
 import store from "../../vuex_store";
+import { DynamicNode, NodeInterface, SelectInterface, setType, type CalculateFunction, type CalculationContext, defineDynamicNode } from "baklavajs";
 
-export class EstimateNode extends UncertainNode {
+import { NORMAL_DISTRIBUTION, type DistributionSetType } from "../distributions/normal";
+import { BaseNode } from "./BaseNode";
+import { probabilisticType } from "../types";
+
+interface EstimateInputs {
+  distribution: DistributionSetType;
+}
+
+interface EstimateOutputs {
+  sample: number[];
+}
+
+export class EstimateNode extends DynamicNodeNode<EstimateInputs, EstimateOutputs> {
+
+  public type = "Estimate";
+
+  public get title() {
+    return this.type;
+  };
+
+  public inputs = {
+    distribution: new SelectInterface<DistributionSetType>("distribution", NORMAL_DISTRIBUTION, [NORMAL_DISTRIBUTION]).setPort(false),
+  }
+
+  public outputs = {
+    sample: new NodeInterface<number[]>("sample", [0.0]).use(setType, probabilisticType),
+  }
+
   constructor() {
     super();
-    this.type = "Estimate";
-    this.name = "Estimate";
-    this.addOption(
-      "Probability distribution",
-      "SelectOption",
-      "norm",
-      undefined,
-      {
-        items: Object.keys(UVType)
-      }
-    );
-    this.uv_type = false;
-    this.update_uv_type = this.update_uv_type.bind(this);
-    this.update_uv_type();
-    this.events.update.addListener(undefined, this.update_uv_type);
+    this.initializeIo();
+  }
+
+  public onUpdate() {
+
+  }
+
+  public calculate: CalculateFunction<EstimateInputs, EstimateOutputs> = (inputs, context): EstimateOutputs => {
+    return this._calculate(inputs, context);
+  }
+
+  public _calculate({ distribution }: EstimateInputs, context: CalculationContext): EstimateOutputs {
+
+    return { sample: [] };
   }
 
   update_uv_type() {
@@ -70,7 +97,8 @@ export class EstimateNode extends UncertainNode {
     return result;
   }
 
-  _calculate() {
+  public calculate: CalculateFunction<I, NumericOutputs> = (inputs, context) => {
+    return super.calculate(inputs, context);
     var estimate_obj = {};
     this.uv_type.params.forEach(element => {
       if (element == "value") {

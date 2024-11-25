@@ -63,11 +63,11 @@ def ChanceEvent(args):
 
 
 def Display(args):
-    return args["Value"]
+    return args["value"]
 
 
 def Result(args):
-    return args["Value"]
+    return args["value"]
 
 
 def ValueVarier(args):

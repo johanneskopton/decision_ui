@@ -1,39 +1,34 @@
-<!-- eslint-disable vue/html-indent -->
+<script setup lang="ts">
+import { useModelStore } from '@/state/model';
+import { useUserStore } from '@/state/user';
+
+const modelStore = useModelStore();
+const useStore = useUserStore();
+
+</script>
+
 <template>
   <v-system-bar>
-    <v-icon v-if="token">mdi-account</v-icon>
+    <v-icon v-if="useStore.access_token">mdi-account</v-icon>
     <v-icon v-else>mdi-account-off</v-icon>
-    <span v-if="email">{{ email }}</span>
+    <span v-if="useStore.email">{{ useStore.email }}</span>
     <span v-else>guest</span>
     <v-spacer />
-    <span v-if="token" :class="{ unsaved: $store.state.model.unsaved }">
-      {{ this.$store.state.model.name
-      }}<span v-if="$store.state.model.unsaved && $store.state.model.name"
-        >*
-      </span>
+    <span v-if="useStore.access_token" :class="{ unsaved: modelStore.unsaved }">
+      {{ modelStore.name }}<span v-if="modelStore.unsaved && modelStore.name">*
+    </span>
     </span>
     <span v-else>
       <em>Unsaved model*</em>
     </span>
     <v-spacer />
     <router-link to="/login">
-      <v-icon v-if="token">mdi-logout-variant</v-icon>
+      <v-icon v-if="useStore.access_token">mdi-logout-variant</v-icon>
       <v-icon v-else>mdi-login-variant</v-icon>
     </router-link>
   </v-system-bar>
 </template>
-<script>
-  export default {
-    computed: {
-      token() {
-        return this.$store.state.user.access_token;
-      },
-      email() {
-        return this.$store.state.user.email;
-      }
-    }
-  };
-</script>
+
 <style lang="scss">
   div.v-system-bar {
     background-color: var(--v-secondary-lighten4) !important;

@@ -10,9 +10,9 @@ interface Outputs {
     output: number;
 }
 
-export default class TestNode extends Node<Inputs, Outputs> {
+export class TestNode extends Node<Inputs, Outputs> {
     public type = "MathNode";
-    
+
     public get title() {
         return "MathNode";
     };
@@ -24,7 +24,7 @@ export default class TestNode extends Node<Inputs, Outputs> {
     };
 
     public outputs = {
-        output: new NodeInterface("Output", 0),
+        output: new NumberInterface("Output", 0),
     };
 
     public constructor() {

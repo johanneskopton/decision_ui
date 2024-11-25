@@ -1,3 +1,65 @@
+<script setup lang="ts">
+  import { onMounted, ref } from "vue";
+  import axios, { AxiosError, type AxiosResponse } from "axios";
+  import { useRouter } from "vue-router";
+
+  import { useUserStore } from "../state/user";
+
+  const userStore = useUserStore();
+  const router = useRouter();
+
+  const email = ref<string>("");
+  const password = ref<string>("");
+  const network_error_msg = ref<boolean>(false);
+  const errorMessages = ref<string>("");
+  const showPass = ref<boolean>(false);
+
+  onMounted(() => {
+    userStore.email = "";
+    userStore.access_token = "";
+  });
+
+  const onResponse = (response: AxiosResponse) => {
+    console.log(response);
+    if (response.status === 200) {
+      const token = response.data.access_token;
+      userStore.login(email.value, token);
+      router.push("/user/files");
+    }
+  };
+
+  const onError = (error: AxiosError) => {
+    if (error.code === "ERR_NETWORK") {
+      network_error_msg.value = true;
+      return;
+    } else if (error.code === "ERR_BAD_REQUEST") {
+      if (error.response?.status === 404) {
+        errorMessages.value = "Wrong email or password";
+        return;
+      }
+    }
+    console.log(error);
+  };
+
+  const login = () => {
+    const formData = new FormData();
+    formData.set("username", email.value);
+    formData.set("password", password.value);
+    axios
+      .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/jwt/login", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
+      .then(onResponse)
+      .catch(onError);
+  };
+
+  const required = (value: string) => {
+    return !!value || "required";
+  };
+</script>
+
 <template>
   <v-container fluid class="fill-height">
     <v-row justify="center" align="center">
@@ -9,25 +71,25 @@
           <v-card-text>
             <v-form>
               <v-text-field
+                v-model="email"
                 prepend-icon="mdi-email-outline"
                 name="email"
                 label="Email"
                 type="text"
-                v-model="email"
-                :rules="[rules.required]"
+                :rules="[required]"
                 :error-messages="errorMessages"
                 :error="!!errorMessages"
               />
               <v-text-field
                 id="password"
+                v-model="password"
                 prepend-icon="mdi-lock"
                 name="password"
                 label="Password"
                 :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required]"
+                :rules="[required]"
                 :type="showPass ? 'text' : 'password'"
                 @click:append="showPass = !showPass"
-                v-model="password"
                 @keyup.enter="login"
               />
             </v-form>
@@ -35,8 +97,7 @@
           <v-card-actions>
             <p class="infotext">
               New here? 🤗
-              <router-link to="/register">Create a free account!</router-link
-              ><br />
+              <router-link to="/register">Create a free account!</router-link><br />
               ..or
               <router-link to="/user/workspace">try as a guest.</router-link>
             </p>
@@ -49,98 +110,18 @@
     <v-snackbar v-model="network_error_msg" :timeout="2000" color="error">
       <!--<v-icon>mdi-server-network-off</v-icon>-->
       No connection to server!
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          color="white"
-          variant="text"
-          v-bind="attrs"
-          @click="network_error_msg = false"
-        >
-          Close
-        </v-btn>
+      <template v-slot:actions>
+        <v-btn color="white" variant="text" @click="network_error_msg = false"> Close </v-btn>
       </template>
     </v-snackbar>
-    <v-snackbar
-      v-model="$store.state.user.register_success_msg"
-      color="info"
-      :timeout="2000"
-    >
+    <v-snackbar v-model="userStore.register_success_msg" color="info" :timeout="2000">
       Registration complete! 🎉
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          variant="text"
-          v-bind="attrs"
-          @click="$store.state.user.register_success_msg = false"
-        >
-          Close
-        </v-btn>
+      <template v-slot:actions>
+        <v-btn variant="text" @click="userStore.register_success_msg = false"> Close </v-btn>
       </template>
     </v-snackbar>
   </v-container>
 </template>
-
-<script>
-  import axios from "axios";
-  export default {
-    data() {
-      return {
-        email: "",
-        password: "",
-        showPass: false,
-        rules: {
-          required(value) {
-            return !!value || "Required.";
-          }
-        },
-        network_error_msg: false,
-        errorMessages: ""
-      };
-    },
-    created() {
-      this.$store.state.user.email = false;
-      this.$store.state.user.access_token = false;
-    },
-    methods: {
-      login: function () {
-        const formData = new FormData();
-        formData.set("username", this.email);
-        formData.set("password", this.password);
-        axios
-          .post(
-            import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/jwt/login",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data"
-              }
-            }
-          )
-          .then(this.onResponse)
-          .catch(this.onError);
-      },
-      onResponse: function (response) {
-        console.log(response);
-        if (response.status === 200) {
-          const token = response.data.access_token;
-          this.$store.commit("login", { email: this.email, token });
-          this.$router.push("/user/files");
-        }
-      },
-      onError: function (error) {
-        if (error.code === "ERR_NETWORK") {
-          this.network_error_msg = true;
-          return;
-        } else if (error.code === "ERR_BAD_REQUEST") {
-          if (error.response.status === 404) {
-            this.errorMessages = "Wrong email or password";
-            return;
-          }
-        }
-        console.log(error);
-      }
-    }
-  };
-</script>
 
 <style>
   div.mainColumn {

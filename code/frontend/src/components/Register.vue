@@ -1,3 +1,60 @@
+<script setup lang="ts">
+  import { ref, watch } from "vue";
+  import { useRouter } from "vue-router";
+  import axios, { AxiosError, type AxiosResponse } from "axios";
+
+  import { useUserStore } from "../state/user";
+
+  const userStore = useUserStore();
+  const router = useRouter();
+
+  const email = ref<string>("");
+  const password = ref<string>("");
+  const errorMessages = ref<string>("");
+  const network_error_msg = ref<boolean>(false);
+  const showPass = ref<boolean>(false);
+
+  watch(
+    () => email,
+    () => {
+      errorMessages.value = "";
+    }
+  );
+
+  const onResponse = (response: AxiosResponse) => {
+    if (response.status === 201) {
+      userStore.register_success_msg = true;
+      router.push("/login");
+    }
+  };
+  const onError = (error: AxiosError) => {
+    if (error.code === "ERR_NETWORK") {
+      network_error_msg.value = true;
+      return;
+    } else if (error.code === "ERR_BAD_REQUEST") {
+      if (error.response && error.response.data && error.response.data.detail === "REGISTER_USER_ALREADY_EXISTS") {
+        errorMessages.value = "A user with this address already exists.";
+        return;
+      }
+    }
+    console.log(error);
+  };
+
+  const register = () => {
+    axios
+      .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/register", {
+        email: email.value,
+        password: password.value
+      })
+      .then(onResponse)
+      .catch(onError);
+  };
+
+  const required = (value: string) => {
+    return !!value || "required";
+  };
+</script>
+
 <template>
   <v-container fluid class="fill-height">
     <v-row justify="center" align="center">
@@ -9,25 +66,25 @@
           <v-card-text>
             <v-form>
               <v-text-field
+                v-model="email"
                 prepend-icon="mdi-email-outline"
                 name="email"
                 label="Email"
                 type="text"
-                v-model="email"
-                :rules="[rules.required]"
+                :rules="[required]"
                 :error-messages="errorMessages"
                 :error="!!errorMessages"
               />
               <v-text-field
                 id="password"
+                v-model="password"
                 prepend-icon="mdi-lock"
                 name="password"
                 label="Password"
                 :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required]"
+                :rules="[required]"
                 :type="showPass ? 'text' : 'password'"
                 @click:append="showPass = !showPass"
-                v-model="password"
               />
             </v-form>
           </v-card-text>
@@ -45,73 +102,12 @@
     <v-snackbar v-model="network_error_msg" :timeout="2000" color="error">
       <!--<v-icon>mdi-server-network-off</v-icon>-->
       No connection to server!
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          color="white"
-          variant="text"
-          v-bind="attrs"
-          @click="network_error_msg = false"
-        >
-          Close
-        </v-btn>
+      <template v-slot:actions>
+        <v-btn color="white" variant="text" @click="network_error_msg = false"> Close </v-btn>
       </template>
     </v-snackbar>
   </v-container>
 </template>
-
-<script lang="ts">
-  import axios, { AxiosError, type AxiosResponse } from "axios";
-  export default {
-    data() {
-      return {
-        email: "",
-        password: "",
-        showPass: false,
-        rules: {
-          required(value: boolean) {
-            return !!value || "Required.";
-          }
-        },
-        network_error_msg: false,
-        errorMessages: ""
-      };
-    },
-    watch: {
-      email() {
-        this.errorMessages = "";
-      }
-    },
-    methods: {
-      register: function() {
-        axios
-          .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/register", {
-            email: this.email,
-            password: this.password
-          })
-          .then(this.onResponse)
-          .catch(this.onError);
-      },
-      onResponse: function(response: AxiosResponse) {
-        if (response.status === 201) {
-          this.$store.state.user.register_success_msg = true;
-          this.$router.push("/login");
-        }
-      },
-      onError: function(error: AxiosError) {
-        if (error.code === "ERR_NETWORK") {
-          this.network_error_msg = true;
-          return;
-        } else if (error.code === "ERR_BAD_REQUEST") {
-          if (error.response.data.detail === "REGISTER_USER_ALREADY_EXISTS") {
-            this.errorMessages = "A user with this address already exists.";
-            return;
-          }
-        }
-        console.log(error);
-      }
-    }
-  };
-</script>
 
 <style>
   div.mainColumn {

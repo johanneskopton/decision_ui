@@ -57,8 +57,5 @@
 </script>
 
 <style>
-  canvas.hide {
-    /* for some reason v-show did not work*/
-    display: none !important;
-  }
+
 </style>

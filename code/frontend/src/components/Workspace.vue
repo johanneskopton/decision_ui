@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useUserStore } from "@/state/user";
+import RunButton from "./RunButton.vue";
+
+const userStore = useUserStore();
+</script>
+
 <template>
   <div class="workspace-container">
     <v-navigation-drawer rail permanent>
@@ -24,7 +31,7 @@
           to="/user/files"
           class="mt-auto"
           prepend-icon="mdi-format-list-text"
-          v-if="$store.state.user.access_token"
+          v-if="userStore.access_token"
         >
           <v-list-item-title>Files</v-list-item-title>
         </v-list-item>
@@ -36,24 +43,6 @@
     </div>
   </div>
 </template>
-
-<script>
-  import RunButton from "./RunButton.vue";
-  export default {
-    components: { RunButton },
-    created() {
-      if (!this.$store.state.model.isInitialized) {
-        this.$store.dispatch("initModel");
-      }
-    },
-    data() {
-      return {
-        drawer: false,
-        selectedItem: false
-      };
-    }
-  };
-</script>
 
 <style>
   nav.v-navigation-drawer {

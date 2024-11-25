@@ -1,5 +1,5 @@
 import gaussian from "gaussian";
-import random_trunc_normal from "./helper/random_trunc_normal";
+import random_trunc_normal from "../helper/random_trunc_normal";
 
 // 95% quantile of the standard normal distribution
 const q95_Z = 1.6448536269514722;

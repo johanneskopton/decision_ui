@@ -14,8 +14,14 @@ export default [
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
   },
 
-  ...pluginVue.configs['flat/essential'],
-  ...pluginVuetify.configs['flat/base'],
+  ...pluginVue.configs['flat/recommended'],
+  ...pluginVuetify.configs['flat/recommended'],
   ...vueTsEslintConfig(),
   skipFormatting,
+
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
+  },
 ]

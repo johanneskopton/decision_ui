@@ -5,8 +5,8 @@ import numpy as np
 import jinja2
 import subprocess
 
-from decision_backend.translator import Translator
-from decision_backend.model import RawModel
+from decision_backend.translation.translator import Translator
+from decision_backend.translation.model import RawModel
 
 test_dir = os.path.dirname(__file__)
 test_data_dir = os.path.join(test_dir, "data")
@@ -27,7 +27,7 @@ model_clean = RawModel(**model_dict_clean)
 def test_create_translator():
     for this_model in [model, model_clean]:
         translator = Translator(this_model, 100)
-        assert len(translator.model.nodes) == 15
+        assert len(translator.model.graph.nodes) == 15
 
 
 def test_create_variable_name():

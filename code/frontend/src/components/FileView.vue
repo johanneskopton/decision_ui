@@ -1,31 +1,25 @@
+<script setup lang="ts">
+  import FileList from "./FileList.vue";
+</script>
+
 <template>
   <div class="fileview">
     <FileList />
     <v-btn
       location="right"
-      dark
-      fab
       color="primary"
       to="/user/workspace"
       class="ma-2"
       size="large"
     >
-      <v-icon dark>
+      <v-icon>
         mdi-file-plus
       </v-icon>
     </v-btn>
   </div>
 </template>
 
-<script>
-  import FileList from "./FileList.vue";
-  export default {
-    components: { FileList },
-    created() {
-      this.$store.dispatch("initModel");
-    }
-  };
-</script>
+
 
 <style lang="scss">
   @use "sass:map";

@@ -2,15 +2,16 @@ from typing import List
 import logging
 
 from sqlalchemy.orm import Session
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from decision_backend.users import auth_backend, current_active_user
 from decision_backend.users import fastapi_users
 from decision_backend.schemas import UserCreate, UserRead, UserUpdate
 from decision_backend.db import User, create_db_and_tables
-from decision_backend.model import RawModel
-from decision_backend.decision_support_wrapper import DecisionSupportWrapper
+from decision_backend.translation.model import RawModel
+from decision_backend.decision_support_wrapper import DecisionSupportWrapper, ExecutionError
 from decision_backend import crud, schemas
 from decision_backend.db import async_session_maker
 
@@ -62,6 +63,18 @@ app.include_router(
     prefix="/api/users",
     tags=["users"],
 )
+
+@app.exception_handler(ExecutionError)
+async def unicorn_exception_handler(request: Request, error: ExecutionError):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "r_script": error.r_script,
+            "estimates": error.estimates,
+            "stdout": error.stdout,
+            "stderr": error.stderr
+        },
+    )
 
 
 @app.post("/api/v1/monte_carlo")
@@ -133,20 +146,6 @@ async def delete_decision_model(decision_model_id: int,
                                 user: User = Depends(current_active_user)
                                 ):
     return await crud.delete_decision_model(db, user, decision_model_id)
-
-# @app.get(
-#    "/api/v1/decision_models/",
-#    response_model=List[schemas.DecisionModel],
-# )
-# async def read_decision_models(skip: int = 0,
-#                               limit: int = 100,
-#                               db: Session = Depends(get_db)
-#                               ):
-#    decision_models = await crud.get_decision_models(db,
-#                                                     skip=skip,
-#                                                     limit=limit)
-#    print(decision_models)
-#    return decision_models
 
 
 @app.on_event("startup")

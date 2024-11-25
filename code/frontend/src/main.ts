@@ -1,7 +1,10 @@
 // vue
 import { createApp } from 'vue'
 
-// Vuetify
+// state management
+import { createPinia } from 'pinia'
+
+// vuetify ui components
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -13,10 +16,9 @@ import hljsVuePlugin from "@highlightjs/vue-plugin";
 // excel editor
 import VueExcelEditor from 'vue3-excel-editor';
 
-// local 
+// local
 import App from "./App.vue";
 import router from "./router";
-import store from "./vuex_store";
 
 const vuetify = createVuetify({
     components,
@@ -26,12 +28,14 @@ const vuetify = createVuetify({
     }
   })
 
+const pinia = createPinia();
+
 const app = createApp(App);
 
 app.use(router);
 app.use(vuetify);
 app.use(VueExcelEditor)
 app.use(hljsVuePlugin)
-app.use(store)
+app.use(pinia)
 
 app.mount("#app");
