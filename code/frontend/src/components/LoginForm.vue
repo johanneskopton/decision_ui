@@ -46,6 +46,9 @@
 
   onMounted(() => userStore.doLogout());
   onMounted(() => modelStore.reset());
+
+  const mode = import.meta.env.MODE;
+  const version = import.meta.env.VITE_APP_VERSION;
 </script>
 
 <template>
@@ -96,6 +99,9 @@
         </v-form>
       </v-col>
     </v-row>
+    <div class="footer">
+      {{ mode }} mode - version {{ version }}
+    </div>
     <v-snackbar v-model="snackbarNetworkErrorVisible" :timeout="2000" color="error">
       <!--<v-icon>mdi-server-network-off</v-icon>-->
       No connection to server!
@@ -118,13 +124,20 @@
   </v-container>
 </template>
 
-<style>
-  div.mainColumn {
+<style scoped lang="scss">
+  .mainColumn {
     max-width: 35em;
   }
 
   .infotext {
     margin-left: 10px;
     margin-bottom: 5px !important;
+  }
+
+  .footer {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 10pt;
   }
 </style>

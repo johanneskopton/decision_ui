@@ -4,6 +4,7 @@ RUN echo "Hello World"
 
 # copy code
 COPY code /root/workspace/code
+COPY .git /root/workspace/.git
 
 # install dependencies
 RUN cd /root/workspace/code/backend/bin && bash install.sh

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 import NodeEditor from "./components/NodeEditor.vue";
 import ResultsDashboard from "./components/ResultsDashboard.vue";
@@ -68,7 +68,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes
 });
 

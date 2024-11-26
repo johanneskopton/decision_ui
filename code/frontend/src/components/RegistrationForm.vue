@@ -114,9 +114,9 @@
   </v-container>
 </template>
 
-<style>
-  div.mainColumn {
-    width: 35em;
+<style scoped lang="scss">
+  .mainColumn {
+    max-width: 35em;
   }
 
   .infotext {
