@@ -8,7 +8,6 @@ interface LoginState {
 
 interface UserState {
   login: RemovableRef<LoginState>;
-  register_success_msg: boolean;
 }
 
 export const useUserStore = defineStore("user", {
@@ -16,13 +15,15 @@ export const useUserStore = defineStore("user", {
     const login = useSessionStorage("login", { email: "", token: "" } as LoginState);
 
     return {
-      login: login,
-      register_success_msg: false
+      login: login
     };
   },
   actions: {
     doLogin(email: string, token: string) {
       this.login = { email, token } as LoginState;
+    },
+    doLogout() {
+      this.login = { email: "", token: "" } as LoginState;
     }
   }
 });

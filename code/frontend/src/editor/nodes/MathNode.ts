@@ -14,7 +14,7 @@ interface ProbabilisticMathInputs {
 }
 
 interface ProbabilisticMathOutputs {
-  sample: number[];
+  result: number[];
 }
 
 const MC_RUNS = 1000;
@@ -33,7 +33,7 @@ export class ProbabilisticMathNode extends BaseNode<ProbabilisticMathInputs, Pro
   };
 
   public outputs = {
-    sample: new NodeInterface<number[]>("Sample", [0.0]).use(setType, probabilisticType)
+    result: new NodeInterface<number[]>("Result", [0.0]).use(setType, probabilisticType)
   };
 
   private operations = {
@@ -48,11 +48,11 @@ export class ProbabilisticMathNode extends BaseNode<ProbabilisticMathInputs, Pro
     this.initializeIo();
   }
 
-  protected _calculate({ A, B, operation }: ProbabilisticMathInputs): ProbabilisticMathOutputs {
-    const sample = [];
+  protected _calculate({ a, b, operation }: ProbabilisticMathInputs): ProbabilisticMathOutputs {
+    const result = [];
     for (let i = 0; i < MC_RUNS; i++) {
-      sample.push(this.operations[operation](A[i], B[i]));
+      result.push(this.operations[operation](a[i], b[i]));
     }
-    return { sample };
+    return { result };
   }
 }

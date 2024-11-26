@@ -8,7 +8,7 @@
 <template>
   <div class="workspace-container">
     <v-navigation-drawer rail permanent>
-      <v-list density="compact" nav height="100%">
+      <v-list density="compact" nav>
         <v-list-item to="/user/workspace/modeling" prepend-icon="mdi-graph mdi-rotate-90">
           <v-list-item-title>Model editor</v-list-item-title>
         </v-list-item>
@@ -21,10 +21,14 @@
         <v-list-item to="/user/workspace/code" prepend-icon="mdi-language-r">
           <v-list-item-title>R-Code</v-list-item-title>
         </v-list-item>
-        <v-list-item v-if="userStore.login.token" to="/user/files" class="mt-auto" prepend-icon="mdi-format-list-text">
-          <v-list-item-title>Files</v-list-item-title>
-        </v-list-item>
       </v-list>
+      <template #append>
+        <v-list density="compact" nav>
+          <v-list-item v-if="userStore.login.token" to="/user/files" prepend-icon="mdi-format-list-text">
+            <v-list-item-title>Files</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </template>
     </v-navigation-drawer>
     <div class="main-window">
       <router-view />
@@ -33,10 +37,11 @@
   </div>
 </template>
 
-<style>
+<style scoped lang="scss">
   nav.v-navigation-drawer {
     position: relative !important;
     top: 0 !important;
+    height: 100% !important;
   }
 
   div.main-window {

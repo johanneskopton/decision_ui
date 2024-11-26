@@ -48,6 +48,7 @@
 
   const open = (model: ModelData) => {
     modelStore.name = model.name;
+    modelStore.unsaved = false;
     modelStore.baklava.editor.load(JSON.parse(model.content));
     router.push("/user/workspace");
   };
@@ -71,6 +72,7 @@
 
   onMounted(() => {
     query_models();
+    modelStore.reset();
   });
 </script>
 
@@ -96,7 +98,7 @@
               </v-avatar>
             </template>
             <template #append>
-              <v-btn icon="mdi-close-circle" color="" @click.stop="deleteModel(model)"> </v-btn>
+              <v-btn icon="mdi-trash-can-outline" size="small" @click.stop="deleteModel(model)"> </v-btn>
             </template>
           </v-list-item>
           <v-list-item v-if="models?.length == 0">

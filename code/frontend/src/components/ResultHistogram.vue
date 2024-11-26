@@ -31,12 +31,9 @@
     graph.value = histogram(graph.value, ctx, bins, density);
   };
 
-  watch(
-    () => histData,
-    () => {
-      drawHist();
-    }
-  );
+  watch(histData, () => {
+    drawHist();
+  });
 
   onMounted(() => {
     drawHist();

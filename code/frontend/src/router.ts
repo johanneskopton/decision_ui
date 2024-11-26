@@ -6,7 +6,7 @@ import EstimatesDashboard from "./components/EstimatesDashboard.vue";
 import CodeDashboard from "./components/CodeDashboard.vue";
 import UserArea from "./components/UserArea.vue";
 import LoginForm from "./components/LoginForm.vue";
-import Register from "./components/Register.vue";
+import RegistrationForm from "./components/RegistrationForm.vue";
 import Workspace from "./components/Workspace.vue";
 import FileView from "./components/FileView.vue";
 
@@ -54,7 +54,7 @@ const routes = [
   },
   {
     path: "/register/",
-    component: Register
+    component: RegistrationForm
   },
   {
     path: "/",

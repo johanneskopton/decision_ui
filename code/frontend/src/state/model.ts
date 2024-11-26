@@ -130,6 +130,9 @@ export const useModelStore = defineStore("model", {
           ...newResult
         };
       }
+    },
+    reset() {
+      Object.assign(this, initializeModelState());
     }
   }
 });
