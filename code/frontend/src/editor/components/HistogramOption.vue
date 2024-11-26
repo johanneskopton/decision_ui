@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, watch, onMounted, useTemplateRef, onUpdated } from "vue";
+  import { ref, watch, useTemplateRef, onUpdated } from "vue";
   import type { Chart } from "chart.js";
 
   import get_bins from "../../common/get_bins";
@@ -11,8 +11,8 @@
   const canvas = useTemplateRef<HTMLCanvasElement | null>("canvas");
   const graph = ref<Chart | null>(null);
 
-  const numberToPrettyString = (value: number) => {
-    if (value === undefined) {
+  const numberToPrettyString = (value: number | null | undefined) => {
+    if (value === undefined || value === null) {
       return "undefined";
     }
     const approximatelyEqual = (v1: number, v2: number, epsilon = 0.001) => Math.abs(v1 - v2) < epsilon;
@@ -46,7 +46,7 @@
     graph.value = histogram(graph.value, ctx, bins, bin_counts, true);
   };
 
-  const update = (value: number[]) => {
+  const update = (value: number[] | null) => {
     isProbabilistic.value = new Set(value).size > 1;
   };
 
@@ -66,7 +66,7 @@
 
 <template>
   <div class="histogram">
-    <canvas ref="canvas" v-if="isProbabilistic" />
+    <canvas v-if="isProbabilistic" ref="canvas" />
     <p v-if="!isProbabilistic">
       {{ numberToPrettyString(new Set(modelValue).values().next().value) }}
     </p>
@@ -76,7 +76,10 @@
 <script lang="ts"></script>
 
 <style scoped lang="scss">
-  .histogram canvas {
-    // todo
+  .histogram {
+    position: relative;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
   }
 </style>

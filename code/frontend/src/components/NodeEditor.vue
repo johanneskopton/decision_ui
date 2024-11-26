@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, useTemplateRef } from "vue";
+  import { onMounted, onUnmounted, useTemplateRef } from "vue";
   import { BaklavaEditor } from "@baklavajs/renderer-vue";
   import { saveAs } from "file-saver";
 
@@ -14,11 +14,11 @@
   const loadfile = useTemplateRef<HTMLInputElement>("loadfile");
 
   const token = Symbol();
-  modelStore.baklava.editor.nodeEvents.update.subscribe(token, (state, node) => {
+  modelStore.baklava.editor.nodeEvents.update.subscribe(token, () => {
     modelStore.unsaved = true;
   });
 
-  const updateGraph = () => {
+  const updateGraphCalculation = () => {
     if (modelStore.baklava.editor.graph.nodes.length > 0) {
       modelStore.baklava.editor.graph.nodes[0].events.update.emit(null);
     }
@@ -41,7 +41,7 @@
         "load",
         () => {
           modelStore.baklava.editor.load(JSON.parse(reader.result as string));
-          updateGraph();
+          updateGraphCalculation();
         },
         false
       );
@@ -50,27 +50,35 @@
   };
 
   onMounted(() => {
-    updateGraph();
+    updateGraphCalculation();
+  });
+
+  onMounted(() => {
+    modelStore.baklava.engine.start();
+  });
+
+  onUnmounted(() => {
+    modelStore.baklava.engine.stop();
   });
 </script>
 
 <template>
-  <div class="node-editor-container">
+  <div class="editor">
     <!--<hint-overlay />-->
     <BaklavaEditor :view-model="modelStore.baklava.viewPlugin as any" />
     <v-sheet class="button-container" color="white" elevation="4" rounded>
       <v-btn-toggle multiple class="button-toggle">
         <v-tooltip location="top" text="Download">
-          <template v-slot:activator="{ props }">
-            <v-btn class="ma-2 dark" variant="text" color="secondary" @click="saveGraph" v-bind="props">
+          <template #activator="{ props }">
+            <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="saveGraph">
               <v-icon class="dark"> mdi-tray-arrow-down </v-icon>
             </v-btn>
           </template>
         </v-tooltip>
-        <input type="file" ref="loadfile" id="loadfile" style="display: none" @change="loadGraph" />
+        <input id="loadfile" ref="loadfile" type="file" style="display: none" @change="loadGraph" />
         <v-tooltip location="top" text="Upload">
-          <template v-slot:activator="{ props }">
-            <v-btn class="ma-2 dark" variant="text" color="secondary" @click="$refs.loadfile.click()" v-bind="props">
+          <template #activator="{ props }">
+            <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="$refs.loadfile.click()">
               <v-icon class="dark"> mdi-tray-arrow-up </v-icon>
             </v-btn>
           </template>
@@ -82,18 +90,44 @@
 </template>
 
 <style scoped lang="scss">
-  @use "../style/baklava.scss";
-
-  .node-editor-container {
+  .editor {
     position: relative;
     width: 100%;
     height: 100%;
   }
 
-  .button-container {
+  .editor .button-container {
     position: absolute;
     bottom: 1em;
     right: 10em;
+  }
+</style>
+
+<style lang="scss">
+  .baklava-node-palette h1 {
+    font-size: 1.1em;
+  }
+
+  .baklava-node[data-node-type="Estimate"],
+  .baklava-node[data-node-type="Result"] {
+    .__title {
+      background-color: #0d5874;
+    }
+  }
+
+  .baklava-node[data-node-type="Debug"],
+  .baklava-node[data-node-type="Histogram"] {
+    .__title {
+      // background-color: #76337f;
+      // background-color: #686e1a;
+    }
+  }
+
+  .baklava-node[data-node-type^="__baklava_GraphNode"],
+  .baklava-node[data-node-type^="__baklava_Subgraph"] {
+    .__title {
+      background-color: #0d7447;
+    }
   }
 
   .node.error {

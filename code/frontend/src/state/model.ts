@@ -1,4 +1,4 @@
-import { Editor, type IEngine } from "@baklavajs/core";
+import { Editor } from "@baklavajs/core";
 import { useBaklava, type IBaklavaViewModel, type ICommand } from "@baklavajs/renderer-vue";
 import { applyResult, DependencyEngine } from "@baklavajs/engine";
 import { BaklavaInterfaceTypes } from "@baklavajs/interface-types";
@@ -12,7 +12,9 @@ import {
   deterministicIntegerType
 } from "../editor/types";
 
-import { ProbabilisticMathNode } from "../editor/nodes/MathNode";
+import { MathNode } from "../editor/nodes/MathNode";
+import { RoundNode } from "../editor/nodes/RoundNode";
+import { SumNode } from "../editor/nodes/SumNode";
 import { EstimateNode } from "../editor/nodes/EstimateNode";
 import { DebugNode } from "../editor/nodes/DebugNode";
 import { HistogramNode } from "../editor/nodes/HistogramNode";
@@ -26,7 +28,8 @@ interface GlobalCalculationData {
 interface BaklavaState {
   viewPlugin: IBaklavaViewModel;
   editor: Editor;
-  engine: IEngine<GlobalCalculationData>;
+  engine: DependencyEngine<GlobalCalculationData>;
+  eventToken: symbol;
 }
 
 interface HistogramData {
@@ -51,8 +54,13 @@ export interface EstimatesTableRow {
   upper: number;
 }
 
+interface Settings {
+  mcRuns: number;
+}
+
 interface ModelState {
   baklava: BaklavaState;
+  settings: Settings;
   decisionSupportResult: DecisionSupportResult | null;
   estimates: EstimatesTableRow[];
   unsaved: boolean;
@@ -74,12 +82,22 @@ const initializeModelState = (): ModelState => {
     deterministicIntegerType
   );
 
-  // register nodes
-  editor.registerNodeType(ProbabilisticMathNode, { category: "Probabilistic" });
-  editor.registerNodeType(EstimateNode, { category: "Input / Output" });
-  editor.registerNodeType(ResultNode, { category: "Input / Output" });
-  editor.registerNodeType(DebugNode, { category: "Display" });
-  editor.registerNodeType(HistogramNode, { category: "Display" });
+  const generalCategory = { category: "1. Input & Output" };
+  const operationsCategory = { category: "2. Operations" };
+  const displayCategory = { category: "3. Display" };
+
+  // register general nodes
+  editor.registerNodeType(EstimateNode, generalCategory);
+  editor.registerNodeType(ResultNode, generalCategory);
+
+  // register operation nodes
+  editor.registerNodeType(MathNode, operationsCategory);
+  editor.registerNodeType(RoundNode, operationsCategory);
+  editor.registerNodeType(SumNode, operationsCategory);
+
+  // register display nodes
+  editor.registerNodeType(DebugNode, displayCategory);
+  editor.registerNodeType(HistogramNode, displayCategory);
 
   // add commands
   type RefreshCommand = ICommand<string, [id: string]>;
@@ -94,21 +112,29 @@ const initializeModelState = (): ModelState => {
   });
 
   // initialize engine
-  const engine = new DependencyEngine(editor);
-  const token = Symbol();
-  engine.events.afterRun.subscribe(token, result => {
+  const engine = new DependencyEngine<{ mcRuns: number }>(editor);
+
+  const eventToken = Symbol();
+  engine.events.afterRun.subscribe(eventToken, result => {
     engine.pause();
     applyResult(result, editor);
     engine.resume();
   });
 
-  engine.start();
+  engine.hooks.gatherCalculationData.subscribe(eventToken, () => {
+    const modelStore = useModelStore();
+    return { mcRuns: modelStore.settings.mcRuns };
+  });
 
   return {
     baklava: {
       editor,
       viewPlugin,
-      engine
+      engine,
+      eventToken
+    },
+    settings: {
+      mcRuns: 10000
     },
     decisionSupportResult: null,
     estimates: [],

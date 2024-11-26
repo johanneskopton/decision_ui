@@ -4,12 +4,12 @@ import { markRaw } from "vue";
 import HistogramOption from "../components/HistogramOption.vue";
 
 export const HistogramNode = defineNode({
-  type: "HistogramNode",
+  type: "Histogram",
 
   title: "Histogram",
 
   inputs: {
-    value: () => new NodeInterface<any>("value", [])
+    value: () => new NodeInterface<any>("Value", [])
   },
 
   outputs: {

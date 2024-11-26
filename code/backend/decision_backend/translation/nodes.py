@@ -27,7 +27,7 @@ can be implemented.
 def Math(args):
     operators = {"add": "+", "subtract": "-", "multiply": "*", "divide": "/"}
     operator = operators[args["operation"]]
-    return "{} {} {}".format(args["A"], operator, args["B"])
+    return "{} {} {}".format(args["a"], operator, args["b"])
 
 
 def Comparison(args):
@@ -36,12 +36,12 @@ def Comparison(args):
 
 
 def Round(args):
-    return "{}({})".format(args["Operation"], args["x"])
+    return "{}({})".format(args["operation"], args["x"])
 
 
 def Sum(args):
-    res_str = args["A"]
-    for i in string.ascii_uppercase[1:]:
+    res_str = args["a"]
+    for i in string.ascii_lowercase[1:]:
         if i not in args:
             break
         if args[i] != 0:

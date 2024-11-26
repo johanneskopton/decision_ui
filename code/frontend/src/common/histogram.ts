@@ -51,7 +51,7 @@ export default function (
     autoSkip: false,
     maxTicksLimit: max_ticks,
     color: baseColor,
-    afterBuildTicks: (axis) => {
+    afterBuildTicks: axis => {
       const scale = niceScale(bins[0], bins[bins.length - 1], max_ticks);
       const target_tick_values: number[] = [];
       for (let i = 0; i < max_ticks; i++) {
@@ -73,6 +73,8 @@ export default function (
     },
     options: {
       animation: false,
+      responsive: true,
+      maintainAspectRatio: true,
       scales: {
         x: {
           type: "linear",
@@ -91,7 +93,7 @@ export default function (
             maxTicksLimit: 4
           },
           grid: {
-            color: baseColor2,
+            color: baseColor2
             // zeroLineColor: baseColor
           }
         }

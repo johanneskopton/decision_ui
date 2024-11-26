@@ -9,6 +9,7 @@ import LoginForm from "./components/LoginForm.vue";
 import RegistrationForm from "./components/RegistrationForm.vue";
 import Workspace from "./components/Workspace.vue";
 import FileView from "./components/FileView.vue";
+import SettingsDashboard from "./components/SettingsDashboard.vue";
 
 const routes = [
   {
@@ -38,6 +39,10 @@ const routes = [
           {
             path: "code",
             component: CodeDashboard
+          },
+          {
+            path: "settings",
+            component: SettingsDashboard
           }
         ]
       },

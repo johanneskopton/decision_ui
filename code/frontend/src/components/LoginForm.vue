@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { onMounted, ref, watch } from "vue";
-  import axios, { AxiosError, type AxiosResponse } from "axios";
   import { useRouter, useRoute } from "vue-router";
 
   import { useUserStore } from "../state/user";
   import { useModelStore } from "@/state/model";
+  import { doLoginRequest } from "@/backend/authentication";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();
@@ -22,41 +22,22 @@
 
   watch([email, password], () => (formErrorMessage.value = ""));
 
-  const onResponse = (response: AxiosResponse) => {
-    console.log(response);
-    if (response.status === 200) {
-      const token = response.data.access_token;
-      userStore.doLogin(email.value, token);
-      router.push("/user/files");
-    }
-  };
-
-  const onError = (error: AxiosError) => {
-    if (error.code === "ERR_NETWORK") {
-      snackbarNetworkErrorVisible.value = true;
-      return;
-    } else {
-      snackbarLoginFailedVisible.value = true;
-      if (error.code === "ERR_BAD_REQUEST" && (error.response?.data as any).detail === "LOGIN_BAD_CREDENTIALS") {
-        formErrorMessage.value = "Wrong email or password";
-      } else {
-        console.error(`Unknown loging error: ${JSON.stringify(error, null, 2)}`);
-      }
-    }
-  };
-
   const login = () => {
-    const formData = new FormData();
-    formData.set("username", email.value);
-    formData.set("password", password.value);
-    axios
-      .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/jwt/login", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      })
-      .then(onResponse)
-      .catch(onError);
+    doLoginRequest({
+      email: email.value,
+      password: password.value,
+      onSuccess: (token: string) => {
+        userStore.doLogin(email.value, token);
+        router.push("/user/files");
+      },
+      onNetworkError: () => {
+        snackbarNetworkErrorVisible.value = true;
+      },
+      onWrongCredentials: () => {
+        snackbarLoginFailedVisible.value = true;
+        formErrorMessage.value = "Wrong email or password";
+      }
+    });
   };
 
   const required = (value: string) => {

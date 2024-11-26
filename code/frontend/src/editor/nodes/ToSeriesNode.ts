@@ -1,4 +1,3 @@
-import { SeriesUncertainNode } from "./SeriesUncertainNode";
 import nj from "@d4c/numjs";
 
 export class ToSeriesNode extends SeriesUncertainNode {
@@ -22,18 +21,12 @@ export class ToSeriesNode extends SeriesUncertainNode {
   }
 
   check_timestep_method() {
-    if (
-      this.getOptionValue("TimestepMethod") == "as defined" &&
-      !this.timestep_option
-    ) {
+    if (this.getOptionValue("TimestepMethod") == "as defined" && !this.timestep_option) {
       this.timestep_option = true;
       this.addInputInterface("timestep", "IntegerOption", 0, {
         type: "probabilistic_int"
       });
-    } else if (
-      this.getOptionValue("TimestepMethod") == "every" &&
-      this.timestep_option
-    ) {
+    } else if (this.getOptionValue("TimestepMethod") == "every" && this.timestep_option) {
       this.removeInterface("timestep");
       this.timestep_option = false;
     }

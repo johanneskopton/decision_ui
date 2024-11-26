@@ -9,24 +9,44 @@
   <div class="workspace-container">
     <v-navigation-drawer rail permanent>
       <v-list density="compact" nav>
-        <v-list-item to="/user/workspace/modeling" prepend-icon="mdi-graph mdi-rotate-90">
-          <v-list-item-title>Model editor</v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/user/workspace/estimates" prepend-icon="mdi-table">
-          <v-list-item-title>Estimates</v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/user/workspace/results" prepend-icon="mdi-chart-histogram">
-          <v-list-item-title>Results dashboard</v-list-item-title>
-        </v-list-item>
-        <v-list-item to="/user/workspace/code" prepend-icon="mdi-language-r">
-          <v-list-item-title>R-Code</v-list-item-title>
-        </v-list-item>
+        <v-tooltip location="right" text="Model editor" open-delay="500">
+          <template #activator="{ props }">
+            <v-list-item to="/user/workspace/modeling" v-bind="props" prepend-icon="mdi-graph mdi-rotate-90" />
+          </template>
+        </v-tooltip>
+        <v-tooltip location="right" text="Estimates" open-delay="500">
+          <template #activator="{ props }">
+            <v-list-item to="/user/workspace/estimates" v-bind="props" prepend-icon="mdi-table" />
+          </template>
+        </v-tooltip>
+        <v-tooltip location="right" text="Results dashboard" open-delay="500">
+          <template #activator="{ props }">
+            <v-list-item to="/user/workspace/results" v-bind="props" prepend-icon="mdi-chart-histogram" />
+          </template>
+        </v-tooltip>
+        <v-tooltip location="right" text="R-Code" open-delay="500">
+          <template #activator="{ props }">
+            <v-list-item to="/user/workspace/code" v-bind="props" prepend-icon="mdi-language-r" />
+          </template>
+        </v-tooltip>
+        <v-tooltip location="right" text="Settings" open-delay="500">
+          <template #activator="{ props }">
+            <v-list-item to="/user/workspace/settings" v-bind="props" prepend-icon="mdi-tune" />
+          </template>
+        </v-tooltip>
       </v-list>
       <template #append>
         <v-list density="compact" nav>
-          <v-list-item v-if="userStore.login.token" to="/user/files" prepend-icon="mdi-format-list-text">
-            <v-list-item-title>Files</v-list-item-title>
-          </v-list-item>
+          <v-tooltip location="right" text="Files" open-delay="500">
+            <template #activator="{ props }">
+              <v-list-item
+                v-if="userStore.login.token"
+                v-bind="props"
+                to="/user/files"
+                prepend-icon="mdi-format-list-text"
+              />
+            </template>
+          </v-tooltip>
         </v-list>
       </template>
     </v-navigation-drawer>

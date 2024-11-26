@@ -28,4 +28,3 @@ export const ResultNode = defineNode({
     this.width = 300;
   }
 });
-

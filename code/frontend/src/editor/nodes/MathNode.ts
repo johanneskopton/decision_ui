@@ -1,58 +1,48 @@
-import { NodeInterface, SelectInterface } from "baklavajs";
+import { defineNode, NodeInterface, SelectInterface } from "baklavajs";
 import { setType } from "@baklavajs/interface-types";
 
 import { probabilisticType } from "../types";
-import { BaseNode } from "./BaseNode";
+import { DeterministicNumberInterface } from "../interfaces/deterministic/DeterministicNumberInterface";
+import { makeArray } from "@/common/array";
 
 type SupportedOperationType = "add" | "subtract" | "multiply" | "divide";
 const SUPPORTED_OPERATIONS = ["add", "subtract", "multiply", "divide"] as SupportedOperationType[];
 
-interface ProbabilisticMathInputs {
-  a: number[];
-  b: number[];
-  operation: SupportedOperationType;
-}
+const operations = {
+  add: (a: number, b: number) => a + b,
+  subtract: (a: number, b: number) => a - b,
+  multiply: (a: number, b: number) => a * b,
+  divide: (a: number, b: number) => a / b
+};
 
-interface ProbabilisticMathOutputs {
-  result: number[];
-}
+export const MathNode = defineNode({
+  type: "Math",
 
-const MC_RUNS = 1000;
+  title: "Math",
 
-export class ProbabilisticMathNode extends BaseNode<ProbabilisticMathInputs, ProbabilisticMathOutputs> {
-  public type = "Math";
+  inputs: {
+    a: () => new DeterministicNumberInterface("A", 1.0).use(setType, probabilisticType),
+    b: () => new DeterministicNumberInterface("B", 2.0).use(setType, probabilisticType),
+    operation: () =>
+      new SelectInterface<SupportedOperationType>("Operation", "add", SUPPORTED_OPERATIONS).setPort(false)
+  },
 
-  public get title() {
-    return this.type;
-  }
+  outputs: {
+    result: () => new NodeInterface<number[]>("Result", [0.0]).use(setType, probabilisticType)
+  },
 
-  public inputs = {
-    a: new NodeInterface<number[]>("A", [0.0]).use(setType, probabilisticType),
-    b: new NodeInterface<number[]>("B", [0.0]).use(setType, probabilisticType),
-    operation: new SelectInterface<SupportedOperationType>("Operation", "add", SUPPORTED_OPERATIONS).setPort(false)
-  };
+  calculate({ a, b, operation }, { globalValues }) {
+    a = makeArray(a, globalValues.mcRuns);
+    b = makeArray(b, globalValues.mcRuns);
 
-  public outputs = {
-    result: new NodeInterface<number[]>("Result", [0.0]).use(setType, probabilisticType)
-  };
+    if (a.length !== b.length || a.length !== globalValues.mcRuns) {
+      // report error
+    }
 
-  private operations = {
-    add: (a: number, b: number) => a + b,
-    subtract: (a: number, b: number) => a - b,
-    multiply: (a: number, b: number) => a * b,
-    divide: (a: number, b: number) => a / b
-  };
-
-  public constructor() {
-    super();
-    this.initializeIo();
-  }
-
-  protected _calculate({ a, b, operation }: ProbabilisticMathInputs): ProbabilisticMathOutputs {
     const result = [];
-    for (let i = 0; i < MC_RUNS; i++) {
-      result.push(this.operations[operation](a[i], b[i]));
+    for (let i = 0; i < globalValues.mcRuns; i++) {
+      result.push(operations[operation](a[i], b[i]));
     }
     return { result };
   }
-}
+});

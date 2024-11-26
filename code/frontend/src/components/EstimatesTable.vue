@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, computed } from "vue";
+  import { onMounted } from "vue";
 
   import { useModelStore, type EstimatesTableRow } from "../state/model";
   import csv_parser from "../helper/csv_parser";
@@ -89,7 +89,7 @@
     width: 45%;
   }
   .table-container.fullwidth {
-    width: 80%;
+    width: 100%;
   }
   .vue-excel-editor {
     margin: 16px;

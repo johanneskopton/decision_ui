@@ -54,9 +54,9 @@
 
 <template>
   <v-tooltip location="top">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn
-        class="ma-2 hoverable"
+        class="runButton ma-2 hoverable"
         size="large"
         color="primary"
         v-bind="props"
@@ -74,6 +74,7 @@
     </template>
     <span>Run</span>
   </v-tooltip>
+
   <v-snackbar v-model="network_error" :timeout="2000" color="error">
     <!--<v-icon>mdi-server-network-off</v-icon>-->
     No connection to server!
@@ -81,14 +82,16 @@
       <v-btn color="white" variant="text" @click="network_error = false"> Close </v-btn>
     </template>
   </v-snackbar>
+
   <v-snackbar v-model="network_success" :timeout="2000" color="secondary">
-    decisionSupport successfully executed!
+    Model successfully executed!
     <template #actions>
       <v-btn color="white" variant="text" @click="network_success = false"> Close </v-btn>
     </template>
   </v-snackbar>
-  <v-dialog v-model="noPermissionDialog" max-width="290">
-    <v-card>
+
+  <v-dialog v-model="noPermissionDialog" max-width="400">
+    <v-card class="notAuthorizedCard">
       <v-card-title class="text-h5"> Not authorized </v-card-title>
 
       <v-card-text>
@@ -96,35 +99,32 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-spacer />
-
         <v-btn color="grey" variant="text" @click="noPermissionDialog = false"> Cancel </v-btn>
-
         <v-btn color="primary" variant="text" to="/login" @click="noPermissionDialog = false"> Login </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
-<style scoped>
-  button.v-btn {
+<style scoped lang="scss">
+  .runButton {
     position: absolute;
     bottom: 8px;
     z-index: 5;
     right: 8px;
   }
 
-  button.hoverable .onhover,
-  button.hoverable:hover .onnohover {
+  .runButton.hoverable .onhover,
+  .runButton.hoverable:hover .onnohover {
     display: none;
   }
 
-  button.hoverable .onnohover,
-  button.hoverable:hover .onhover {
+  .runButton.hoverable .onnohover,
+  .runButton.hoverable:hover .onhover {
     display: inherit;
   }
 
-  .button_text {
-    margin-right: 1em;
+  .notAuthorizedCard {
+    padding: 0.5em;
   }
 </style>

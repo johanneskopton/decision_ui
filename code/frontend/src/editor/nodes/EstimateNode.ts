@@ -11,17 +11,15 @@ import {
 import { probabilisticType } from "../types";
 import { useModelStore, type EstimatesTableRow } from "@/state/model";
 
-const N_RUNS = 1000;
-
 const createEstimatesTableEntry = (title: string, distribution: string, params: any): EstimatesTableRow => {
   return {
     label: title,
     variable: title,
     distribution,
-    lower: params.lower,
-    upper: params.upper,
+    lower: distribution === "deterministic" ? params.value : params.lower,
+    upper: distribution === "deterministic" ? params.value : params.upper
   } as EstimatesTableRow;
-}
+};
 
 const updateEstimatesTable = (title: string | undefined, distribution: string, params: any) => {
   if (title) {
@@ -31,11 +29,9 @@ const updateEstimatesTable = (title: string | undefined, distribution: string, p
       return value["variable"] != title;
     }, this);
     // re-add table row with current data
-    modelStore.estimates.push(
-      createEstimatesTableEntry(title, distribution, params)
-    );
+    modelStore.estimates.push(createEstimatesTableEntry(title, distribution, params));
   }
-}
+};
 
 export const EstimateNode = defineDynamicNode({
   type: "Estimate",
@@ -61,11 +57,11 @@ export const EstimateNode = defineDynamicNode({
     };
   },
 
-  calculate({ distribution, ...params }) {
+  calculate({ distribution, ...params }, { globalValues }) {
     updateEstimatesTable(this.title, distribution, params);
 
     return {
-      sample: DISRTIBUTIONS[distribution].random_sample(params, N_RUNS)
+      sample: DISRTIBUTIONS[distribution].random_sample(params, globalValues.mcRuns)
     };
   }
 });

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import axios, { type AxiosResponse } from "axios";
   import { onMounted, ref, useTemplateRef } from "vue";
   import { useRouter } from "vue-router";
 
@@ -7,6 +6,7 @@
 
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
+  import { doDeleteModel, doQueryModels, type ModelData } from "@/backend/models";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();
@@ -14,42 +14,28 @@
 
   const confirmDelete = useTemplateRef<typeof Confirm>("confirmDelete");
 
-  interface ModelData {
-    id: string;
-    name: string;
-    content: string;
-    saved: string;
-    owner_id: string;
-  }
-
   const models = ref<ModelData[] | null>(null);
 
   const nodeCount = (content: string) => {
     return String(JSON.parse(content).graph.nodes.length) + " nodes";
   };
 
-  const receiveResults = (response: AxiosResponse) => {
-    models.value = response.data as ModelData[];
-  };
-  const receiveResultsError = (response: AxiosResponse) => {
-    console.log(response);
-  };
-
-  const query_models = () => {
-    axios
-      .get(import.meta.env.VITE_BACKEND_BASE_URL + "/api/v1/decision_models/", {
-        headers: {
-          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.login.token}`
-        }
-      })
-      .then(response => receiveResults(response))
-      .catch(response => receiveResultsError(response));
+  const queryModels = () => {
+    doQueryModels({
+      token: userStore.login.token,
+      onSuccess: (m: ModelData[]) => {
+        models.value = m;
+      },
+      onError: () => {
+        // todo
+      }
+    });
   };
 
   const open = (model: ModelData) => {
     modelStore.name = model.name;
-    modelStore.unsaved = false;
     modelStore.baklava.editor.load(JSON.parse(model.content));
+    modelStore.unsaved = false;
     router.push("/user/workspace");
   };
 
@@ -58,20 +44,22 @@
       .open("Delete", "Are you sure you want to delete <code>" + model.name + "</code>?", { color: "warning" })
       .then((confirm: boolean) => {
         if (confirm) {
-          axios
-            .delete("/api/v1/decision_models/" + model.id, {
-              headers: {
-                [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.login.token}`
-              }
-            })
-            .then(query_models)
-            .catch(response => receiveResultsError(response));
+          doDeleteModel({
+            token: userStore.login.token,
+            modelId: model.id,
+            onSuccess: () => {
+              queryModels();
+            },
+            onError: () => {
+              // todo
+            }
+          });
         }
       });
   };
 
   onMounted(() => {
-    query_models();
+    queryModels();
     modelStore.reset();
   });
 </script>

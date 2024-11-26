@@ -1,7 +1,7 @@
 import { defineNode, NodeInterface, TextareaInputInterface } from "baklavajs";
 
 export const DebugNode = defineNode({
-  type: "DebugNode",
+  type: "Debug",
 
   title: "Debug",
 
@@ -17,7 +17,7 @@ export const DebugNode = defineNode({
   calculate({ input }) {
     return {
       display: input === null ? "" : JSON.stringify(input, null, 2),
-      output: input,
+      output: input
     };
   },
 
