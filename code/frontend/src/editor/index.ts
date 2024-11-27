@@ -20,6 +20,7 @@ import { HistogramNode } from "./nodes/HistogramNode";
 import { ResultNode } from "./nodes/ResultNode";
 import { NoteNode } from "./nodes/NoteNode";
 import { ToSeriesNode } from "./nodes/ToSeriesNode";
+import { NPVNode } from "./nodes/NPVNode";
 
 import { useModelStore } from "../state/model";
 
@@ -69,6 +70,7 @@ export const initializeBaklvaState = (): BaklavaState => {
 
   // reigster series nodes
   editor.registerNodeType(ToSeriesNode, seriesCategory);
+  editor.registerNodeType(NPVNode, seriesCategory);
 
   // auto modify node titles to make them unique
   const eventToken = Symbol();

@@ -14,7 +14,7 @@ const AVAILABLE_TIMESTEPS = [TIMESTEP_EVERY, TIMESTEP_AS_DEFINED];
 export const ToSeriesNode = defineDynamicNode({
   type: "ToSeries",
 
-  title: "ToSeries",
+  title: "To Series",
 
   inputs: {
     timestep_method: () =>

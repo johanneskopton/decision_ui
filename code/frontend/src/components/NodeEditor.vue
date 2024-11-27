@@ -106,6 +106,21 @@
 <style lang="scss">
   .baklava-node-palette h1 {
     font-size: 1.1em;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    font-weight: normal;
+  }
+
+  .baklava-node-palette section:first-child h1 {
+    margin-top: -1em;
+  }
+
+  .baklava-node.--palette {
+    margin: 1em 0;
+  }
+
+  .baklava-node.--palette .__title {
+    padding: 0.4em 0.75em;
   }
 
   .baklava-node[data-node-type="Estimate"],
@@ -115,7 +130,8 @@
     }
   }
 
-  .baklava-node[data-node-type="ToSeries"] {
+  .baklava-node[data-node-type="ToSeries"],
+  .baklava-node[data-node-type="NPV"] {
     .__title {
       background-color: #76337f;
     }

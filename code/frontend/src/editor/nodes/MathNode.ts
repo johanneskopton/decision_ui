@@ -53,7 +53,6 @@ export const MathNode = defineFlexibleDynamicNode({
   },
 
   onUpdate() {
-    console.log("math update");
     const node = this as any as Node<any, any>;
     let outputType: InterfaceTypeSet = PROBABILISTIC_TYPE;
 

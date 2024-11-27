@@ -79,19 +79,19 @@ def ValueVarier(args):
 
 
 def ToSeries(args):
-    if args["TimestepMethod"] == "every":
-        return "rep({}, {})".format(args["value"], args["n"])
-    elif args["TimestepMethod"] == "as defined":
+    if args["timestep_method"] == "every":
+        return "rep({}, {})".format(args["x"], args["n"])
+    elif args["timestep_method"] == "as defined":
         timestep = args["timestep"]
         if type(timestep) in [int, float, np.int64]:
             return (
                 "rep({}, {})".format(0, args["n"]),
-                "[{}] <- {}".format(args["timestep"] + 1, args["value"]),
+                "[{}] <- {}".format(args["timestep"] + 1, args["x"]),
             )
         else:
             return (
                 "rep({}, {})".format(0, args["n"]),
-                "[{}+1] <- {}".format(args["timestep"], args["value"]),
+                "[{}+1] <- {}".format(args["timestep"], args["x"]),
             )
 
 

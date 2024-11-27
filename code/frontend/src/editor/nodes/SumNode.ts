@@ -79,7 +79,7 @@ export const SumNode = defineFlexibleDynamicNode({
     }
 
     // remember numder of inputs for serialization
-    (node.inputs.n_inputs as any)._value = n_usedInputs;
+    (node.inputs.n_inputs as any)._value = n_usedInputs + 1;
 
     return {
       inputs: generateInputInterfaces(n_usedInputs + 1, node),

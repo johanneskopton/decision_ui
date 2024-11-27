@@ -13,12 +13,12 @@ export default function (s: number[], n_bins = 30) {
   }
 
   // calc bins
-  const hi = quantile(0.99);
-  const lo = quantile(0.01);
+  const hi = quantile(0.999);
+  const lo = quantile(0.001);
   const hilo = hi - lo;
   n_bins = hilo == 0 ? 1 : n_bins;
   const bins = Array(n_bins).fill(0);
-  const bin_size = hilo == 0 ? 1 : hilo / (n_bins - 1);
+  const bin_size = hilo == 0 ? 1.0 : hilo / (n_bins - 1);
   for (let i = 0; i < n_bins; i++) {
     bins[i] = lo + bin_size * i;
   }
