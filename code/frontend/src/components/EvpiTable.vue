@@ -1,55 +1,54 @@
 <script setup lang="ts">
-import { useModelStore } from "@/state/model";
-import RunButton from "./RunButton.vue";
+  import { useModelStore } from "@/state/model";
+  import RunButton from "./RunButton.vue";
+  import { storeToRefs } from "pinia";
+  import { computed } from "vue";
 
-const modelStore = useModelStore();
+  const { decisionSupportResult } = storeToRefs(useModelStore());
 
-const evpi = () => {
-  if (
-    modelStore.decisionSupportResult &&
-    modelStore.decisionSupportResult.evpi
-  ) {
-    return modelStore.decisionSupportResult.evpi;
-  } else {
-    return [];
-  }
-};
-
-const result_vars = () => {
-  const evpi_line = evpi()[0];
-  const res: string[] = [];
-  Object.keys(evpi_line).forEach(key => {
-    if (key != "variable" && key != "$id") {
-      res.push(key);
-    }
+  const evpi = computed(() => {
+    if (!decisionSupportResult.value) return [];
+    if (!decisionSupportResult.value.evpi) return [];
+    return decisionSupportResult.value.evpi;
   });
-  return res;
-};
 
+  const result_vars = computed(() => {
+    const evpi_line = evpi.value[0];
+    const res: string[] = [];
+    Object.keys(evpi_line).forEach(key => {
+      if (key != "variable" && key != "$id") {
+        res.push(key);
+      }
+    });
+    return res;
+  });
 </script>
 
 <template>
-  <v-card color="white" elevation="1" class="table-container" rounded>
+  <v-card color="white" elevation="1" class="container" rounded>
     <v-card-title>Expected Value Of Perfect Information (EVPI)</v-card-title>
-    <vue-excel-editor v-if="evpi.length > 0" v-model="evpi" width="100%">
+    <vue-excel-editor v-if="evpi.length > 0" v-model="evpi" width="100%" class="table">
       <vue-excel-column readonly field="variable" label="variable" width="200px" />
-      <vue-excel-column readonly v-for="result_var in result_vars" :key="result_var" :field="result_var"
-        :label="result_var" width="150px" type="number" />
+      <vue-excel-column
+        v-for="result_var in result_vars"
+        :key="result_var"
+        :field="result_var"
+        :label="result_var"
+        readonly
+        width="150px"
+        type="number"
+      />
     </vue-excel-editor>
-    <!--<v-alert v-else type="info" elevation="2">
-      No EVPI to see.. Run the model first!
-    </v-alert>-->
     <RunButton get-evpi :evpi-set="evpi.length > 0" />
   </v-card>
 </template>
 
+<style scoped lang="scss">
+  .container {
+    width: 675px;
+  }
 
-<style>
-.table-container {
-  width: 675px;
-}
-
-.vue-excel-editor {
-  margin: 16px;
-}
+  .table {
+    margin: 16px;
+  }
 </style>
