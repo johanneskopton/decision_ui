@@ -29,14 +29,15 @@ export const RoundNode = defineFlexibleDynamicNode({
   title: "Round",
 
   inputs: {
-    output_type: () => new NodeInterface<InterfaceTypeSet>("Output Type", DETERMINISTIC_INT_TYPE).setHidden(true),
+    output_type: () =>
+      new NodeInterface<InterfaceTypeSet>("Output Type", DETERMINISTIC_INT_TYPE).setPort(false).setHidden(true),
     x: () => new FlexibleNumberInterface("X", 1.0).use(setType, flexibleType),
     operation: () =>
       new SelectInterface<SupportedOperationType>("Operation", "round", SUPPORTED_OPERATIONS).setPort(false)
   },
 
-  onFirstUpdate(inputValues) {
-    return { outputs: getOutputInterfaceForType(inputValues.output_type) };
+  onFirstUpdate({ output_type }) {
+    return { outputs: getOutputInterfaceForType(output_type) };
   },
 
   onUpdate() {

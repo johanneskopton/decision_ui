@@ -59,7 +59,7 @@ export const registerUpdateForInputConnectionChange = (node: DynamicNode<any, an
     if (connection.to.nodeId == node.id) {
       // connection concerns current node
       // update node outputs
-      (node as any).onUpdate();
+      (node as any).onUpdate.call(node);
     }
   };
   node.graph?.events.addConnection.subscribe(node, connectionHandler);
@@ -81,6 +81,7 @@ export const defineFlexibleDynamicNode = <I, O>(definition: IDynamicFlexibleNode
 
     onPlaced() {
       registerUpdateForInputConnectionChange(this as any);
+      definition.onPlaced?.call(this);
     },
 
     onUpdate(inputs, outputs) {

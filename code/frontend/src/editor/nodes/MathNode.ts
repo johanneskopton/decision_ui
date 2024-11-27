@@ -40,18 +40,20 @@ export const MathNode = defineFlexibleDynamicNode({
   title: "Math",
 
   inputs: {
-    output_type: () => new NodeInterface<InterfaceTypeSet>("Output Type", DETERMINISTIC_TYPE).setHidden(true),
+    output_type: () =>
+      new NodeInterface<InterfaceTypeSet>("Output Type", DETERMINISTIC_TYPE).setPort(false).setHidden(true),
     a: () => new FlexibleNumberInterface("A", 1.0).use(setType, flexibleType),
     b: () => new FlexibleNumberInterface("B", 2.0).use(setType, flexibleType),
     operation: () =>
       new SelectInterface<SupportedOperationType>("Operation", "add", SUPPORTED_OPERATIONS).setPort(false)
   },
 
-  onFirstUpdate(inputValues) {
-    return { outputs: getOutputInterfaceForType(inputValues.output_type) };
+  onFirstUpdate({ output_type }) {
+    return { outputs: getOutputInterfaceForType(output_type) };
   },
 
   onUpdate() {
+    console.log("math update");
     const node = this as any as Node<any, any>;
     let outputType: InterfaceTypeSet = PROBABILISTIC_TYPE;
 
