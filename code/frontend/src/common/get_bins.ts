@@ -5,19 +5,20 @@ export default function (s: number[], n_bins = 30) {
   });
 
   function quantile(p: number) {
-    const idx = 1 + (s.length - 1) * p,
-      lo = Math.floor(idx),
-      hi = Math.ceil(idx),
-      h = idx - lo;
-    return (1 - h) * s[lo] + h * s[hi];
+    const idx = 1 + (s.length - 1) * p;
+    const lo = Math.floor(idx);
+    const hi = Math.ceil(idx);
+    const h = idx - lo;
+    return (1 - h) * s[Math.max(0, lo)] + h * s[Math.min(hi, s.length - 1)];
   }
 
   // calc bins
   const hi = quantile(0.99);
   const lo = quantile(0.01);
   const hilo = hi - lo;
+  n_bins = hilo == 0 ? 1 : n_bins;
   const bins = Array(n_bins).fill(0);
-  const bin_size = hilo / (n_bins - 1);
+  const bin_size = hilo == 0 ? 1 : hilo / (n_bins - 1);
   for (let i = 0; i < n_bins; i++) {
     bins[i] = lo + bin_size * i;
   }

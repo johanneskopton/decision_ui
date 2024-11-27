@@ -1,5 +1,4 @@
-import { defineDynamicNode, NodeInterface, SelectInterface } from "baklavajs";
-import { setType } from "@baklavajs/interface-types";
+import { defineDynamicNode, DynamicNode, Node, SelectInterface } from "baklavajs";
 
 import {
   AVAILABLE_DISTRIBUTIONS,
@@ -8,7 +7,6 @@ import {
   type AvailableDistributionsType
 } from "../distributions";
 
-import { probabilisticType } from "../types";
 import { useModelStore, type EstimatesTableRow } from "@/state/model";
 
 const createEstimatesTableEntry = (title: string, distribution: string, params: any): EstimatesTableRow => {
@@ -47,21 +45,29 @@ export const EstimateNode = defineDynamicNode({
       ).setPort(false)
   },
 
-  outputs: {
-    sample: () => new NodeInterface<number[]>("Sample", [0.0]).use(setType, probabilisticType)
+  outputs: {},
+
+  onCreate() {
+    const node = this as any as DynamicNode<any, any>;
+    node.events.titleChanged.subscribe(node, () => {
+      const inputsForNode: Record<string, any> = {};
+      Object.entries(node.inputs).forEach(([k, v]) => {
+        inputsForNode[k] = v.value;
+      });
+      const { distribution, ...params } = inputsForNode;
+      updateEstimatesTable(this.title, distribution, params);
+    });
   },
 
   onUpdate({ distribution }) {
     return {
-      inputs: DISRTIBUTIONS[distribution].inputs
+      inputs: DISRTIBUTIONS[distribution].inputs,
+      outputs: DISRTIBUTIONS[distribution].outputs
     };
   },
 
-  calculate({ distribution, ...params }, { globalValues }) {
+  calculate({ distribution, ...params }, context) {
     updateEstimatesTable(this.title, distribution, params);
-
-    return {
-      sample: DISRTIBUTIONS[distribution].random_sample(params, globalValues.mcRuns)
-    };
+    return DISRTIBUTIONS[distribution].generate_output(params, context);
   }
 });

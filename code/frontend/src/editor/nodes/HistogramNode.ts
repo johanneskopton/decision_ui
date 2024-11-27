@@ -1,7 +1,8 @@
-import { defineNode, NodeInterface } from "baklavajs";
+import { defineNode, NodeInterface, setType } from "baklavajs";
 import { markRaw } from "vue";
 
 import HistogramOption from "../components/HistogramOption.vue";
+import { flexibleType, type FlexibleNumber } from "../common/types";
 
 export const HistogramNode = defineNode({
   type: "Histogram",
@@ -9,11 +10,12 @@ export const HistogramNode = defineNode({
   title: "Histogram",
 
   inputs: {
-    value: () => new NodeInterface<any>("Value", [])
+    value: () => new NodeInterface<FlexibleNumber>("Value", null as any).use(setType, flexibleType)
   },
 
   outputs: {
-    display: () => new NodeInterface("Histogram", []).setComponent(markRaw(HistogramOption)).setPort(false)
+    display: () =>
+      new NodeInterface<FlexibleNumber>("Histogram", null as any).setComponent(markRaw(HistogramOption)).setPort(false)
   },
 
   calculate({ value }) {

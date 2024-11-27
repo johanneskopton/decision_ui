@@ -3,7 +3,7 @@ import { markRaw } from "vue";
 
 import HistogramOption from "../components/HistogramOption.vue";
 
-import { probabilisticType } from "../types";
+import { probabilisticType, type FlexibleNumber } from "../common/types";
 
 export const ResultNode = defineNode({
   type: "Result",
@@ -11,11 +11,12 @@ export const ResultNode = defineNode({
   title: "Result",
 
   inputs: {
-    value: () => new NodeInterface<any>("Value", []).use(setType, probabilisticType)
+    value: () => new NodeInterface<number[]>("Value", null as any).use(setType, probabilisticType)
   },
 
   outputs: {
-    display: () => new NodeInterface("Histogram", []).setComponent(markRaw(HistogramOption)).setPort(false)
+    display: () =>
+      new NodeInterface<FlexibleNumber>("Histogram", null as any).setComponent(markRaw(HistogramOption)).setPort(false)
   },
 
   calculate({ value }) {

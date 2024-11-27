@@ -1,7 +1,7 @@
 import { defineDynamicNode, IntegerInterface, NodeInterface, setType } from "baklavajs";
 import { DeterministicNumberInterface } from "../interfaces/deterministic/DeterministicNumberInterface";
-import { probabilisticType } from "../types";
-import { makeArray } from "../../common/array";
+import { probabilisticType } from "../common/types";
+import { makeArray } from "../common/math";
 
 const ALPHABET_ORD = Array.from(Array(26)).map((e, i) => i + 65);
 const ALPHABET_CHAR = ALPHABET_ORD.map(x => String.fromCharCode(x));

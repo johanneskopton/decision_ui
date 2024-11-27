@@ -1,7 +1,7 @@
-import { NumberInterface, setType } from "baklavajs";
+import { NodeInterface, NumberInterface, setType } from "baklavajs";
 
 import type { DistributionConfiguration } from "./base";
-import { deterministicType } from "../types";
+import { deterministicType, probabilisticType } from "../common/types";
 
 import random_trunc_normal from "../../helper/random_trunc_normal";
 
@@ -9,13 +9,18 @@ const q95_Z = 1.6448536269514722;
 
 export const TNormDistirbution: DistributionConfiguration = {
   inputs: {
-    lower: () => new NumberInterface("lower", -1).use(setType, deterministicType),
-    upper: () => new NumberInterface("upper", 1).use(setType, deterministicType)
+    lower: () => new NumberInterface("lower", -1).use(setType, deterministicType).setPort(false),
+    upper: () => new NumberInterface("upper", 1).use(setType, deterministicType).setPort(false)
   },
-  random_sample: (params: { lower: number; upper: number }, size): number[] => {
-    const mean = (params["lower"] + params["upper"]) / 2;
-    const stdDev = (params["upper"] - mean) / q95_Z;
-
-    return [...Array(size).keys()].map(() => random_trunc_normal({ range: [0, 1], mean, stdDev }));
+  outputs: {
+    sample: () => new NodeInterface<number[]>("Sample", [0.0]).use(setType, probabilisticType)
+  },
+  generate_output: ({ lower, upper }, { globalValues }) => {
+    const mean = (lower + upper) / 2;
+    const stdDev = (upper - mean) / q95_Z;
+    const sample = [...Array(globalValues.mcRuns).keys()].map(() =>
+      random_trunc_normal({ range: [0, 1], mean, stdDev })
+    );
+    return { sample };
   }
 };

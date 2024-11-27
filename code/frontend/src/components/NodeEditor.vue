@@ -115,11 +115,9 @@
     }
   }
 
-  .baklava-node[data-node-type="Debug"],
-  .baklava-node[data-node-type="Histogram"] {
+  .baklava-node[data-node-type="ToSeries"] {
     .__title {
-      // background-color: #76337f;
-      // background-color: #686e1a;
+      background-color: #76337f;
     }
   }
 
@@ -127,6 +125,33 @@
   .baklava-node[data-node-type^="__baklava_Subgraph"] {
     .__title {
       background-color: #0d7447;
+    }
+  }
+
+  .baklava-node-interface[data-interface-type="probabilistic"],
+  .baklava-node-interface[data-interface-type="probabilistic_int"] {
+    .__port {
+      background-color: rgb(36, 138, 163);
+    }
+  }
+
+  .baklava-node-interface[data-interface-type="deterministic"],
+  .baklava-node-interface[data-interface-type="deterministic_int"] {
+    .__port {
+      background-color: rgb(219, 180, 53);
+    }
+  }
+
+  .baklava-node-interface[data-interface-type="deterministic_int"],
+  .baklava-node-interface[data-interface-type="probabilistic_int"] {
+    .__port {
+      border-radius: 0%;
+    }
+  }
+
+  .baklava-node-interface[data-interface-type="probabilistic_series"] {
+    .__port {
+      background-color: #b05fbb;
     }
   }
 

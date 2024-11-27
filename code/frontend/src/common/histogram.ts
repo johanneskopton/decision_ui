@@ -13,20 +13,21 @@ export default function (
   counts: number[],
   in_node = false
 ) {
-  let baseColor = "rgba(255, 255, 255, 1)";
-  let baseColor2 = "rgba(255, 255, 255, 0.2)";
+  let textColor = "rgba(255, 255, 255, 1)";
+  let gridColor = "rgba(255, 255, 255, 0.2)";
+  const barColor = "rgba(178, 223, 219, 1)";
   let max_ticks = 7;
   let datasets = [
     {
       data: counts,
       categoryPercentage: 1.0,
       barPercentage: 1.1,
-      backgroundColor: "rgba(206, 147, 216, 1)" // TODO: make dynamic (vuetify)
+      backgroundColor: barColor
     }
   ];
   if (!in_node) {
-    baseColor = "rgba(155, 155, 155, 1)";
-    baseColor2 = "rgba(155, 155, 155, 0.2)";
+    textColor = "rgba(155, 155, 155, 1)";
+    gridColor = "rgba(155, 155, 155, 0.2)";
     max_ticks = 10;
     datasets = [];
     const n_variables = Object.keys(counts).length;
@@ -44,13 +45,12 @@ export default function (
 
   // Calculate X-ticks
 
-  let tick_index = 1;
   const x_ticks: any = {
     maxRotation: 90,
     minRotation: 0,
     autoSkip: false,
     maxTicksLimit: max_ticks,
-    color: baseColor,
+    color: textColor,
     afterBuildTicks: axis => {
       const scale = niceScale(bins[0], bins[bins.length - 1], max_ticks);
       const target_tick_values: number[] = [];
@@ -81,7 +81,7 @@ export default function (
           ticks: x_ticks,
 
           grid: {
-            color: baseColor2,
+            color: gridColor,
             offset: false
             // zeroLineColor: baseColor
           }
@@ -89,11 +89,11 @@ export default function (
         y: {
           type: "linear",
           ticks: {
-            color: baseColor,
+            color: textColor,
             maxTicksLimit: 4
           },
           grid: {
-            color: baseColor2
+            color: gridColor
             // zeroLineColor: baseColor
           }
         }
