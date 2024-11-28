@@ -1,5 +1,5 @@
 import { Editor } from "@baklavajs/core";
-import { useBaklava, type IBaklavaViewModel, type ICommand } from "@baklavajs/renderer-vue";
+import { useBaklava, type IBaklavaViewModel } from "@baklavajs/renderer-vue";
 import { applyResult, DependencyEngine } from "@baklavajs/engine";
 import { BaklavaInterfaceTypes } from "@baklavajs/interface-types";
 
@@ -20,7 +20,8 @@ import { HistogramNode } from "./nodes/HistogramNode";
 import { ResultNode } from "./nodes/ResultNode";
 import { NoteNode } from "./nodes/NoteNode";
 import { ToSeriesNode } from "./nodes/ToSeriesNode";
-import { NPVNode } from "./nodes/NPVNode";
+import { NPVNode } from "./nodes/NetPresentValueNode";
+import { ValueVarierNode } from "./nodes/ValueVarierNode";
 
 import { useModelStore } from "../state/model";
 
@@ -71,6 +72,7 @@ export const initializeBaklvaState = (): BaklavaState => {
   // reigster series nodes
   editor.registerNodeType(ToSeriesNode, seriesCategory);
   editor.registerNodeType(NPVNode, seriesCategory);
+  editor.registerNodeType(ValueVarierNode, seriesCategory);
 
   // auto modify node titles to make them unique
   const eventToken = Symbol();

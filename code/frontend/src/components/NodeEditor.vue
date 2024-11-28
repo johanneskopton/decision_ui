@@ -131,7 +131,8 @@
   }
 
   .baklava-node[data-node-type="ToSeries"],
-  .baklava-node[data-node-type="NPV"] {
+  .baklava-node[data-node-type="NPV"],
+  .baklava-node[data-node-type="ValueVarier"] {
     .__title {
       background-color: #76337f;
     }

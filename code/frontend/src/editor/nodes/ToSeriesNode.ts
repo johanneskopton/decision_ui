@@ -1,7 +1,7 @@
 import nj from "@d4c/numjs";
 import { defineDynamicNode, IntegerInterface, NodeInterface, SelectInterface, setType } from "baklavajs";
 import { deterministicIntegerType, probabilisticSeriesType, probabilisticType } from "../common/types";
-import { DeterministicNumberInterface } from "../interfaces/deterministic/DeterministicNumberInterface";
+import { DeterministicNumberInterface } from "../interfaces/DeterministicNumberInterface";
 import { repeat } from "../../common/array";
 import { makeArray } from "../common/math";
 

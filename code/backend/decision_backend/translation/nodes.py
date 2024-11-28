@@ -66,14 +66,14 @@ def Result(args):
 def ValueVarier(args):
     if args["trend"] == 0:
         return "vv(var_mean={}, var_CV={}, n={})".format(
-            args["var_mean"], args["var_CV"], args["n"]
+            args["var_mean"], args["var_cv"], args["n"]
         )
     else:
         return "vv(var_mean={}, var_CV={}, n={}, {}_trend={})".format(
             args["var_mean"],
-            args["var_CV"],
+            args["var_cv"],
             args["n"],
-            args["TrendType"],
+            args["trend_type"],
             args["trend"],
         )
 
