@@ -22,6 +22,7 @@ import { NoteNode } from "./nodes/NoteNode";
 import { ToSeriesNode } from "./nodes/ToSeriesNode";
 import { NPVNode } from "./nodes/NetPresentValueNode";
 import { ValueVarierNode } from "./nodes/ValueVarierNode";
+import { ComparisonNode } from "./nodes/ComparisonNode";
 
 import { useModelStore } from "../state/model";
 
@@ -63,6 +64,7 @@ export const initializeBaklvaState = (): BaklavaState => {
   editor.registerNodeType(MathNode, operationsCategory);
   editor.registerNodeType(RoundNode, operationsCategory);
   editor.registerNodeType(SumNode, operationsCategory);
+  editor.registerNodeType(ComparisonNode, operationsCategory);
 
   // register display nodes
   editor.registerNodeType(DebugNode, displayCategory);

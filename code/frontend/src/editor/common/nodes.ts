@@ -66,7 +66,7 @@ export const registerUpdateForInputConnectionChange = (node: DynamicNode<any, an
   node.graph?.events.removeConnection.subscribe(node, connectionHandler);
 };
 
-interface IDynamicFlexibleNodeDefinition<I, O> extends IDynamicNodeDefinition<I, O> {
+export interface IDynamicFlexibleNodeDefinition<I, O> extends IDynamicNodeDefinition<I, O> {
   onFirstUpdate: (inputs: I, outputs: O) => DynamicNodeUpdateResult;
 }
 
