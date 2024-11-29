@@ -34,7 +34,7 @@ export default defineConfig({
       outDir: './dist/electron/vite/renderer',
       emptyOutDir: true,
       rollupOptions: {
-        input: "./src/index.html"
+        input: "./src/webapp/index.html"
       }
     },
     resolve: {

@@ -13,12 +13,12 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 const commitHash = childProcess.execSync("git rev-parse --short HEAD").toString().trim();
 
 export default defineConfig({
-  root: "src",
+  root: "src/webapp/",
   build: {
-    outDir: "../dist/webapp",
+    outDir: "../../dist/webapp",
     emptyOutDir: true,
     rollupOptions: {
-      input: "./src/index.html"
+      input: "./src/webapp/index.html"
     },
   },
   server: {
@@ -42,7 +42,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url))
+      "@": fileURLToPath(new URL("./src/webapp", import.meta.url))
     }
   },
   define: {
