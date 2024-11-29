@@ -29,7 +29,7 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
-    root: "src",
+    root: "./src/webapp",
     build: {
       outDir: './dist/electron/vite/renderer',
       emptyOutDir: true,
