@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useUserStore } from "@/state/user";
+  import { useUserStore } from "../state/user";
   import RunButton from "./RunButton.vue";
 
   const userStore = useUserStore();

@@ -3,8 +3,8 @@
   import { useRouter, useRoute } from "vue-router";
 
   import { useUserStore } from "../state/user";
-  import { useModelStore } from "@/state/model";
-  import { doLoginRequest } from "@/backend/authentication";
+  import { useModelStore } from "../state/model";
+  import { doLoginRequest } from "../backend/authentication";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();

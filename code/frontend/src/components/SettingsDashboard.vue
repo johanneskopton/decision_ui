@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Dashboard from "./Dashboard.vue";
-  import { useModelStore } from "@/state/model";
+  import { useModelStore } from "../state/model";
   import { storeToRefs } from "pinia";
 
   const { settings } = storeToRefs(useModelStore());

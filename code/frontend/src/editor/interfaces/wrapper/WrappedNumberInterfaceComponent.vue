@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { repeat } from "@/common/array";
+  import { repeat } from "../../../common/array";
   import { AbstractNode, NumberInterface, NumberInterfaceComponent } from "baklavajs";
   import { ref, toRef } from "vue";
   import type { WrappedNumberInterface } from "./WrappedNumberInterface";

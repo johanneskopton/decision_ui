@@ -1,4 +1,4 @@
-import { defineDynamicNode, DynamicNode, Node, SelectInterface } from "baklavajs";
+import { defineDynamicNode, DynamicNode, SelectInterface } from "baklavajs";
 
 import {
   AVAILABLE_DISTRIBUTIONS,
@@ -7,7 +7,7 @@ import {
   type AvailableDistributionsType
 } from "../distributions";
 
-import { useModelStore, type EstimatesTableRow } from "@/state/model";
+import { useModelStore, type EstimatesTableRow } from "../../state/model";
 
 const createEstimatesTableEntry = (title: string, distribution: string, params: any): EstimatesTableRow => {
   return {

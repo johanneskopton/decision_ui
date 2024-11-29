@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { useModelStore } from "@/state/model";
+  import { useModelStore } from "../state/model";
   import RunButton from "./RunButton.vue";
   import { storeToRefs } from "pinia";
   import { computed } from "vue";

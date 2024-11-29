@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed, ref, useTemplateRef, onMounted, watch } from "vue";
-  import { useModelStore } from "@/state/model";
+  import { useModelStore } from "../state/model";
   import { type Chart } from "chart.js";
 
   import histogram from "../common/histogram";

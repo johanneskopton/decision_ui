@@ -22,8 +22,8 @@ app.use(nocache());
 app.set("etag", false);
 
 // proxy api calls
-app.use("/api", createProxyMiddleware({ 
-    target: "http://localhost:8000/api", 
+app.use("/api", createProxyMiddleware({
+    target: "http://localhost:8000/api",
     changeOrigin: true,
     on: {
         proxyReq: (proxyReq, req) => {
@@ -35,7 +35,7 @@ app.use("/api", createProxyMiddleware({
 }));
 
 // serve static files
-const pathToStatic = path.join(__dirname, "../../../frontend/dist");
+const pathToStatic = path.join(__dirname, "../../../frontend/dist/webapp");
 logger.info(`serving from ${pathToStatic}`);
 app.use(express.static(pathToStatic, { etag: false }));
 

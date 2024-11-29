@@ -6,7 +6,7 @@
 
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
-  import { doDeleteModel, doQueryModels, type ModelData } from "@/backend/models";
+  import { doDeleteModel, doQueryModels, type ModelData } from "../backend/models";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();

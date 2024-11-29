@@ -2,7 +2,7 @@ import { NodeInterface } from "baklavajs";
 import { markRaw, type ComponentOptions } from "vue";
 
 import WrappedNumberInterfaceComponent from "./WrappedNumberInterfaceComponent.vue";
-import { repeat } from "@/common/array";
+import { repeat } from "../../../common/array";
 
 export class WrappedNumberInterface extends NodeInterface<number[]> {
   private defaultValue: number;

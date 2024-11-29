@@ -5,7 +5,7 @@
   import clean_model_json from "../helper/clean_model_json";
 
   import { useModelStore, type DecisionSupportResult } from "../state/model";
-  import { useUserStore } from "@/state/user";
+  import { useUserStore } from "../state/user";
 
   const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
 

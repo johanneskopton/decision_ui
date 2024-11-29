@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { useModelStore } from "@/state/model";
-  import { useUserStore } from "@/state/user";
+  import { useModelStore } from "../state/model";
+  import { useUserStore } from "../state/user";
 
   const modelStore = useModelStore();
   const useStore = useUserStore();

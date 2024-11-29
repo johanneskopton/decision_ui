@@ -1,6 +1,6 @@
-import { repeat } from "@/common/array";
 import nj from "@d4c/numjs";
 
+import { repeat } from "../../common/array";
 import type { FlexibleNumber } from "./types";
 
 export const makeArray = (value: FlexibleNumber, size: number): number[] => {
