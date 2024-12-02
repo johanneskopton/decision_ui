@@ -2,6 +2,7 @@
   import { ref, watch } from "vue";
   import { useRouter } from "vue-router";
   import axios, { AxiosError, type AxiosResponse } from "axios";
+  import { BACKEND_BASE_URL } from "../backend/common";
 
   const router = useRouter();
 
@@ -38,8 +39,9 @@
   };
 
   const register = () => {
+    console.log(BACKEND_BASE_URL + "/api/auth/register");
     axios
-      .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/register", {
+      .post(BACKEND_BASE_URL + "/api/auth/register", {
         email: email.value,
         password: password.value
       })

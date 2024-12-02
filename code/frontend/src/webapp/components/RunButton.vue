@@ -7,6 +7,8 @@
   import { useModelStore, type DecisionSupportResult } from "../state/model";
   import { useUserStore } from "../state/user";
 
+  import { BACKEND_BASE_URL, AUTHORIZATION_HEADER } from "../backend/common";
+
   const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
 
   const modelStore = useModelStore();
@@ -42,9 +44,9 @@
     model = clean_model_json(model);
     const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
     axios
-      .post(import.meta.env.VITE_BACKEND_BASE_URL + route, model, {
+      .post(BACKEND_BASE_URL + route, model, {
         headers: {
-          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.login.token}`
+          [AUTHORIZATION_HEADER]: `Bearer ${userStore.login.token}`
         }
       })
       .then(response => receiveResults(response))

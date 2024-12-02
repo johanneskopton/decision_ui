@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
+import { BACKEND_BASE_URL } from "./common";
 
 export const doLoginRequest = ({
   email,
@@ -17,7 +18,7 @@ export const doLoginRequest = ({
   formData.set("username", email);
   formData.set("password", password);
   axios
-    .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/auth/jwt/login", formData, {
+    .post(BACKEND_BASE_URL + "/api/auth/jwt/login", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }

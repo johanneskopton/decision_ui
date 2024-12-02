@@ -7,6 +7,8 @@
   import { useUserStore } from "../state/user";
   import { useModelStore } from "../state/model";
 
+  import { BACKEND_BASE_URL, AUTHORIZATION_HEADER } from "../backend/common";
+
   const nameDialog = ref<boolean>(false);
   const modelName = ref<string>("");
 
@@ -36,9 +38,9 @@
       saved: Date.now()
     };
     axios
-      .post(import.meta.env.VITE_BACKEND_BASE_URL + "/api/v1/decision_model/", bodyContent, {
+      .post(BACKEND_BASE_URL + "/api/v1/decision_model/", bodyContent, {
         headers: {
-          [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${userStore.login.token}`
+          [AUTHORIZATION_HEADER]: `Bearer ${userStore.login.token}`
         }
       })
       .then(response => receiveResults(response))

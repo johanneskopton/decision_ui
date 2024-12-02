@@ -1,4 +1,5 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
+import { AUTHORIZATION_HEADER, BACKEND_BASE_URL } from "./common";
 
 export interface ModelData {
   id: string;
@@ -18,9 +19,9 @@ export const doQueryModels = ({
   onError: () => void;
 }) => {
   axios
-    .get(import.meta.env.VITE_BACKEND_BASE_URL + "/api/v1/decision_models/", {
+    .get(BACKEND_BASE_URL + "/api/v1/decision_models/", {
       headers: {
-        [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${token}`
+        [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }
     })
     .then((response: AxiosResponse) => {
@@ -44,9 +45,9 @@ export const doDeleteModel = ({
   onError: () => void;
 }) => {
   axios
-    .delete("/api/v1/decision_models/" + modelId, {
+    .delete(BACKEND_BASE_URL + "/api/v1/decision_models/" + modelId, {
       headers: {
-        [import.meta.env.VITE_BACKEND_AUTH_HEADER]: `Bearer ${token}`
+        [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }
     })
     .then(() => {

@@ -10,7 +10,7 @@ from decision_backend.translation.model import RawModel
 
 logger = logging.getLogger(__name__)
 
-R_SCRIPT_PATH = os.environ.get("R_SCRIPT_PATH", "Rscript")
+DSUI_R_SCRIPT_PATH = os.environ.get("DSUI_R_SCRIPT_PATH", "Rscript")
 
 
 class ExecutionError(Exception):
@@ -35,7 +35,7 @@ class DecisionSupportWrapper:
     def run(self):
         logger.debug("run R script")
         result = subprocess.run(
-            [R_SCRIPT_PATH, self.translator.r_script_file.name],
+            [DSUI_R_SCRIPT_PATH, self.translator.r_script_file.name],
             capture_output=True,
             text=True,
         )

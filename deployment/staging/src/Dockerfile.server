@@ -12,6 +12,7 @@ RUN cd /root/workspace/code/frontend/bin && bash install.sh
 RUN cd /root/workspace/code/server/bin && bash install.sh
 
 # build
+ENV VITE_BACKEND_AUTH_HEADER="X-Auth-Token"
 RUN cd /root/workspace/code/frontend/bin && bash build.sh
 RUN cd /root/workspace/code/server/bin && bash build.sh
 

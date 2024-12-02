@@ -60,12 +60,11 @@ const startBackend = () => {
     return null;
   }
 
-  const args: string[] = ["-p", "8000", "--host", "127.0.0.1"];
-  if (process.platform === "win32") {
-    args.push("-r", rExecutable);
-  }
+  const env: NodeJS.ProcessEnv = process.platform === "win32" ? {
+    DSUI_R_SCRIPT_PATH: rExecutable
+  } : {};
 
-  const backendProcess = spawn(pythonExecutable, args, { cwd: pythonDir });
+  const backendProcess = spawn(pythonExecutable, ["-p", "8000", "--host", "127.0.0.1"], { cwd: pythonDir, env });
   backendProcess.stdout.pipe(process.stdout);
   backendProcess.stderr.pipe(process.stderr);
 

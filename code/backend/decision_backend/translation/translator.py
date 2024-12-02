@@ -28,6 +28,10 @@ template_dir = os.path.join(src_dir, "templates")
 templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
 templateEnv = jinja2.Environment(loader=templateLoader)
 
+try:
+    templateEnv.get_template("mc.R")
+except Exception as e:
+    logger.exception(e)
 
 class Translator:
     def __init__(self, model: RawModel, mc_runs: int, do_evpi=False):
@@ -165,6 +169,11 @@ class Translator:
             if node.type == RESULT_NODE_TYPE:
                 first_out_var = node.variable_name
                 break
+
+        if os.name == 'nt':
+            estimates_file = estimates_file.replace("\\", "\\\\")
+            results_file = results_file.replace("\\", "\\\\")
+            evpi_file = evpi_file.replace("\\", "\\\\")
 
         res_str = mc_template.render(
             estimates_path=estimates_file,

@@ -5,6 +5,7 @@
   import { useUserStore } from "../state/user";
   import { useModelStore } from "../state/model";
   import { doLoginRequest } from "../backend/authentication";
+  import { BACKEND_BASE_URL } from "../backend/common";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();
@@ -100,7 +101,7 @@
       </v-col>
     </v-row>
     <div class="footer">
-      {{ mode }} mode - version {{ version }}
+      {{ mode }} mode - version {{ version }} -- api at {{ BACKEND_BASE_URL }}
     </div>
     <v-snackbar v-model="snackbarNetworkErrorVisible" :timeout="2000" color="error">
       <!--<v-icon>mdi-server-network-off</v-icon>-->
