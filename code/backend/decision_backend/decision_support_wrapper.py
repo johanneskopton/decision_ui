@@ -1,5 +1,6 @@
 import subprocess
 import logging
+import os
 
 import pandas as pd
 import numpy as np
@@ -8,6 +9,8 @@ from decision_backend.translation.translator import Translator
 from decision_backend.translation.model import RawModel
 
 logger = logging.getLogger(__name__)
+
+R_SCRIPT_PATH = os.environ.get("R_SCRIPT_PATH", "Rscript")
 
 
 class ExecutionError(Exception):
@@ -32,7 +35,7 @@ class DecisionSupportWrapper:
     def run(self):
         logger.debug("run R script")
         result = subprocess.run(
-            ["Rscript", self.translator.r_script_file.name],
+            [R_SCRIPT_PATH, self.translator.r_script_file.name],
             capture_output=True,
             text=True,
         )

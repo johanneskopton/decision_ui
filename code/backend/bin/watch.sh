@@ -9,4 +9,4 @@ cd "$(dirname "$0")/../"
 source .venv/bin/activate
 
 # start server
-uvicorn decision_backend.main:app --host 0.0.0.0 --reload
+uvicorn decision_backend.main:app --host 0.0.0.0 --port 8000 --reload

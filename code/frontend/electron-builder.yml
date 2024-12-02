@@ -1,19 +1,26 @@
-appId: com.electron.app
-productName: electron-app
+appId: de.uni-bonn.inres
+productName: decision-support-ui
 directories:
   output: dist/electron/builder
-  buildResources: other
 files:
-  - '!**/.vscode/*'
-  - '!src/*'
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!bin/*"
+  - "!config/*"
+  - "!test/*"
+  - "!.editorconfig"
+  - "!.gitignore"
+  - "!.postcssrc.js"
+  - "!.prettierrc"
+  - "!electron.vite.config.ts"
+  - "!eslint.config.js"
+  - "!README.md"
+  - "!{tsconfig.json,tsconfig.node.json,tsconfig.app.json}"
+  - "!vite.config.ts"
 asarUnpack:
   - resources/**
 win:
-  executableName: electron-app
+  executableName: decision-support-ui
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

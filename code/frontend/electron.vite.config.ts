@@ -1,6 +1,6 @@
-import { resolve } from 'path';
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
-import vue from '@vitejs/plugin-vue';
+import { resolve } from "path";
+import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import vue from "@vitejs/plugin-vue";
 import childProcess from "child_process";
 
 import vueJsx from "@vitejs/plugin-vue-jsx";
@@ -11,27 +11,30 @@ const commitHash = childProcess.execSync("git rev-parse --short HEAD").toString(
 
 export default defineConfig({
   main: {
+    envDir: "config",
     build: {
-      outDir: './dist/electron/vite/main',
+      outDir: "./dist/electron/vite/main",
       lib: {
-        entry: ['src/electron/main/index.ts'],
+        entry: ["src/electron/main/index.ts"]
       }
     },
     plugins: [externalizeDepsPlugin()]
   },
   preload: {
+    envDir: "config",
     build: {
-      outDir: './dist/electron/vite/preload',
+      outDir: "./dist/electron/vite/preload",
       lib: {
-        entry: ['src/electron/preload/index.ts'],
+        entry: ["src/electron/preload/index.ts"]
       }
     },
     plugins: [externalizeDepsPlugin()]
   },
   renderer: {
+    envDir: "../../config",
     root: "./src/webapp",
     build: {
-      outDir: './dist/electron/vite/renderer',
+      outDir: "./dist/electron/vite/renderer",
       emptyOutDir: true,
       rollupOptions: {
         input: "./src/webapp/index.html"
@@ -39,7 +42,7 @@ export default defineConfig({
     },
     resolve: {
       alias: {
-        '@renderer': resolve('src/')
+        "@renderer": resolve("src/")
       }
     },
     define: {
@@ -54,4 +57,4 @@ export default defineConfig({
       }
     }
   }
-})
+});

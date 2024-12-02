@@ -18,12 +18,7 @@ from decision_backend.decision_support_wrapper import (
 from decision_backend import crud, schemas
 from decision_backend.db import async_session_maker
 
-# db.Base.metadata.create_all(bind=engine)
-logging.basicConfig(
-    level=logging.DEBUG, format="%(asctime)s %(levelname)s:%(name)s:%(message)s"
-)
 app = FastAPI()
-
 
 # Dependency
 async def get_db():

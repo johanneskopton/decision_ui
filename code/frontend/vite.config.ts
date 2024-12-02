@@ -14,12 +14,13 @@ const commitHash = childProcess.execSync("git rev-parse --short HEAD").toString(
 
 export default defineConfig({
   root: "src/webapp/",
+  envDir: "../../config",
   build: {
     outDir: "../../dist/webapp",
     emptyOutDir: true,
     rollupOptions: {
       input: "./src/webapp/index.html"
-    },
+    }
   },
   server: {
     proxy: {
@@ -30,7 +31,6 @@ export default defineConfig({
       }
     }
   },
-  envDir: "config",
   plugins: [
     vue(),
     vueJsx(),
