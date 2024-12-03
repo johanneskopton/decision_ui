@@ -2,6 +2,7 @@ appId: de.uni-bonn.inres
 productName: Decision Support UI
 directories:
   output: dist/electron/builder
+  buildResources: resources/build
 files:
   - "!**/.vscode/*"
   - "!src/*"
@@ -21,6 +22,7 @@ asarUnpack:
   - resources/**
 win:
   executableName: decision-support-ui
+  icon: resources/images/logo.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -31,6 +33,7 @@ nsis:
   createDesktopShortcut: always
   createStartMenuShortcut: true
   runAfterFinish: false
+  installerIcon: resources/images/logo.ico
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

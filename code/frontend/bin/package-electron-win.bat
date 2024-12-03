@@ -9,8 +9,10 @@ if not exist resources\decision-support-ui-backend (
     xcopy /Y /e  ..\backend\dist\decision-support-ui-backend resources\decision-support-ui-backend
 )
 
+REM delete database
+DEL /s /q resources\decision-support-ui-backend\test.db
+
 REM build setup.exe distributable
-SET VITE_BACKEND_BASE_URL=http://127.0.0.1:8000
 npm run build:electron:win
 
 endlocal
