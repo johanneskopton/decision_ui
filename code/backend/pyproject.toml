@@ -46,3 +46,6 @@ Homepage = "https://github.com/johanneskopton/decision_ui"
 Documentation = "https://github.com/johanneskopton/decision_ui"
 Repository = "https://github.com/johanneskopton/decision_ui.git"
 Issues = "https://github.com/johanneskopton/decision_ui/issues"
+
+[tool.setuptools]
+packages = ["decision_backend"]

@@ -1,5 +1,5 @@
 appId: de.uni-bonn.inres
-productName: decision-support-ui
+productName: Decision Support UI
 directories:
   output: dist/electron/builder
 files:
@@ -24,8 +24,13 @@ win:
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+  createStartMenuShortcut: true
+  runAfterFinish: false
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

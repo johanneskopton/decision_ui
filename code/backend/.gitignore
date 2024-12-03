@@ -130,3 +130,5 @@ dmypy.json
 
 # Custom
 *.db
+resources/*
+!resources/README.md

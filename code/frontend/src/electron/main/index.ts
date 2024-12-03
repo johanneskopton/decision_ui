@@ -1,13 +1,51 @@
 import { join } from "path";
 import { existsSync } from "fs";
+import * as net from "net";
 import { ChildProcessWithoutNullStreams, ProcessEnvOptions, spawn } from "child_process";
 
-import { app, shell, BrowserWindow } from "electron";
+import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 
 let backendProcess: ChildProcessWithoutNullStreams | null = null;
 
-const createWindow = () => {
+const findPort = async (): Promise<number> => {
+  return new Promise<number>((resolve) => {
+    const srv = net.createServer();
+    srv.listen(0, () =>  {
+      const port = (srv.address() as net.AddressInfo).port; 
+      srv.close(() => {
+        resolve(port);
+      });
+    });
+  });
+}
+
+const startBackend = (port: number) => {
+  const resourcesDir = is.dev
+    ? join(__dirname, "../../../../resources")
+    : join(__dirname, "../../../../../app.asar.unpacked/resources");
+
+  const backendDir = join(resourcesDir, "decision-support-ui-backend");
+  const pythonExecutableFile =
+    process.platform === "win32" ? "decision-support-ui-backend.exe" : "decision-support-ui-backend";
+  const pythonExecutable = join(backendDir, pythonExecutableFile);
+
+  if (!existsSync(pythonExecutable)) {
+    console.warn(`Could not find python backend executable at '${pythonExecutable}', continue anyway`);
+    return null;
+  }
+
+  const backendProcess = spawn(pythonExecutable, ["-p", ""+port, "--host", "127.0.0.1"], { cwd: backendDir });
+  backendProcess.stdout.pipe(process.stdout);
+  backendProcess.stderr.pipe(process.stderr);
+
+  return backendProcess;
+};
+
+const createWindow = async () => {
+  const backendPort = await findPort();
+  backendProcess = startBackend(backendPort);
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1280,
@@ -18,6 +56,10 @@ const createWindow = () => {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false
     }
+  });
+
+  ipcMain.handle("getBackendBaseURL", () => {
+    return `http://127.0.0.1:${backendPort}`;
   });
 
   mainWindow.on("ready-to-show", () => {
@@ -38,39 +80,6 @@ const createWindow = () => {
   }
 };
 
-const startBackend = () => {
-  const resourcesDir = is.dev
-    ? join(__dirname, "../../../../resources")
-    : join(__dirname, "../../../../../app.asar.unpacked/resources");
-
-  const rExecutable = join(resourcesDir, "r/bin/Rscript.exe");
-
-  if (process.platform === "win32" && !existsSync(rExecutable)) {
-    // check that R is available
-    console.warn(`Could not find Rscript.exe at '${rExecutable}', continue anyway`);
-  }
-
-  const pythonDir = join(resourcesDir, "python");
-  const pythonExecutableFile =
-    process.platform === "win32" ? "decision-support-ui-backend.exe" : "decision-support-ui-backend";
-  const pythonExecutable = join(pythonDir, pythonExecutableFile);
-
-  if (!existsSync(pythonExecutable)) {
-    console.warn(`Could not find python backend executable at '${pythonExecutable}', continue anyway`);
-    return null;
-  }
-
-  const env: NodeJS.ProcessEnv = process.platform === "win32" ? {
-    DSUI_R_SCRIPT_PATH: rExecutable
-  } : {};
-
-  const backendProcess = spawn(pythonExecutable, ["-p", "8000", "--host", "127.0.0.1"], { cwd: pythonDir, env });
-  backendProcess.stdout.pipe(process.stdout);
-  backendProcess.stderr.pipe(process.stderr);
-
-  return backendProcess;
-};
-
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -85,7 +94,6 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  backendProcess = startBackend();
   createWindow();
 
   app.on("activate", function () {
@@ -107,7 +115,11 @@ app.on("window-all-closed", () => {
 });
 
 app.on("quit", () => {
-  if (backendProcess !== null && backendProcess.exitCode == null) {
-    backendProcess.kill();
+  if (backendProcess !== null) {
+    try {
+      backendProcess.kill();
+    } catch {
+      // ignore
+    }
   }
 });

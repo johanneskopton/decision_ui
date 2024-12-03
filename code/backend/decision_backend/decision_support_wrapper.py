@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 DSUI_R_SCRIPT_PATH = os.environ.get("DSUI_R_SCRIPT_PATH", "Rscript")
 
-
 class ExecutionError(Exception):
 
     def __init__(self, r_script, estimates, stdout, stderr):
@@ -33,7 +32,10 @@ class DecisionSupportWrapper:
         self.translator.translate_to_files()
 
     def run(self):
-        logger.debug("run R script")
+        if DSUI_R_SCRIPT_PATH == "Rscript":
+            logger.debug("run R from global R installation")
+        else:
+            logger.debug("run R from installation at %s", DSUI_R_SCRIPT_PATH)
         result = subprocess.run(
             [DSUI_R_SCRIPT_PATH, self.translator.r_script_file.name],
             capture_output=True,

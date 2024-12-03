@@ -6,8 +6,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /test/unit/coverage/
-resources/python
-resources/r
+resources/decision-support-ui-backend
 
 # Editor directories and files
 .idea
