@@ -123,6 +123,32 @@
     padding: 0.4em 0.75em;
   }
 
+  .baklava-node-interface.--input > div[title="Output Type"] {
+    display: none;
+  }
+
+  .node-container:has(> div.baklava-node[data-node-type="__baklava_SubgraphInputNode"]) {
+    // graph nodes inside a subgraph
+    .baklava-node-interface.--input > div[title="Output Type"] {
+      display: block;
+    }
+  }
+
+  .baklava-node-palette:has(> section > div.baklava-node[data-node-type="__baklava_SubgraphInputNode"]) {
+    // node pallete inside a subgraph
+
+    .baklava-node.--palette[data-node-type="Histogram"],
+    .baklava-node.--palette[data-node-type="Debug"],
+    .baklava-node.--palette[data-node-type="Estimate"],
+    .baklava-node.--palette[data-node-type="Result"] {
+      display: none;
+    }
+
+    & > section:nth-of-type(2) {
+      display: none;
+    }
+  }
+
   .baklava-node[data-node-type="Estimate"],
   .baklava-node[data-node-type="Result"] {
     .__title {
@@ -139,7 +165,8 @@
   }
 
   .baklava-node[data-node-type^="__baklava_GraphNode"],
-  .baklava-node[data-node-type^="__baklava_Subgraph"] {
+  .baklava-node[data-node-type^="__baklava_Subgraph"],
+  .baklava-node[data-node-type="TypeConstraint"] {
     .__title {
       background-color: #0d7447;
     }

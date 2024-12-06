@@ -25,6 +25,7 @@ import { ValueVarierNode } from "./nodes/ValueVarierNode";
 import { ComparisonNode } from "./nodes/ComparisonNode";
 
 import { useModelStore } from "../state/model";
+import { TypeConstraintNode } from "./nodes/TypeConstraintNode";
 
 export interface GlobalCalculationData {
   mcRuns: number;
@@ -55,6 +56,7 @@ export const initializeBaklvaState = (): BaklavaState => {
   const operationsCategory = { category: "Operations" };
   const displayCategory = { category: "Display" };
   const seriesCategory = { category: "Series" };
+  const subgraphCategory = { category: "Subgraphs" };
 
   // register general nodes
   editor.registerNodeType(EstimateNode, generalCategory);
@@ -71,10 +73,13 @@ export const initializeBaklvaState = (): BaklavaState => {
   editor.registerNodeType(HistogramNode, displayCategory);
   editor.registerNodeType(NoteNode, displayCategory);
 
-  // reigster series nodes
+  // register series nodes
   editor.registerNodeType(ToSeriesNode, seriesCategory);
   editor.registerNodeType(NPVNode, seriesCategory);
   editor.registerNodeType(ValueVarierNode, seriesCategory);
+
+  // register subgraph nodes
+  editor.registerNodeType(TypeConstraintNode, subgraphCategory);
 
   // auto modify node titles to make them unique
   const eventToken = Symbol();
