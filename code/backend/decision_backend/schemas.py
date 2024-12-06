@@ -19,7 +19,7 @@ class DecisionModel(DecisionModelBase):
     owner_id: UUID
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserRead(schemas.BaseUser[UUID]):
@@ -30,7 +30,7 @@ class UserCreate(schemas.BaseUserCreate):
     decision_models: List[DecisionModel] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class UserUpdate(schemas.BaseUserUpdate):

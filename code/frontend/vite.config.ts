@@ -17,10 +17,7 @@ export default defineConfig({
   envDir: "../../config",
   build: {
     outDir: "../../dist/webapp",
-    emptyOutDir: true,
-    rollupOptions: {
-      input: "./src/webapp/index.html"
-    }
+    emptyOutDir: true
   },
   server: {
     proxy: {

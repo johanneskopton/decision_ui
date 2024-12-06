@@ -1,7 +1,8 @@
 {
   "name": "decision-support-ui",
   "version": "0.0.1",
-  "description": "",
+  "author": "Institute of Crop Science and Resource Conservation, University of Bonn",
+  "description": "A tool to support decision making using Monte Carlo simulations",
   "private": true,
   "type": "module",
   "main": "./dist/electron/vite/main/index.js",

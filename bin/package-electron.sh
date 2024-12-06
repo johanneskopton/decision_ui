@@ -5,4 +5,4 @@
 cd "$(dirname "$0")/../"
 
 bash code/backend/bin/package.sh
-back code/frontend/bin/package-electron.sh
+bash code/frontend/bin/package-electron.sh
