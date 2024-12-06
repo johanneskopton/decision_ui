@@ -1,3 +1,5 @@
+import os
+
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
@@ -9,14 +11,16 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy_utils import UUIDType
 
+DSUI_DATABASE_PATH = os.environ.get(
+    "DSUI_DATABASE_PATH", "./decision-support-ui-backend.db"
+)
 
-DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+DATABASE_URL = f"sqlite+aiosqlite:///{DSUI_DATABASE_PATH}"
 Base: DeclarativeMeta = declarative_base()
 
 
 engine = create_async_engine(DATABASE_URL)
-async_session_maker = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False)
+async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):

@@ -1,7 +1,7 @@
 #/bin/bash
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/../"
 
-rm -rf ../code/frontend/node_modules
-rm -rf ../code/backend/test.db
-rm -rf ../code/backend/decision_backend.egg-info
+bash code/frontend/bin/clean.sh
+bash code/backend/bin/clean.sh
+bash code/server/bin/clean.sh

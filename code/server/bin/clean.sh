@@ -7,7 +7,4 @@ cd "$(dirname "$0")/../"
 
 # remove files
 rm -rf build
-rm -rf decision_backend.egg-info
-rm -rf .venv
-rm -rf .pytest_cache
-rm -f decision-support-ui-backend.db
+rm -rf node_modules

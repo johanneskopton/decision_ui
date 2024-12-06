@@ -53,6 +53,9 @@ RUN --mount=type=cache,target=/var/cache/dnf,z \
     curl -fsSL https://rpm.nodesource.com/setup_22.x | bash - && \
     dnf install -y nodejs
 
+# install node "concurrently" to start multiple commands in parallel
+RUN npm install -g concurrently
+
 # copy custom screenrc for convenience
 COPY ./resources/tmux.conf /root/.tmux.conf
 

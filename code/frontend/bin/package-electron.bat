@@ -1,4 +1,4 @@
-@ECHO OFF 
+@ECHO OFF
 setlocal
 
 REM change to frontend directory
@@ -10,7 +10,7 @@ if not exist resources\decision-support-ui-backend (
 )
 
 REM delete database
-DEL /s /q resources\decision-support-ui-backend\test.db
+DEL /s /q resources\decision-support-ui-backend\decision-support-ui-backend.db
 
 REM build setup.exe distributable
 npm run build:electron:win
