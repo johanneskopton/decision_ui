@@ -69,18 +69,17 @@ export const defineMathNode = <T extends string>(definition: MathNodeDefinition<
 
     inputs: getMathInputs(definition.defaultOperation, definition.availableOperations),
 
-    onFirstUpdate({ output_type }) {
+    onUpdate({ output_type }) {
       return { outputs: getOutputInterfaceForType(output_type) };
     },
 
-    onUpdate() {
+    onConnectionUpdate() {
       const node = this as any as Node<any, any>;
       let outputType: InterfaceTypeSet = PROBABILISTIC_TYPE;
 
       // determine output type based on current values and connections
       const a_type = getInputInterfaceType(node, "a");
       const b_type = getInputInterfaceType(node, "b");
-      console.error(`a_type = ${a_type}, b_type = ${b_type}`);
       if (isDeterministicType(a_type) && isDeterministicType(b_type)) {
         // output will be deterministic
         outputType = DETERMINISTIC_TYPE;

@@ -56,7 +56,6 @@ export const initializeBaklvaState = (): BaklavaState => {
   const operationsCategory = { category: "Operations" };
   const displayCategory = { category: "Display" };
   const seriesCategory = { category: "Series" };
-  const subgraphCategory = { category: "Subgraphs" };
 
   // register general nodes
   editor.registerNodeType(EstimateNode, generalCategory);
@@ -79,7 +78,7 @@ export const initializeBaklvaState = (): BaklavaState => {
   editor.registerNodeType(ValueVarierNode, seriesCategory);
 
   // register subgraph nodes
-  editor.registerNodeType(TypeConstraintNode, subgraphCategory);
+  editor.registerNodeType(TypeConstraintNode, operationsCategory);
 
   // auto modify node titles to make them unique
   const eventToken = Symbol();

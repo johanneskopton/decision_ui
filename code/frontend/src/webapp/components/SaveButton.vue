@@ -24,7 +24,7 @@
     }
   };
   const receiveResultsError = (response: AxiosError) => {
-    console.log(response);
+    console.error(response);
   };
 
   const saveGraphUser = () => {

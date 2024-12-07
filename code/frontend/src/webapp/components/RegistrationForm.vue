@@ -39,7 +39,6 @@
   };
 
   const register = () => {
-    console.log(BACKEND_BASE_URL + "/api/auth/register");
     axios
       .post(BACKEND_BASE_URL + "/api/auth/register", {
         email: email.value,

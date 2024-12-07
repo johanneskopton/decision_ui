@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted, onUnmounted, useTemplateRef } from "vue";
+  import { onMounted, onUnmounted, ref, useTemplateRef } from "vue";
   import { BaklavaEditor } from "@baklavajs/renderer-vue";
   import { saveAs } from "file-saver";
 
@@ -12,6 +12,7 @@
 
   const modelStore = useModelStore();
   const loadfile = useTemplateRef<HTMLInputElement>("loadfile");
+  const baklavaRenderKey = ref<number>(1);
 
   const token = Symbol();
   modelStore.baklava.editor.nodeEvents.update.subscribe(token, () => {
@@ -40,8 +41,18 @@
       reader.addEventListener(
         "load",
         () => {
+          // reset model store, otherwise bakalva will return error during loading (probably related to subgraphs)
+          modelStore.reset();
+
+          // load json file
           modelStore.baklava.editor.load(JSON.parse(reader.result as string));
+
+          // restart engine and do one calculation
+          modelStore.baklava.engine.start();
           updateGraphCalculation();
+
+          // force re-render of baklava editor (otherwise it looks broken)
+          baklavaRenderKey.value = baklavaRenderKey.value + 1;
         },
         false
       );
@@ -65,7 +76,7 @@
 <template>
   <div class="editor">
     <!--<hint-overlay />-->
-    <BaklavaEditor :view-model="modelStore.baklava.viewPlugin as any" />
+    <BaklavaEditor :key="baklavaRenderKey" :view-model="modelStore.baklava.viewPlugin as any" />
     <v-sheet class="button-container" color="white" elevation="4" rounded>
       <v-btn-toggle multiple class="button-toggle">
         <v-tooltip location="top" text="Download">
@@ -165,8 +176,7 @@
   }
 
   .baklava-node[data-node-type^="__baklava_GraphNode"],
-  .baklava-node[data-node-type^="__baklava_Subgraph"],
-  .baklava-node[data-node-type="TypeConstraint"] {
+  .baklava-node[data-node-type^="__baklava_Subgraph"] {
     .__title {
       background-color: #0d7447;
     }

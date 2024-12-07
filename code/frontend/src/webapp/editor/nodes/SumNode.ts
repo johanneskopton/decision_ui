@@ -42,12 +42,12 @@ export const SumNode = defineFlexibleDynamicNode({
     output_type: () => new NodeInterface("Inputs", DETERMINISTIC_TYPE).setPort(false).setHidden(true)
   } as { [key: string]: () => NodeInterface },
 
-  onFirstUpdate({ n_inputs, output_type }) {
+  onUpdate({ n_inputs, output_type }) {
     // generate inputs and output according to serialized static inputs (n_inputs, output_type)
     return { inputs: generateInputInterfaces(n_inputs, this as any), outputs: getOutputInterfaceForType(output_type) };
   },
 
-  onUpdate() {
+  onConnectionUpdate() {
     const node = this as any as DynamicNode<any, any>;
     let outputType = PROBABILISTIC_TYPE;
 

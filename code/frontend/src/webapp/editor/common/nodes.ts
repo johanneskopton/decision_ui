@@ -2,13 +2,13 @@ import {
   defineDynamicNode,
   NodeInterface,
   setType,
-  type DynamicNode,
   type DynamicNodeDefinition,
   type DynamicNodeUpdateResult,
   type IConnection,
   type IDynamicNodeDefinition,
   type Node
 } from "baklavajs";
+
 import {
   DETERMINISTIC_INT_TYPE,
   DETERMINISTIC_TYPE,
@@ -42,7 +42,12 @@ export const getInputInterfaceType = (node: Node<any, any>, key: string): Interf
   if (node.inputs[key].connectionCount > 0) {
     // check connection to key
     const connection = node.graph?.connections.find(c => c.to.id == node.inputs[key].id);
-    return (connection?.from as any).type as InterfaceTypeSet;
+    const type = (connection?.from as any).type as InterfaceTypeSet | undefined | null;
+    if (type === undefined || type == null) {
+      // e.g. when connecting a subgraph input
+      return DETERMINISTIC_TYPE;
+    }
+    return type;
   }
   return DETERMINISTIC_TYPE;
 };
@@ -59,28 +64,51 @@ export const isProbabilistic = (value: FlexibleNumber) => {
   return Array.isArray(value) && !Array.isArray(value[0]);
 };
 
-export const registerUpdateForInputConnectionChange = (node: DynamicNode<any, any>) => {
-  const connectionHandler = (connection: IConnection) => {
-    if (connection.to.nodeId == node.id) {
-      // connection concerns current node
-      // update node outputs
-      (node as any).onUpdate.call(node);
-    }
-  };
+const registerInteractiveChange = (node: Node<any, any>) => {
+  (node as any).interactive = false;
+  node.graph?.events.checkConnection.subscribe(node, () => {
+    (node as any).interactive = true;
+  });
+  node.graph?.events.beforeRemoveConnection.subscribe(node, () => {
+    (node as any).interactive = true;
+  });
+};
+
+const isNodeInteractive = (node: Node<any, any>) => {
+  return (node as any).interactive;
+};
+
+export const registerUpdateForInteractiveConnectionChange = (node: Node<any, any>) => {
   if (!node.graph) {
     console.error("cannot register connection change handlers for unknown graph");
   }
-  node.graph?.events.addConnection.subscribe(node, connectionHandler);
-  node.graph?.events.removeConnection.subscribe(node, connectionHandler);
+  registerInteractiveChange(node);
+  const handler = (connection: IConnection) => {
+    // addConnection is called when the graph is being loaded
+    // at this time, the type information is incomplete, because
+    // connections are added one by one
+    // as soon as the node is fully loaded, we dispatch update events
+    if (connection.to.nodeId == node.id && isNodeInteractive(node)) {
+      // connection concerns current node
+      (node as any).connectionUpdate = true;
+      (node as any).onUpdate.call(node);
+      (node as any).connectionUpdate = false;
+    }
+  };
+  node.graph?.events.addConnection.subscribe(node, handler);
+  node.graph?.events.removeConnection.subscribe(node, handler);
+};
+
+export const isNodeInteractiveConnectionUpdate = (node: Node<any, any>) => {
+  return (node as any).connectionUpdate;
 };
 
 export const isNodePartOfSubgraph = (node: Node<any, any>) => {
-  console.log(`[node=${node.id}] graph.template = ${node.graph?.template}`);
   return node.graph?.template ? true : false;
 };
 
 export interface IDynamicFlexibleNodeDefinition<I, O> extends IDynamicNodeDefinition<I, O> {
-  onFirstUpdate: (inputs: I, outputs: O) => DynamicNodeUpdateResult;
+  onConnectionUpdate?: (inputs: I, outputs: O) => DynamicNodeUpdateResult;
 }
 
 export const defineFlexibleDynamicNode = <I, O>(definition: IDynamicFlexibleNodeDefinition<I, O>) => {
@@ -88,50 +116,36 @@ export const defineFlexibleDynamicNode = <I, O>(definition: IDynamicFlexibleNode
     ...definition,
 
     onCreate() {
-      const node = this as any as Node<any, any>;
-      // console.error("[node=" + (this as any).id + "] dynamic node create");
-      (this as any).loading = false;
-      node.hooks.beforeLoad.subscribe(Symbol(), (state, n) => {
-        (n as any).loading = true;
-        return state;
-      });
-
-      // fix error that dynamic nodes do not update in subgraphs
-      node.inputs = reactive(node.inputs);
-      node.outputs = reactive(node.outputs);
-
       definition.onCreate?.call(this);
     },
 
     onPlaced() {
       const node = this as any as Node<any, any>;
-      console.error(`[node id=${node.id} title=${node.title}] dynamic node placed`);
-      registerUpdateForInputConnectionChange(this as any);
+      registerUpdateForInteractiveConnectionChange(node);
+
+      // fix error that dynamic nodes do not update in the editor inside subgraphs
+      if (node.graph) {
+        // make inputs, outputs and connections reactive
+        node.inputs = reactive(node.inputs);
+        node.outputs = reactive(node.outputs);
+        (node.graph as any)._connections = reactive((node.graph as any)._connections);
+      }
+
       definition.onPlaced?.call(this);
     },
 
     onUpdate(inputs, outputs) {
       const node = this as any as Node<any, any>;
-      console.error(
-        `[node id=${node.id} title=${node.title}] dynamic node update, loading = ${(this as any).loading}, graph=${node.graph?.nodes.length}`
-      );
-      if ((node as any).loading) {
-        (node as any).loading = false;
-        return definition.onFirstUpdate.call(this, inputs, outputs);
+      if (isNodeInteractiveConnectionUpdate(node) && definition.onConnectionUpdate) {
+        console.error(`[node title=${node.title} id=${node.id}] connection update`);
+        return definition.onConnectionUpdate.call(this, inputs, outputs);
       } else {
+        console.error(`[node title=${node.title} id=${node.id}] static update`);
         return definition.onUpdate.call(this, inputs, outputs);
       }
     },
 
     calculate(inputs, context) {
-      const node = this as any as Node<any, any>;
-      console.error(
-        `[node id=${node.id} title=${node.title}] dynamic node calculate, graph=${node.graph?.nodes.length}`
-      );
-      // if ((this as any).beforeFirstCalculation) {
-      //console.error("[node=" + (this as any).id + "] dynamic node set before first calulation = false");
-      // (this as any).loaded = true;
-      // }
       return definition.calculate?.call(this, inputs, context);
     }
   });

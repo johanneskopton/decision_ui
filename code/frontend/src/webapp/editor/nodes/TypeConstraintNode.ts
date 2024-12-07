@@ -22,13 +22,6 @@ export const TypeConstraintNode = defineFlexibleDynamicNode({
       ]).setPort(false)
   },
 
-  onFirstUpdate({ type }) {
-    return {
-      inputs: getOutputInterfaceForType(type),
-      outputs: getOutputInterfaceForType(type)
-    };
-  },
-
   onUpdate({ type }) {
     return {
       inputs: getOutputInterfaceForType(type),

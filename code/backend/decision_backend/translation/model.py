@@ -60,6 +60,9 @@ class RawNode(BaseModel):
     width: int
     """The size of the node in pixel as visualized in the fronted editor"""
 
+    graphState: "Optional[RawGraph]"
+    """The execution state of the subgraph instance referenced by this node"""
+
 
 class RawGraph(BaseModel):
     """A graph"""
@@ -83,7 +86,7 @@ class RawModel(BaseModel):
     graph: RawGraph
     """The main graph of the model"""
 
-    graphTemplates: Any
+    graphTemplates: List[RawGraph]
     """Unknown"""
 
 

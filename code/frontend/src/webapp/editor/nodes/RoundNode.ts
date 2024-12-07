@@ -36,11 +36,11 @@ export const RoundNode = defineFlexibleDynamicNode({
       new SelectInterface<SupportedOperationType>("Operation", "round", SUPPORTED_OPERATIONS).setPort(false)
   },
 
-  onFirstUpdate({ output_type }) {
+  onUpdate({ output_type }) {
     return { outputs: getOutputInterfaceForType(output_type) };
   },
 
-  onUpdate() {
+  onConnectionUpdate() {
     const node = this as any as Node<any, any>;
     let outputType: InterfaceTypeSet = PROBABILISTIC_INT_TYPE;
 
