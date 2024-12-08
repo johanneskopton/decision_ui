@@ -1,56 +1,50 @@
 <script setup lang="ts">
   import { ref } from "vue";
-  import axios, { AxiosError, type AxiosResponse } from "axios";
 
   import clean_model_json from "../helper/clean_model_json";
 
-  import { useModelStore, type DecisionSupportResult } from "../state/model";
+  import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
 
-  import { BACKEND_BASE_URL, AUTHORIZATION_HEADER } from "../backend/common";
+  import { doRunModel } from "@/backend/models";
 
   const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
 
   const modelStore = useModelStore();
   const userStore = useUserStore();
 
-  const loading_mc = ref<boolean>(false);
+  const loading = ref<boolean>(false);
   const network_error = ref<boolean>(false);
-  const network_success = ref<boolean>();
-  const noPermissionDialog = ref<boolean>(false);
-
-  const receiveResults = (response: AxiosResponse) => {
-    loading_mc.value = false;
-    console.log(`Run successfull with: ${JSON.stringify(response.data, null, 2)}`);
-    if (response.status == 200) {
-      network_success.value = true;
-    }
-    modelStore.setDecisionSupportResult(response.data as DecisionSupportResult);
-  };
-
-  const receiveResultsError = (response: AxiosError) => {
-    loading_mc.value = false;
-    console.error(`Run error with status code ${response.status}: ${JSON.stringify(response.response?.data, null, 2)}`);
-    if (response.code === "ERR_NETWORK") {
-      network_error.value = true;
-    } else if (response.code === "ERR_BAD_REQUEST") {
-      noPermissionDialog.value = true;
-    }
-  };
+  const server_error = ref<boolean>(false);
+  const success = ref<boolean>();
+  const unauthorized = ref<boolean>(false);
 
   const callBackend = () => {
-    loading_mc.value = true;
-    let model = modelStore.baklava.editor.save();
-    model = clean_model_json(model);
-    const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
-    axios
-      .post(BACKEND_BASE_URL + route, model, {
-        headers: {
-          [AUTHORIZATION_HEADER]: `Bearer ${userStore.login.token}`
-        }
-      })
-      .then(response => receiveResults(response))
-      .catch(response => receiveResultsError(response));
+    loading.value = true;
+    const model = clean_model_json(modelStore.baklava.editor.save());
+
+    doRunModel({
+      token: userStore.login.token,
+      model,
+      getEvpi,
+      onSuccess: result => {
+        loading.value = false;
+        success.value = true;
+        modelStore.setDecisionSupportResult(result);
+      },
+      onNetworkError: () => {
+        loading.value = false;
+        network_error.value = true;
+      },
+      onServerError: () => {
+        loading.value = false;
+        server_error.value = true;
+      },
+      onUnauthorized: () => {
+        loading.value = false;
+        unauthorized.value = true;
+      }
+    });
   };
 </script>
 
@@ -62,7 +56,7 @@
         size="large"
         color="primary"
         v-bind="props"
-        :loading="loading_mc"
+        :loading="loading"
         @click="callBackend"
       >
         <span v-if="getEvpi" class="button_text"> Calculate EVPI</span>
@@ -78,21 +72,27 @@
   </v-tooltip>
 
   <v-snackbar v-model="network_error" :timeout="2000" color="error">
-    <!--<v-icon>mdi-server-network-off</v-icon>-->
     No connection to server!
     <template #actions>
       <v-btn color="white" variant="text" @click="network_error = false"> Close </v-btn>
     </template>
   </v-snackbar>
 
-  <v-snackbar v-model="network_success" :timeout="2000" color="secondary">
+  <v-snackbar v-model="success" :timeout="2000" color="secondary">
     Model successfully executed!
     <template #actions>
-      <v-btn color="white" variant="text" @click="network_success = false"> Close </v-btn>
+      <v-btn color="white" variant="text" @click="success = false"> Close </v-btn>
     </template>
   </v-snackbar>
 
-  <v-dialog v-model="noPermissionDialog" max-width="400">
+  <v-snackbar v-model="server_error" :timeout="2000" color="error">
+    Error while executing model!
+    <template #actions>
+      <v-btn color="white" variant="text" @click="success = false"> Close </v-btn>
+    </template>
+  </v-snackbar>
+
+  <v-dialog v-model="unauthorized" max-width="400">
     <v-card class="notAuthorizedCard">
       <v-card-title class="text-h5"> Not authorized </v-card-title>
 
@@ -101,8 +101,8 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="grey" variant="text" @click="noPermissionDialog = false"> Cancel </v-btn>
-        <v-btn color="primary" variant="text" to="/login" @click="noPermissionDialog = false"> Login </v-btn>
+        <v-btn color="grey" variant="text" @click="unauthorized = false"> Cancel </v-btn>
+        <v-btn color="primary" variant="text" to="/login" @click="unauthorized = false"> Login </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -49,3 +49,6 @@ Issues = "https://github.com/johanneskopton/decision_ui/issues"
 
 [tool.setuptools]
 packages = ["decision_backend"]
+
+[tool.black]
+line-length = 120

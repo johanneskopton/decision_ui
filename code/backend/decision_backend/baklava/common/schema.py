@@ -1,9 +1,9 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from typing import List, Any, Mapping, Optional
 
 
-class RawConnection(BaseModel):
+class BaklavaConnection(BaseModel):
     """Represents connection between nodes"""
 
     id: str
@@ -15,8 +15,10 @@ class RawConnection(BaseModel):
     to: str
     """The UUID of the node the connection goes to"""
 
+    model_config = ConfigDict(populate_by_name=True)
 
-class RawNodeInterface(BaseModel):
+
+class BakalvaNodeInterface(BaseModel):
     """Interface of a node"""
 
     id: str
@@ -25,27 +27,30 @@ class RawNodeInterface(BaseModel):
     value: Optional[Any] = None
     """The value of the node interface as specified by the user in the frontend editor"""
 
+    templateId: Optional[str] = None
+    """Not sure yet"""
 
-class RawPosition(BaseModel):
+
+class BaklavaPosition(BaseModel):
     """2d-Position"""
 
     x: float
     y: float
 
 
-class RawNode(BaseModel):
+class BaklavaNode(BaseModel):
     """A node"""
 
     id: str
     """Unique identifier of a node as UUID"""
 
-    inputs: Mapping[str, RawNodeInterface]
+    inputs: Mapping[str, BakalvaNodeInterface]
     """The map of input options (the key corresponds to the interface name)"""
 
-    outputs: Mapping[str, RawNodeInterface]
+    outputs: Mapping[str, BakalvaNodeInterface]
     """The map of output options (the key corresponds to the interface name)"""
 
-    position: RawPosition
+    position: BaklavaPosition
     """The 2d-position of the node as visualized in the frontend editor"""
 
     title: str
@@ -60,45 +65,68 @@ class RawNode(BaseModel):
     width: int
     """The size of the node in pixel as visualized in the fronted editor"""
 
-    graphState: "Optional[RawGraph]"
+    graphState: "Optional[BaklavaGraph]" = None
     """The execution state of the subgraph instance referenced by this node"""
 
+    graphInterfaceId: Optional[str] = None
+    """Not sure yet"""
 
-class RawGraph(BaseModel):
+
+class BaklavaGraphInputOutput(BaseModel):
+
+    id: str
+
+    name: str
+
+    nodeId: str
+
+    nodeInterfaceId: str
+
+
+class BaklavaGraph(BaseModel):
     """A graph"""
 
-    nodes: List[RawNode]
+    id: Optional[str] = None
+
+    """The name of the graph (if it is a subgraph)"""
+    name: Optional[str] = None
+
+    nodes: List[BaklavaNode]
     """The list of nodes of the graph"""
 
-    connections: List[RawConnection]
+    connections: List[BaklavaConnection]
     """The list of connections between nodes of the graph"""
 
-    panning: RawPosition
+    panning: Optional[BaklavaPosition] = None
     """Unknown, probably the frontend editor panning state"""
 
-    scaling: float
+    scaling: Optional[float] = None
     """Unknown, probably the frontend editor scale state"""
 
+    inputs: List[BaklavaGraphInputOutput]
+    """Graph inputs (if graph is a subgraph)"""
 
-class RawModel(BaseModel):
-    """The model"""
+    outputs: List[BaklavaGraphInputOutput]
+    """Graph outputs (if graph is a subgraph)"""
 
-    graph: RawGraph
+
+class BaklavaModel(BaseModel):
+    """The Baklava model"""
+
+    graph: BaklavaGraph
     """The main graph of the model"""
 
-    graphTemplates: List[RawGraph]
-    """Unknown"""
+    graphTemplates: List[BaklavaGraph]
+    """Subgraphs of the model"""
 
 
-class ExtendedNode(RawNode):
-    """A extended version of the node for further processing."""
+class DecisionSupportHistogramResult(BaseModel):
 
-    variable_name: str
-    """The variable name that is used in the R script"""
+    hist: Any
+    r_script: str
+    estimates: str
 
 
-class StrippedModel(BaseModel):
-    """A stripped down version of the model for further processing."""
+class DecisionSupportEVPIResult(BaseModel):
 
-    nodes: List[ExtendedNode]
-    connections: List[RawConnection]
+    evpi: Any

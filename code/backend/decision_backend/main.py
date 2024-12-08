@@ -1,24 +1,36 @@
-from typing import List
 import logging
+import os
+
+from typing import List
 
 from sqlalchemy.orm import Session
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from decision_backend.baklava.evaluate.run import ExecutionError, run_baklava_model
 from decision_backend.users import auth_backend, current_active_user
 from decision_backend.users import fastapi_users
 from decision_backend.schemas import UserCreate, UserRead, UserUpdate
 from decision_backend.db import User, create_db_and_tables
-from decision_backend.translation.model import RawModel
-from decision_backend.decision_support_wrapper import (
-    DecisionSupportWrapper,
-    ExecutionError,
+from decision_backend.baklava.common.schema import (
+    BaklavaModel,
+    DecisionSupportEVPIResult,
+    DecisionSupportHistogramResult,
 )
 from decision_backend import crud, schemas
 from decision_backend.db import async_session_maker
 
+
+logging.basicConfig(
+    level=os.environ.get("DSUI_LOG_LEVEL", "INFO"),
+    format="%(asctime)s %(levelname)s:%(name)s:%(message)s",
+)
+
+logger = logging.getLogger(__name__)
+
 app = FastAPI()
+
 
 # Dependency
 async def get_db():
@@ -38,9 +50,7 @@ app.add_middleware(
 )
 
 
-app.include_router(
-    fastapi_users.get_auth_router(auth_backend), prefix="/api/auth/jwt", tags=["auth"]
-)
+app.include_router(fastapi_users.get_auth_router(auth_backend), prefix="/api/auth/jwt", tags=["auth"])
 app.include_router(
     fastapi_users.get_register_router(UserRead, UserCreate),
     prefix="/api/auth",
@@ -77,41 +87,13 @@ async def unicorn_exception_handler(request: Request, error: ExecutionError):
 
 
 @app.post("/api/v1/monte_carlo")
-def monte_carlo(model: RawModel, user: User = Depends(current_active_user)):
-
-    dsw = DecisionSupportWrapper(model, 50000)
-    dsw.run()
-    hist = dsw.get_hist()
-    r_script = dsw.get_r_script()
-    estimates = dsw.get_estimates()
-    # evpi = dsw.get_evpi()
-    dsw.clean()
-
-    return {
-        "hist": hist,
-        "r_script": r_script,
-        "estimates": estimates,
-        # "evpi": evpi
-    }
+def monte_carlo(model: BaklavaModel, user: User = Depends(current_active_user)) -> DecisionSupportHistogramResult:
+    return run_baklava_model(model, 50000, do_evpi=False)
 
 
 @app.post("/api/v1/evpi")
-def evpi(model: RawModel, user: User = Depends(current_active_user)):
-
-    dsw = DecisionSupportWrapper(model, 1000, do_evpi=True)
-    dsw.run()
-    # hist = dsw.get_hist()
-    # r_script = dsw.get_r_script()
-    # estimates = dsw.get_estimates()
-    evpi = dsw.get_evpi()
-    dsw.clean()
-
-    return {
-        # "hist": hist,
-        # "r_script": r_script,
-        # "estimates": estimates,
-        "evpi": evpi
-    }
+def evpi(model: BaklavaModel, user: User = Depends(current_active_user)) -> DecisionSupportEVPIResult:
+    return run_baklava_model(model, 1000, do_evpi=True)
 
 
 @app.post("/api/v1/decision_model/", response_model=schemas.DecisionModel)
@@ -120,18 +102,14 @@ async def create_item_for_user(
     db: Session = Depends(get_db),
     user: User = Depends(current_active_user),
 ):
-    return await crud.create_user_decision_model(
-        db=db, decision_model=decision_model, user=user
-    )
+    return await crud.create_user_decision_model(db=db, decision_model=decision_model, user=user)
 
 
 @app.get(
     "/api/v1/decision_models/",
     response_model=List[schemas.DecisionModel],
 )
-async def read_decision_models(
-    db: Session = Depends(get_db), user: User = Depends(current_active_user)
-):
+async def read_decision_models(db: Session = Depends(get_db), user: User = Depends(current_active_user)):
     return await crud.get_user_decision_models(db, user)
 
 

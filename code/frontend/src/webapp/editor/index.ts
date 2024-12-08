@@ -40,6 +40,8 @@ export interface BaklavaState {
 
 export const initializeBaklvaState = (): BaklavaState => {
   const viewPlugin = useBaklava();
+  viewPlugin.settings.nodes.resizable = true;
+  viewPlugin.settings.nodes.maxWidth = 800;
   const editor = viewPlugin.editor;
   const types = new BaklavaInterfaceTypes(editor, { viewPlugin });
 

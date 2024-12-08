@@ -117,7 +117,7 @@
 <style lang="scss">
   .baklava-node-palette h1 {
     font-size: 1.1em;
-    margin-top: 2.5em;
+    margin-top: 2em;
     margin-bottom: 1em;
     font-weight: normal;
   }
@@ -127,7 +127,7 @@
   }
 
   .baklava-node.--palette {
-    margin: 1em 0;
+    margin: 0.5em 0;
   }
 
   .baklava-node.--palette .__title {
@@ -160,6 +160,20 @@
     }
   }
 
+  .baklava-node[data-node-type="Background"] {
+    background-color: rgba(120, 10, 10, 0.5);
+    box-shadow: none;
+    .__title,
+    .__content {
+      background-color: transparent;
+    }
+  }
+
+  .baklava-node[data-node-type="Background"]:not(.--palette) {
+    height: 500px;
+    z-index: 0 !important;
+  }
+
   .baklava-node[data-node-type="Estimate"],
   .baklava-node[data-node-type="Result"] {
     .__title {
@@ -168,7 +182,7 @@
   }
 
   .baklava-node[data-node-type="ToSeries"],
-  .baklava-node[data-node-type="NPV"],
+  .baklava-node[data-node-type="NetPresentValue"],
   .baklava-node[data-node-type="ValueVarier"] {
     .__title {
       background-color: #76337f;

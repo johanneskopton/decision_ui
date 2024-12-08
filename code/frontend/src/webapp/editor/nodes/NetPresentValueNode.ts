@@ -2,7 +2,7 @@ import { defineNode, NodeInterface, NumberInterface, setType } from "baklavajs";
 import { deterministicType, probabilisticSeriesType, probabilisticType } from "../common/types";
 
 export const NPVNode = defineNode({
-  type: "NPV",
+  type: "NetPresentValue",
 
   title: "Net Present Value",
 

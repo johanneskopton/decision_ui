@@ -5,8 +5,8 @@ import numpy as np
 import jinja2
 import subprocess
 
-from decision_backend.translation.translator import Translator
-from decision_backend.translation.model import RawModel
+from decision_backend.baklava.run import Translator
+from decision_backend.baklava.common.schema import BaklavaModel
 
 test_dir = os.path.dirname(__file__)
 test_data_dir = os.path.join(test_dir, "data")
@@ -16,12 +16,11 @@ templateEnv = jinja2.Environment(loader=templateLoader)
 
 model_path = "model.json"
 model_dict = json.load(open(os.path.join(test_data_dir, model_path), "r"))
-model = RawModel(**model_dict)
+model = BaklavaModel(**model_dict)
 
 model_path_clean = "model_clean.json"
-model_dict_clean = json.load(
-    open(os.path.join(test_data_dir, model_path_clean), "r"))
-model_clean = RawModel(**model_dict_clean)
+model_dict_clean = json.load(open(os.path.join(test_data_dir, model_path_clean), "r"))
+model_clean = BaklavaModel(**model_dict_clean)
 
 
 def test_create_translator():
@@ -40,7 +39,7 @@ def test_create_variable_name():
     name = Translator._create_variable_name("a a_")
     assert name == "a_a"
 
-    name = Translator._create_variable_name("a\"§$%&/()=")
+    name = Translator._create_variable_name('a"§$%&/()=')
     assert name == "a"
 
     name = Translator._create_variable_name("a", {"a"})
@@ -56,10 +55,8 @@ def test_extract_estimates():
         translator.extract_estimates()
         assert type(translator.estimates_df) == pd.DataFrame
         print(translator.estimates_df.loc[:, "upper"])
-        assert (translator.estimates_df.loc[:, "lower"] == [
-            30000, 1.8, 40, 0.2]).all()
-        assert (translator.estimates_df.loc[:, "upper"] == [
-            50000, 2.4, 50, 0.5]).all()
+        assert (translator.estimates_df.loc[:, "lower"] == [30000, 1.8, 40, 0.2]).all()
+        assert (translator.estimates_df.loc[:, "upper"] == [50000, 2.4, 50, 0.5]).all()
         assert np.isnan(translator.estimates_df.loc[0, "median"])
 
 
@@ -118,11 +115,11 @@ def test_write_script():
         r_script_target = r_script_template.render(
             estimates_path=translator.estimates_file.name,
             results_path=translator.results_file.name,
-            evpi_path=translator.evpi_file.name)
+            evpi_path=translator.evpi_file.name,
+        )
         r_script = open(translator.r_script_file.name, "r").read()
 
-        csv_target = open(os.path.join(
-            test_data_dir, "model.csv"), "r").read()
+        csv_target = open(os.path.join(test_data_dir, "model.csv"), "r").read()
         csv = open(translator.estimates_file.name, "r").read()
 
         translator.clean()
@@ -140,11 +137,11 @@ def test_write_script_evpi():
         r_script_target = r_script_template.render(
             estimates_path=translator.estimates_file.name,
             results_path=translator.results_file.name,
-            evpi_path=translator.evpi_file.name)
+            evpi_path=translator.evpi_file.name,
+        )
         r_script = open(translator.r_script_file.name, "r").read()
 
-        csv_target = open(os.path.join(
-            test_data_dir, "model.csv"), "r").read()
+        csv_target = open(os.path.join(test_data_dir, "model.csv"), "r").read()
         csv = open(translator.estimates_file.name, "r").read()
 
         translator.clean()
@@ -160,9 +157,10 @@ def test_execute_r_mc():
 
         subprocess.run(["Rscript", translator.r_script_file.name])
         df = pd.read_csv(translator.results_file.name)
-        target_columns = {'y.ProfitResult',
-                          'y.ProfitAltResult',
-                          }
+        target_columns = {
+            "y.ProfitResult",
+            "y.ProfitAltResult",
+        }
 
         translator.clean()
 

@@ -11,12 +11,8 @@ def main():
         add_help=False,
     )
 
-    parser.add_argument(
-        "-h", "--help", action="help", help="show this help message and exit"
-    )
-    parser.add_argument(
-        "-v", dest="verbose", action="store_true", help="print more log messages"
-    )
+    parser.add_argument("-h", "--help", action="help", help="show this help message and exit")
+    parser.add_argument("-v", dest="verbose", action="store_true", help="print more log messages")
     parser.add_argument(
         "--reload",
         dest="reload",
@@ -51,11 +47,7 @@ def main():
 
     args = parser.parse_args()
 
-    logging_level = logging.DEBUG if args.verbose else logging.INFO
-    uvicorn_level = "debug" if args.verbose else "info"
-    logging.basicConfig(
-        level=logging_level, format="%(asctime)s %(levelname)s:%(name)s:%(message)s"
-    )
+    os.environ["DSUI_LOG_LEVEL"] = logging.getLevelName(logging.DEBUG if args.verbose else logging.INFO)
 
     if args.store:
         os.environ["DSUI_DATABASE_PATH"] = args.store
@@ -65,7 +57,7 @@ def main():
         host=args.host,
         port=args.port,
         reload=args.reload,
-        log_level=uvicorn_level,
+        log_level="debug" if args.verbose else "info",
     )
 
 

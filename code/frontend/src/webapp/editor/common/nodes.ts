@@ -107,6 +107,16 @@ export const isNodePartOfSubgraph = (node: Node<any, any>) => {
   return node.graph?.template ? true : false;
 };
 
+const fixDynamicNodeUpdateInSubgraph = (node: Node<any, any>) => {
+  // fix error that dynamic nodes do not update in the editor inside subgraphs
+  if (node.graph) {
+    // make inputs, outputs and connections reactive
+    node.inputs = reactive(node.inputs);
+    node.outputs = reactive(node.outputs);
+    (node.graph as any)._connections = reactive((node.graph as any)._connections);
+  }
+};
+
 export interface IDynamicFlexibleNodeDefinition<I, O> extends IDynamicNodeDefinition<I, O> {
   onConnectionUpdate?: (inputs: I, outputs: O) => DynamicNodeUpdateResult;
 }
@@ -122,25 +132,17 @@ export const defineFlexibleDynamicNode = <I, O>(definition: IDynamicFlexibleNode
     onPlaced() {
       const node = this as any as Node<any, any>;
       registerUpdateForInteractiveConnectionChange(node);
-
-      // fix error that dynamic nodes do not update in the editor inside subgraphs
-      if (node.graph) {
-        // make inputs, outputs and connections reactive
-        node.inputs = reactive(node.inputs);
-        node.outputs = reactive(node.outputs);
-        (node.graph as any)._connections = reactive((node.graph as any)._connections);
-      }
-
+      fixDynamicNodeUpdateInSubgraph(node);
       definition.onPlaced?.call(this);
     },
 
     onUpdate(inputs, outputs) {
       const node = this as any as Node<any, any>;
       if (isNodeInteractiveConnectionUpdate(node) && definition.onConnectionUpdate) {
-        console.error(`[node title=${node.title} id=${node.id}] connection update`);
+        // console.error(`[node title=${node.title} id=${node.id}] connection update`);
         return definition.onConnectionUpdate.call(this, inputs, outputs);
       } else {
-        console.error(`[node title=${node.title} id=${node.id}] static update`);
+        // console.error(`[node title=${node.title} id=${node.id}] static update`);
         return definition.onUpdate.call(this, inputs, outputs);
       }
     },

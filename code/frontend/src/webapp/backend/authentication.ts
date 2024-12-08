@@ -1,5 +1,5 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { BACKEND_BASE_URL } from "./common";
+import { BACKEND_BASE_URL, REQUEST_TIMEOUT } from "./common";
 
 export const doLoginRequest = ({
   email,
@@ -21,7 +21,8 @@ export const doLoginRequest = ({
     .post(BACKEND_BASE_URL + "/api/auth/jwt/login", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
-      }
+      },
+      timeout: REQUEST_TIMEOUT
     })
     .then((response: AxiosResponse) => {
       if (response.status === 200) {
