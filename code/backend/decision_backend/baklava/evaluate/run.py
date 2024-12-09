@@ -65,7 +65,8 @@ def _build_r_runtime_input(
     model_function = translate_model(model_parser, variables)
     estimates_df = build_estimates_df(model_parser.get_main_graph(), variables)
 
-    first_result_variable = variables.get_variable_name_for_node(model_parser.get_main_graph().get_first_result_node())
+    first_result_node = model_parser.get_main_graph().get_first_result_node()
+    first_result_variable = variables.get_variable_name_for_node(first_result_node) if first_result_node else None
     n_prob_estimates = (estimates_df["distribution"] != "const").sum(axis=0)
     filepaths = prepare_filepaths(files)
 

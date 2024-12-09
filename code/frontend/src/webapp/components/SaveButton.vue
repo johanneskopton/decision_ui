@@ -16,7 +16,6 @@
   const modelStore = useModelStore();
 
   const receiveResults = (response: AxiosResponse) => {
-    console.log(response);
     if (response.status === 200) {
       modelStore.lastSaved = Date.now();
       modelStore.unsaved = false;

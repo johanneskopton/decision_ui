@@ -122,5 +122,5 @@ def translate_model(model: ModelParser, variables: VariableManager) -> Tuple[str
     result += "\treturn(list({}))\n".format(", ".join([f"{n}={n}" for n in state.get_output_variables()]))
     result += "}\n"
 
-    logger.info("Translated model function:\n\n" + result)
+    logger.debug("translated model function:\n\n" + result)
     return result

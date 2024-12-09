@@ -6,7 +6,7 @@
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
 
-  import { doRunModel } from "@/backend/models";
+  import { doRunModel } from "../backend/models";
 
   const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
 
@@ -15,11 +15,18 @@
 
   const loading = ref<boolean>(false);
   const network_error = ref<boolean>(false);
-  const server_error = ref<boolean>(false);
+  const unknown_error = ref<boolean>(false);
+  const execution_error = ref<boolean>(false);
+  const execution_error_msg = ref<string>("");
   const success = ref<boolean>();
   const unauthorized = ref<boolean>(false);
 
   const callBackend = () => {
+    if (!userStore.isLoggedIn) {
+      unauthorized.value = true;
+      return;
+    }
+
     loading.value = true;
     const model = clean_model_json(modelStore.baklava.editor.save());
 
@@ -36,13 +43,14 @@
         loading.value = false;
         network_error.value = true;
       },
-      onServerError: () => {
+      onUnknownError: () => {
         loading.value = false;
-        server_error.value = true;
+        unknown_error.value = true;
       },
-      onUnauthorized: () => {
+      onExecutionError: msg => {
         loading.value = false;
-        unauthorized.value = true;
+        execution_error_msg.value = msg;
+        execution_error.value = true;
       }
     });
   };
@@ -85,10 +93,18 @@
     </template>
   </v-snackbar>
 
-  <v-snackbar v-model="server_error" :timeout="2000" color="error">
-    Error while executing model!
+  <v-snackbar v-model="execution_error" :timeout="2000" color="error">
+    Error while executing model: <br />
+    {{ execution_error_msg }}
     <template #actions>
-      <v-btn color="white" variant="text" @click="success = false"> Close </v-btn>
+      <v-btn color="white" variant="text" @click="execution_error = false"> Close </v-btn>
+    </template>
+  </v-snackbar>
+
+  <v-snackbar v-model="unknown_error" :timeout="2000" color="error">
+    Unknown server error!
+    <template #actions>
+      <v-btn color="white" variant="text" @click="unknown_error = false"> Close </v-btn>
     </template>
   </v-snackbar>
 

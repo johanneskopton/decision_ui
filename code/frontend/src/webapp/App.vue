@@ -1,5 +1,10 @@
+<script setup lang="ts">
+  import LoginRefresh from "./components/LoginRefresh.vue";
+</script>
+
 <template>
   <v-app>
+    <LoginRefresh />
     <router-view />
   </v-app>
 </template>

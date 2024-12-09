@@ -53,11 +53,12 @@ def main():
         os.environ["DSUI_DATABASE_PATH"] = args.store
 
     uvicorn.run(
-        "decision_backend.main:app",
+        "decision_backend.main:create_app",
         host=args.host,
         port=args.port,
         reload=args.reload,
         log_level="debug" if args.verbose else "info",
+        factory=True,
     )
 
 

@@ -10,6 +10,13 @@ export interface ModelData {
   owner_id: string;
 }
 
+interface ExecutionError {
+  r_script: string;
+  estimates: string;
+  stdout: string;
+  stderr: string;
+}
+
 export const doQueryModels = ({
   token,
   onSuccess,
@@ -65,17 +72,17 @@ export const doRunModel = async ({
   model,
   getEvpi,
   onSuccess,
-  onUnauthorized,
   onNetworkError,
-  onServerError
+  onExecutionError,
+  onUnknownError
 }: {
   token: string;
   model: any;
   getEvpi: boolean;
   onSuccess: (results: DecisionSupportResult) => void;
-  onUnauthorized: () => void;
   onNetworkError: () => void;
-  onServerError: () => void;
+  onExecutionError: (msg: string) => void;
+  onUnknownError: () => void;
 }) => {
   const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
   axios
@@ -89,13 +96,16 @@ export const doRunModel = async ({
       if (error.code === "ERR_NETWORK") {
         onNetworkError();
       } else if (error.response?.status == 401) {
-        onUnauthorized();
+        // should be picked up by interceptor
       } else if (error.response?.status === 422) {
         // unprocessable content
-        onServerError();
+        onUnknownError();
+      } else if (error.response?.status === 500) {
+        const executionError = error.response?.data as ExecutionError;
+        onExecutionError(executionError.stderr);
       } else {
         // unknown error
-        onServerError();
+        onUnknownError();
       }
     });
 };
