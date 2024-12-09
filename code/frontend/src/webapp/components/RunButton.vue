@@ -21,7 +21,7 @@
   const success = ref<boolean>();
   const unauthorized = ref<boolean>(false);
 
-  const callBackend = () => {
+  const callBackend = async () => {
     if (!userStore.isLoggedIn) {
       unauthorized.value = true;
       return;
@@ -30,7 +30,7 @@
     loading.value = true;
     const model = clean_model_json(modelStore.baklava.editor.save());
 
-    doRunModel({
+    await doRunModel({
       token: userStore.login.token,
       model,
       getEvpi,

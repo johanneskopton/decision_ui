@@ -7,7 +7,7 @@
   import { useUserStore } from "../state/user";
   import { useModelStore } from "../state/model";
 
-  import { BACKEND_BASE_URL, AUTHORIZATION_HEADER } from "../backend/common";
+  import { getBackendBaseURL, AUTHORIZATION_HEADER } from "../backend/common";
 
   const nameDialog = ref<boolean>(false);
   const modelName = ref<string>("");
@@ -26,7 +26,7 @@
     console.error(response);
   };
 
-  const saveGraphUser = () => {
+  const saveGraphUser = async () => {
     if (!modelName.value) return;
     nameDialog.value = false;
     let model = modelStore.baklava.editor.save();
@@ -37,7 +37,7 @@
       saved: Date.now()
     };
     axios
-      .post(BACKEND_BASE_URL + "/api/v1/decision_model/", bodyContent, {
+      .post((await getBackendBaseURL()) + "/api/v1/decision_model/", bodyContent, {
         headers: {
           [AUTHORIZATION_HEADER]: `Bearer ${userStore.login.token}`
         }

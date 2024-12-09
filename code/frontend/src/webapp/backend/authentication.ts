@@ -1,7 +1,7 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { AUTHORIZATION_HEADER, BACKEND_BASE_URL, REQUEST_TIMEOUT } from "./common";
+import { AUTHORIZATION_HEADER, getBackendBaseURL, REQUEST_TIMEOUT } from "./common";
 
-export const doLoginRequest = ({
+export const doLoginRequest = async ({
   email,
   password,
   onSuccess,
@@ -18,7 +18,7 @@ export const doLoginRequest = ({
   formData.set("username", email);
   formData.set("password", password);
   axios
-    .post(BACKEND_BASE_URL + "/api/auth/jwt/login", formData, {
+    .post((await getBackendBaseURL()) + "/api/auth/jwt/login", formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       },
@@ -45,7 +45,7 @@ export const doLoginRequest = ({
     });
 };
 
-export const doRefreshRequest = ({
+export const doRefreshRequest = async ({
   token,
   onSuccess,
   onNetworkError,
@@ -57,7 +57,7 @@ export const doRefreshRequest = ({
   onWrongCredentials: () => void;
 }) => {
   axios
-    .post(BACKEND_BASE_URL + "/api/auth/jwt/refresh", null, {
+    .post((await getBackendBaseURL()) + "/api/auth/jwt/refresh", null, {
       headers: {
         [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }

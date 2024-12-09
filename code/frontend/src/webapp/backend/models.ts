@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
-import { AUTHORIZATION_HEADER, BACKEND_BASE_URL } from "./common";
-import type { DecisionSupportResult } from "@/state/model";
+import { AUTHORIZATION_HEADER, getBackendBaseURL } from "./common";
+import type { DecisionSupportResult } from "../state/model";
 
 export interface ModelData {
   id: string;
@@ -17,7 +17,7 @@ interface ExecutionError {
   stderr: string;
 }
 
-export const doQueryModels = ({
+export const doQueryModels = async ({
   token,
   onSuccess,
   onError
@@ -27,7 +27,7 @@ export const doQueryModels = ({
   onError: () => void;
 }) => {
   axios
-    .get(BACKEND_BASE_URL + "/api/v1/decision_models/", {
+    .get((await getBackendBaseURL()) + "/api/v1/decision_models/", {
       headers: {
         [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }
@@ -41,7 +41,7 @@ export const doQueryModels = ({
     });
 };
 
-export const doDeleteModel = ({
+export const doDeleteModel = async ({
   token,
   modelId,
   onSuccess,
@@ -53,7 +53,7 @@ export const doDeleteModel = ({
   onError: () => void;
 }) => {
   axios
-    .delete(BACKEND_BASE_URL + "/api/v1/decision_models/" + modelId, {
+    .delete((await getBackendBaseURL()) + "/api/v1/decision_models/" + modelId, {
       headers: {
         [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }
@@ -86,7 +86,7 @@ export const doRunModel = async ({
 }) => {
   const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
   axios
-    .post(BACKEND_BASE_URL + route, model, {
+    .post((await getBackendBaseURL()) + route, model, {
       headers: {
         [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }

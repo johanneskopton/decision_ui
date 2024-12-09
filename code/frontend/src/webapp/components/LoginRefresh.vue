@@ -15,10 +15,10 @@
     router.push("/login");
   });
 
-  const refreshLoginToken = () => {
+  const refreshLoginToken = async () => {
     const userStore = useUserStore();
     if (userStore.login.token) {
-      doRefreshRequest({
+      await doRefreshRequest({
         token: userStore.login.token,
         onNetworkError: () => {
           // do nothing? and try again a bit later

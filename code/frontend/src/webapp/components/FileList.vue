@@ -20,8 +20,8 @@
     return String(JSON.parse(content).graph.nodes.length) + " nodes";
   };
 
-  const queryModels = () => {
-    doQueryModels({
+  const queryModels = async () => {
+    await doQueryModels({
       token: userStore.login.token,
       onSuccess: (m: ModelData[]) => {
         models.value = m;
@@ -42,9 +42,9 @@
   const deleteModel = (model: ModelData) => {
     confirmDelete.value
       .open("Delete", "Are you sure you want to delete <code>" + model.name + "</code>?", { color: "warning" })
-      .then((confirm: boolean) => {
+      .then(async (confirm: boolean) => {
         if (confirm) {
-          doDeleteModel({
+          await doDeleteModel({
             token: userStore.login.token,
             modelId: model.id,
             onSuccess: () => {

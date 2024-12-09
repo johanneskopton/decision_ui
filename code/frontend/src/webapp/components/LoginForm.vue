@@ -22,8 +22,8 @@
 
   watch([email, password], () => (formErrorMessage.value = ""));
 
-  const login = () => {
-    doLoginRequest({
+  const login = async () => {
+    await doLoginRequest({
       email: email.value,
       password: password.value,
       onSuccess: (token: string) => {

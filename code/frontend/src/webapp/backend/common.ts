@@ -1,6 +1,8 @@
 export const AUTHORIZATION_HEADER = (import.meta.env.VITE_BACKEND_AUTH_HEADER || "Authorization").trim();
 
-const getBackendBaseURL = async () => {
+export const REQUEST_TIMEOUT = 2000;
+
+const _getBackendBaseURL = async (): Promise<string> => {
   if (window && (window as any).api && (window as any).api.getBackendBaseURL) {
     // webapp was started with electron
     return await (window as any).api.getBackendBaseURL();
@@ -10,6 +12,11 @@ const getBackendBaseURL = async () => {
   }
 };
 
-export const BACKEND_BASE_URL = await getBackendBaseURL();
+let _cachedBackendBaseUrl: string | null = null;
 
-export const REQUEST_TIMEOUT = 2000;
+export const getBackendBaseURL = async () => {
+  if (!_cachedBackendBaseUrl) {
+    _cachedBackendBaseUrl = await _getBackendBaseURL();
+  }
+  return _cachedBackendBaseUrl;
+};
