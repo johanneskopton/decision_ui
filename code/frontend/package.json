@@ -1,6 +1,6 @@
 {
   "name": "decision-support-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Institute of Crop Science and Resource Conservation, University of Bonn",
   "description": "A tool to support decision making using Monte Carlo simulations",
   "private": true,

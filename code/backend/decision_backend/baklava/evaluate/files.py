@@ -89,6 +89,11 @@ def open_files_context():
 
     yield FilesContext(estimates_file, r_script_file, results_file, evpi_file)
 
+    estimates_file.close()
+    r_script_file.close()
+    results_file.close()
+    evpi_file.close()
+
     os.unlink(estimates_file.name)
     os.unlink(r_script_file.name)
     os.unlink(results_file.name)

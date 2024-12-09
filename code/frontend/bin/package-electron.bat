@@ -4,9 +4,9 @@ setlocal
 REM change to frontend directory
 CD /D "%~dp0/../"
 
-REM copy python dir
+REM copy python backend
 if not exist resources\decision-support-ui-backend (
-    xcopy /Y /e  ..\backend\dist\decision-support-ui-backend resources\decision-support-ui-backend
+    echo d | xcopy /y /e  ..\backend\dist\decision-support-ui-backend resources\decision-support-ui-backend
 )
 
 REM delete database
