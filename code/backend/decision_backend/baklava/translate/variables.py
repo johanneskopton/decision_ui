@@ -6,11 +6,12 @@ import logging
 from typing import Iterator, Mapping, Set
 
 from decision_backend.baklava.common.constants import (
+    RESULT_NODE_TYPE,
     SUBGRAPH_INPUT_NODE_TYPE,
     SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX,
     SUBGRAPH_OUTPUT_NODE_TYPE,
 )
-from decision_backend.baklava.model.parser import GraphParser
+from decision_backend.baklava.model.parser import GraphParser, ModelParser
 from decision_backend.baklava.common.schema import BakalvaNodeInterface, BaklavaGraph, BaklavaNode
 
 logger = logging.getLogger(__name__)
@@ -31,87 +32,91 @@ def _generate_variable_name(title: str, existing_names: Set[str]) -> str:
     return unique_name
 
 
-def _find_subgraph_interface_name(node: BaklavaNode, output_name: str):
-    # TODO: read from graph template instead of graphState
-    for output in node.graphState.outputs:
-        if output.id == output_name:
-            return output.name
-    raise AttributeError(f"subgraph output interface with name '{output_name}' not found in outputs")
+class VariableManager:
+    """Maps Baklava subgraphs, nodes and interfaces to R variables."""
 
+    def __init__(self, model: ModelParser):
+        self.node_id_to_name: Mapping[str, str] = {}
+        self.intf_id_to_name: Mapping[str, str] = {}
+        self.graph_id_to_name: Mapping[str, str] = {}
+        self.names_per_graph: Mapping[str, Set[str]] = {}
+        self._register_all(model)
 
-class VariableGenerator:
-    """Maps Baklava nodes to R variables."""
-
-    def __init__(
-        self,
-        node_id_to_name: Mapping[str, str] = None,
-        intf_id_to_name: Mapping[str, str] = None,
-        graph_id_to_name: Mapping[str, str] = None,
-        names: Set[str] = None,
-    ):
-        self.node_id_to_name: Mapping[str, str] = {} if node_id_to_name is None else node_id_to_name
-        self.intf_id_to_name: Mapping[str, str] = {} if intf_id_to_name is None else intf_id_to_name
-        self.graph_id_to_name: Mapping[str, str] = {} if graph_id_to_name is None else graph_id_to_name
-        self.names: Set[str] = set() if names is None else names
-
-    def _make_unique(self, name):
-        logger.debug(f"current names are {self.names}")
-        generated_name = _generate_variable_name(name, self.names)
-        self.names.add(generated_name)
+    def _make_unique(self, graph: GraphParser, name: str):
+        # logger.debug(f"current names in graph are {self.names_per_graph[graph_id]}")
+        generated_name = _generate_variable_name(name, self.names_per_graph[graph.get_id()])
+        self.names_per_graph[graph.get_id()].add(generated_name)
         return generated_name
 
-    def _register_graph(self, graph: GraphParser, name: str):
+    def _register_graph_variable(self, graph: GraphParser, name: str):
         logger.debug(f"register function '{name}' for subgraph with id '{graph.get_id()}'")
         self.graph_id_to_name[graph.get_id()] = name
 
-    def _register_node(self, node: BaklavaNode, name: str):
+    def _register_node_variable(self, node: BaklavaNode, name: str):
         logger.debug(f"register variable '{name}' for node with id '{node.id}'")
         self.node_id_to_name[node.id] = name
 
-    def _register_interface(self, intf: BakalvaNodeInterface, name: str):
+    def _register_interface_variable(self, intf: BakalvaNodeInterface, name: str):
         logger.debug(f"register variable '{name}' for node interface with id '{intf.id}'")
         self.intf_id_to_name[intf.id] = name
 
-    def register_subgraphs(self, graphs: Iterator[GraphParser]):
-        print("register")
-        for graph in graphs:
-            if not graph.get_name():
-                raise AttributeError(f"graph with id '{graph.get_id()}' does not have a name")
-            self._register_graph(graph, self._make_unique(graph.get_name()))
-
-    def register_nodes(self, nodes: Iterator[BaklavaNode], output_node_type: str):
-        for node in nodes:
-            # register input value as name for subgraph output node
+    def _register_subgraph(self, graph: GraphParser, output_node_type: str):
+        for node in graph.iterate_nodes():
+            # register input value as name for subgraph input/output node
             if node.type == SUBGRAPH_OUTPUT_NODE_TYPE:
-                self._register_node(node, self._make_unique(node.inputs["name"].value))
+                self._register_node_variable(node, self._make_unique(graph, node.inputs["name"].value))
                 continue
 
             # register name for result nodes
             if node.type == output_node_type:
-                self._register_node(node, self._make_unique(node.title))
+                self._register_node_variable(node, self._make_unique(graph, node.title))
                 continue
 
+            # register name for subgraph instance node
             if node.type.startswith(SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX):
-                self._register_node(node, self._make_unique(node.title))
+                self._register_node_variable(node, self._make_unique(graph, node.title + "_List"))
 
-            # register names for regular nodes interfaces
+            # register names for node interfaces
             for intf_name, intf in node.outputs.items():
 
                 # subgraph instances node interfaces
                 if node.type.startswith(SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX):
                     if intf_name == "_calculationResults":
                         continue
-                    output_name = _find_subgraph_interface_name(node, intf_name)
-                    # TODO: find name of output node in subgraph
-                    self._register_interface(intf, f"{self.get_variable_name_for_node(node)}${output_name}")
+                    # use output variable name inside subgraph
+                    output_name = self.get_variable_name_for_node(
+                        graph.find_subgraph_input_output_node_for_interface(intf_name)
+                    )
+                    self._register_interface_variable(intf, f"{self.get_variable_name_for_node(node)}${output_name}")
                     continue
 
                 # subgraph input node interfaces
                 if node.type == SUBGRAPH_INPUT_NODE_TYPE:
-                    self._register_interface(intf, self._make_unique(node.inputs["name"].value))
+                    self._register_interface_variable(intf, self._make_unique(graph, node.inputs["name"].value))
                     continue
 
-                self._register_interface(intf, self._make_unique(f"{node.title}_{intf_name}"))
+                # regular node interface
+                self._register_interface_variable(intf, self._make_unique(graph, f"{node.title}_{intf_name}"))
+
+    def _register_all(self, model: ModelParser):
+        # initialize empty main graph names (TODO: add R reserved words)
+        main_graph_id = model.get_main_graph().get_id()
+        self.names_per_graph[main_graph_id] = set()
+
+        # register function names in main graph
+        for subgraph in model.iterate_subgraphs():
+            if not subgraph.get_name():
+                raise AttributeError(f"subgraph with id '{subgraph.get_id()}' does not have a name")
+            self._register_graph_variable(subgraph, self._make_unique(model.get_main_graph(), subgraph.get_name()))
+
+        # register nodes inside each subgraph
+        for subgraph in model.iterate_subgraphs():
+            # copy global names to subgraph
+            self.names_per_graph[subgraph.get_id()] = set(self.names_per_graph[main_graph_id])
+            self._register_subgraph(subgraph, SUBGRAPH_OUTPUT_NODE_TYPE)
+
+        # main graph
+        self._register_subgraph(model.get_main_graph(), RESULT_NODE_TYPE)
 
     def get_function_name_for_subgraph(self, graph: GraphParser) -> str:
         if graph.get_id() in self.graph_id_to_name:
@@ -128,18 +133,3 @@ class VariableGenerator:
         if node.id in self.node_id_to_name:
             return self.node_id_to_name[node.id]
         raise KeyError(f"node with id '{node.id}' does not have a variable name assigned to it")
-
-    def clone(self):
-        return VariableGenerator(
-            dict(self.node_id_to_name), dict(self.intf_id_to_name), dict(self.graph_id_to_name), set(self.names)
-        )
-
-    """
-    def getNodeForVariableName(self, name: str):
-        if name in self.name_to_node_id:
-            node_id = self.name_to_node_id[name]
-            if node_id in self.node_id_to_node:
-                return self.node_id_to_node[self.name_to_node_id[name]]
-            raise KeyError(f"variable name '{name}' is assigned to node with id '{node_id}' but node is not available")
-        raise KeyError(f"unknown variable name '{name}'")
-    """

@@ -25,7 +25,7 @@ from decision_backend.baklava.common.schema import (
     DecisionSupportHistogramResult,
 )
 from decision_backend.baklava.common.constants import RESULT_NODE_TYPE
-from decision_backend.baklava.translate.variables import VariableGenerator
+from decision_backend.baklava.translate.variables import VariableManager
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class ExecutionError(Exception):
         self.stderr = stderr
 
 
-def _get_first_result_variable(graph: BaklavaGraph, variables: VariableGenerator):
+def _get_first_result_variable(graph: BaklavaGraph, variables: VariableManager):
     for node in graph.nodes:
         if node.type == RESULT_NODE_TYPE:
             return variables.get_variable_name_for_node(node)
