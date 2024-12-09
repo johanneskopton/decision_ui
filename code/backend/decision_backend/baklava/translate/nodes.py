@@ -2,7 +2,7 @@ import string
 from typing import Any, List, Mapping
 import numpy as np
 
-from decision_backend.baklava.common.constants import SUBGRAPH_OUTPUT_NODE_TYPE
+from decision_backend.baklava.common.constants import SUBGRAPH_OUTPUT_NODE_TYPE, TYPE_CONSTRAINT_NODE_TYPE
 from decision_backend.baklava.model.parser import (
     GraphParser,
 )
@@ -185,6 +185,6 @@ NODE_TYPE_TO_TRANSLATOR_MAP_IMPLEMENTATIONS: Mapping[str, NodeTranslator] = {
     "ChanceEvent": ChanceEventNodeTranslator(),
     "ToSeries": ToSeriesNodeTranslator(),
     "NetPresentValue": NetPresentValueNodeTranslator(),
-    "TypeConstraint": PassthroughNodeTranslator(),
+    TYPE_CONSTRAINT_NODE_TYPE: PassthroughNodeTranslator(),
     SUBGRAPH_OUTPUT_NODE_TYPE: SubgraphOutputNodeTranslator(),
 }

@@ -10,6 +10,7 @@ from decision_backend.baklava.common.constants import (
     SUBGRAPH_INPUT_NODE_TYPE,
     SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX,
     SUBGRAPH_OUTPUT_NODE_TYPE,
+    TYPE_CONSTRAINT_NODE_TYPE,
 )
 from decision_backend.baklava.model.parser import GraphParser, ModelParser
 from decision_backend.baklava.common.schema import BakalvaNodeInterface, BaklavaGraph, BaklavaNode
@@ -98,15 +99,15 @@ class VariableManager:
                 # regular node interface
                 self._register_interface_variable(intf, self._make_unique(graph, f"{node.title}_{intf_name}"))
 
-        # fix names of type constraints
+        # let variables pass through type constraint node
         for node in graph.iterate_nodes():
-            if node.type == "TypeConstraint":
+            if node.type == TYPE_CONSTRAINT_NODE_TYPE:
                 output_intf = node.outputs.get("value", node.outputs.get("sample", node.outputs.get("series")))
                 input_intf = node.inputs.get("value", node.inputs.get("sample", node.inputs.get("series")))
                 connection = graph.get_connection_from_input_interface(input_intf)
                 source_node_output_intf = graph.get_source_node_interface_from_connection(connection)
-                value = self.get_variable_name_for_node_interface(source_node_output_intf)
-                self._register_interface_variable(output_intf, value)
+                input_variable = self.get_variable_name_for_node_interface(source_node_output_intf)
+                self._register_interface_variable(output_intf, input_variable)
 
     def _register_all(self, model: ModelParser):
         # initialize empty main graph names (TODO: add R reserved words)
