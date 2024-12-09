@@ -40,7 +40,6 @@ class GraphParser:
 
     def find_subgraph_for_node(self, node: BaklavaNode) -> BaklavaGraph:
         """Return graph parser for subgraph referenced by subgraph instance node."""
-        print(node.type)
         target_graph_id = str(node.type).replace(SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX + "-", "")
         for graph in self.model.graphTemplates:
             if graph.id == target_graph_id:

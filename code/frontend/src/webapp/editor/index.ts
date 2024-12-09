@@ -26,6 +26,7 @@ import { ComparisonNode } from "./nodes/ComparisonNode";
 
 import { useModelStore } from "../state/model";
 import { TypeConstraintNode } from "./nodes/TypeConstraintNode";
+import { ChanceEventNode } from "./nodes/ChanceEventNode";
 
 export interface GlobalCalculationData {
   mcRuns: number;
@@ -68,6 +69,7 @@ export const initializeBaklvaState = (): BaklavaState => {
   editor.registerNodeType(RoundNode, operationsCategory);
   editor.registerNodeType(SumNode, operationsCategory);
   editor.registerNodeType(ComparisonNode, operationsCategory);
+  editor.registerNodeType(ChanceEventNode, operationsCategory);
 
   // register display nodes
   editor.registerNodeType(DebugNode, displayCategory);

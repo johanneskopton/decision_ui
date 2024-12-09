@@ -44,7 +44,6 @@ def write_estimates_csv_file(estimates_df: pd.DataFrame, file: tempfile.NamedTem
         file.flush()
     finally:
         file.close()
-    return file
 
 
 def write_r_script_file(r_script: str, file: tempfile.NamedTemporaryFile):
@@ -53,7 +52,6 @@ def write_r_script_file(r_script: str, file: tempfile.NamedTemporaryFile):
         file.flush()
     finally:
         file.close()
-    return file
 
 
 def read_results_file(result_fp: str):

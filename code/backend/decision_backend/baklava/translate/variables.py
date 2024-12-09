@@ -75,7 +75,7 @@ class VariableManager:
 
             # register name for subgraph instance node
             if node.type.startswith(SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX):
-                self._register_node_variable(node, self._make_unique(graph, node.title + "_List"))
+                self._register_node_variable(node, self._make_unique(graph, node.title + "_list"))
 
             # register names for node interfaces
             for intf_name, intf in node.outputs.items():
@@ -97,7 +97,10 @@ class VariableManager:
                     continue
 
                 # regular node interface
-                self._register_interface_variable(intf, self._make_unique(graph, f"{node.title}_{intf_name}"))
+                if len(node.outputs) == 1:
+                    self._register_interface_variable(intf, self._make_unique(graph, f"{node.title}"))
+                else:
+                    self._register_interface_variable(intf, self._make_unique(graph, f"{node.title}_{intf_name}"))
 
         # let variables pass through type constraint node
         for node in graph.iterate_nodes():
