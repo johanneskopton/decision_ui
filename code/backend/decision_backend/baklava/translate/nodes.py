@@ -69,6 +69,12 @@ class SubgraphOutputNodeTranslator(NodeTranslator):
         return [f"{variables.get_variable_name_for_node(node)} <- {input_values["placeholder"]}"]
 
 
+class PassthroughNodeTranslator(NodeTranslator):
+
+    def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
+        return []
+
+
 class OneOutputNodeTranslator(NodeTranslator):
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
@@ -86,15 +92,6 @@ class ResultNodeTranslator(OneOutputNodeTranslator):
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         values = _prepare_node_input_values(graph, node, variables)
         return [f"{variables.get_variable_name_for_node(node)} <- {values["value"]}"]
-
-
-class TypeConstraintNodeTranslator(OneOutputNodeTranslator):
-
-    def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
-        values = _prepare_node_input_values(graph, node, variables)
-        variable_name = variables.get_variable_name_for_node_interface(next(iter(node.outputs.values())))
-        input_value = values.get("value", values.get("sample", values.get("series")))
-        return [f"{variable_name} <- {input_value}"]
 
 
 class MathNodeTranslator(OneOutputNodeTranslator):
@@ -188,6 +185,6 @@ NODE_TYPE_TO_TRANSLATOR_MAP_IMPLEMENTATIONS: Mapping[str, NodeTranslator] = {
     "ChanceEvent": ChanceEventNodeTranslator(),
     "ToSeries": ToSeriesNodeTranslator(),
     "NetPresentValue": NetPresentValueNodeTranslator(),
-    "TypeConstraint": TypeConstraintNodeTranslator(),
+    "TypeConstraint": PassthroughNodeTranslator(),
     SUBGRAPH_OUTPUT_NODE_TYPE: SubgraphOutputNodeTranslator(),
 }

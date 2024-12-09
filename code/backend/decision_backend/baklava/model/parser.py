@@ -2,7 +2,7 @@
 
 from typing import Generator, List, Mapping, Set
 
-from decision_backend.baklava.common.constants import SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX
+from decision_backend.baklava.common.constants import RESULT_NODE_TYPE, SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX
 from decision_backend.baklava.common.schema import (
     BakalvaNodeInterface,
     BaklavaConnection,
@@ -31,6 +31,12 @@ class GraphParser:
     def iterate_nodes(self):
         for node in self.graph.nodes:
             yield node
+
+    def get_first_result_node(self):
+        for node in self.graph.nodes:
+            if node.type == RESULT_NODE_TYPE:
+                return node
+        return None
 
     def find_subgraph_for_node(self, node: BaklavaNode) -> BaklavaGraph:
         """Return graph parser for subgraph referenced by subgraph instance node."""

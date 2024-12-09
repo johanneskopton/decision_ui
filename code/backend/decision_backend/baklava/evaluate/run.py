@@ -20,11 +20,9 @@ from decision_backend.baklava.evaluate.files import (
 from decision_backend.baklava.translate.model import translate_model
 from decision_backend.baklava.common.schema import (
     BaklavaModel,
-    BaklavaGraph,
     DecisionSupportEVPIResult,
     DecisionSupportHistogramResult,
 )
-from decision_backend.baklava.common.constants import RESULT_NODE_TYPE
 from decision_backend.baklava.translate.variables import VariableManager
 
 logger = logging.getLogger(__name__)
@@ -47,14 +45,6 @@ class ExecutionError(Exception):
         self.stderr = stderr
 
 
-def _get_first_result_variable(graph: BaklavaGraph, variables: VariableManager):
-    for node in graph.nodes:
-        if node.type == RESULT_NODE_TYPE:
-            return variables.get_variable_name_for_node(node)
-
-    return None
-
-
 def _load_jinja_template():
     template_dir = os.path.join(os.path.dirname(__file__), "../templates")
     templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
@@ -69,15 +59,17 @@ def _build_r_runtime_input(
     do_evpi: bool,
 ) -> RuntimeInput:
     """Generates the R script from the the model function and a jinja2 template."""
-    model_function, variables = translate_model(ModelParser(model))
-    estimates_df = build_estimates_df(model.graph, variables)
-    first_result_variable = _get_first_result_variable(model.graph, variables)
+    model_parser = ModelParser(model)
+    variables = VariableManager(model_parser)
 
-    jinja_template = _load_jinja_template()
+    model_function = translate_model(model_parser, variables)
+    estimates_df = build_estimates_df(model_parser.get_main_graph(), variables)
+
+    first_result_variable = variables.get_variable_name_for_node(model_parser.get_main_graph().get_first_result_node())
+    n_prob_estimates = (estimates_df["distribution"] != "const").sum(axis=0)
     filepaths = prepare_filepaths(files)
 
-    n_prob_estimates = (estimates_df["distribution"] != "constant").sum(axis=0)
-
+    jinja_template = _load_jinja_template()
     r_script = jinja_template.render(
         estimates_path=filepaths.estimates_fp,
         model_function=model_function,

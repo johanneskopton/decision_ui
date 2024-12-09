@@ -69,18 +69,23 @@ class BaklavaNode(BaseModel):
     """The execution state of the subgraph instance referenced by this node"""
 
     graphInterfaceId: Optional[str] = None
-    """Not sure yet"""
+    """Only if this is a subgraph input/output node. Value matches interface name in a subgraph instance node."""
 
 
 class BaklavaGraphInputOutput(BaseModel):
+    """Subgraph input output references."""
 
     id: str
+    """Id that is used as interface name in subgraph instance nodes."""
 
     name: str
+    """Name of the input/output as provided by the user in the name field."""
 
     nodeId: str
+    """The id of the input/output node of the subgraph."""
 
     nodeInterfaceId: str
+    """Matches templateId of the input/output node interface."""
 
 
 class BaklavaGraph(BaseModel):

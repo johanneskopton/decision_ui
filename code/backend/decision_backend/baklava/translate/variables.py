@@ -98,6 +98,16 @@ class VariableManager:
                 # regular node interface
                 self._register_interface_variable(intf, self._make_unique(graph, f"{node.title}_{intf_name}"))
 
+        # fix names of type constraints
+        for node in graph.iterate_nodes():
+            if node.type == "TypeConstraint":
+                output_intf = node.outputs.get("value", node.outputs.get("sample", node.outputs.get("series")))
+                input_intf = node.inputs.get("value", node.inputs.get("sample", node.inputs.get("series")))
+                connection = graph.get_connection_from_input_interface(input_intf)
+                source_node_output_intf = graph.get_source_node_interface_from_connection(connection)
+                value = self.get_variable_name_for_node_interface(source_node_output_intf)
+                self._register_interface_variable(output_intf, value)
+
     def _register_all(self, model: ModelParser):
         # initialize empty main graph names (TODO: add R reserved words)
         main_graph_id = model.get_main_graph().get_id()

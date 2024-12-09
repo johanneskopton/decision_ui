@@ -2,11 +2,12 @@ import pandas as pd
 
 from decision_backend.baklava.common.constants import ESTIMATE_NODE_TYPE
 from decision_backend.baklava.common.schema import BaklavaGraph
+from decision_backend.baklava.model.parser import GraphParser
 from decision_backend.baklava.translate.values import round_to_precision
 from decision_backend.baklava.translate.variables import VariableManager
 
 
-def build_estimates_df(graph: BaklavaGraph, variables: VariableManager) -> pd.DataFrame:
+def build_estimates_df(graph: GraphParser, variables: VariableManager) -> pd.DataFrame:
     """Return a pandas dataframe representing the estimates CSV table given the graph."""
     df = pd.DataFrame(
         columns=[
@@ -18,7 +19,7 @@ def build_estimates_df(graph: BaklavaGraph, variables: VariableManager) -> pd.Da
             "upper",
         ]
     )
-    for node in graph.nodes:
+    for node in graph.iterate_nodes():
 
         if node.type != ESTIMATE_NODE_TYPE:
             continue

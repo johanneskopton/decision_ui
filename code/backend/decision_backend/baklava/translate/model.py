@@ -101,9 +101,8 @@ def translate_graph(
     return state
 
 
-def translate_model(model: ModelParser) -> Tuple[str, VariableManager]:
+def translate_model(model: ModelParser, variables: VariableManager) -> Tuple[str, VariableManager]:
     """Translate a bakalva model into a model function."""
-    variables = VariableManager(model)
     result = "model_function <- function(){\n"
 
     for graph in model.iterate_subgraphs():
@@ -111,7 +110,7 @@ def translate_model(model: ModelParser) -> Tuple[str, VariableManager]:
 
         function_name = variables.get_function_name_for_subgraph(graph)
         result += f"\t# subgraph {graph.get_name()}\n"
-        result += f"\t{function_name} <- function({", ".join(state.get_input_variables())}){{\n"
+        result += f"\t{function_name} <- function({", ".join(sorted(state.get_input_variables()))}){{\n"
         result += "".join(f"\t\t{line}\n" for line in state.get_translations())
         result += "\t\treturn(list({}))\n".format(", ".join([f"{n}={n}" for n in state.get_output_variables()]))
         result += "\t}\n\n"
@@ -124,4 +123,4 @@ def translate_model(model: ModelParser) -> Tuple[str, VariableManager]:
     result += "}\n"
 
     logger.info("Translated model function:\n\n" + result)
-    return result, variables
+    return result
