@@ -134,20 +134,12 @@
     padding: 0.4em 0.75em;
   }
 
-  .baklava-node-interface.--input > div[title="Output Type"] {
-    display: none;
-  }
+  .baklava-editor:has(
+      > .baklava-node-palette > section > div.baklava-node[data-node-type="__baklava_SubgraphInputNode"]
+    ) {
+    // editor inside a subgraph
 
-  .node-container:has(> div.baklava-node[data-node-type="__baklava_SubgraphInputNode"]) {
-    // graph nodes inside a subgraph
-    .baklava-node-interface.--input > div[title="Output Type"] {
-      display: block;
-    }
-  }
-
-  .baklava-node-palette:has(> section > div.baklava-node[data-node-type="__baklava_SubgraphInputNode"]) {
-    // node pallete inside a subgraph
-
+    // hide palette nodes in subgraph mode
     .baklava-node.--palette[data-node-type="Histogram"],
     .baklava-node.--palette[data-node-type="Debug"],
     .baklava-node.--palette[data-node-type="Estimate"],
@@ -155,23 +147,23 @@
       display: none;
     }
 
-    & > section:nth-of-type(2) {
+    // hide input-output section in palette
+    .baklava-node-palette > section:nth-of-type(2) {
       display: none;
     }
-  }
 
-  .baklava-node[data-node-type="Background"] {
-    background-color: rgba(120, 10, 10, 0.5);
-    box-shadow: none;
-    .__title,
-    .__content {
-      background-color: transparent;
+    // hide input-output section in context menu
+    .baklava-context-menu div.submenu:nth-of-type(2) {
+      display: none;
     }
-  }
 
-  .baklava-node[data-node-type="Background"]:not(.--palette) {
-    height: 500px;
-    z-index: 0 !important;
+    // hide input-output section in context menu
+    .baklava-context-menu div.submenu:nth-of-type(1) .baklava-context-menu.--nested {
+      & div.item:nth-of-type(1),
+      & div.item:nth-of-type(2) {
+        display: none;
+      }
+    }
   }
 
   .baklava-node[data-node-type="Estimate"],
