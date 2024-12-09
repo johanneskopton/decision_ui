@@ -117,7 +117,7 @@
 <style lang="scss">
   .baklava-node-palette h1 {
     font-size: 1.1em;
-    margin-top: 2em;
+    margin-top: 1.5em;
     margin-bottom: 1em;
     font-weight: normal;
   }
@@ -131,7 +131,7 @@
   }
 
   .baklava-node.--palette .__title {
-    padding: 0.4em 0.75em;
+    padding: 0.35em 0.75em;
   }
 
   .baklava-editor:has(
