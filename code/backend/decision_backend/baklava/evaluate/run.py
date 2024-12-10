@@ -65,8 +65,6 @@ def _build_r_runtime_input(
     model_function = translate_model(model_parser, variables)
     estimates_df = build_estimates_df(model_parser.get_main_graph(), variables)
 
-    first_result_node = model_parser.get_main_graph().get_first_result_node()
-    first_result_variable = variables.get_variable_name_for_node(first_result_node) if first_result_node else None
     n_prob_estimates = (estimates_df["distribution"] != "const").sum(axis=0)
     filepaths = prepare_filepaths(files)
 
@@ -78,7 +76,6 @@ def _build_r_runtime_input(
         evpi_path=filepaths.evpi_fp,
         is_estimate=len(estimates_df) > 0,
         do_evpi=n_prob_estimates > 0 and do_evpi,
-        first_out_var=first_result_variable,
         mc_runs=mc_runs,
     )
 
@@ -99,6 +96,8 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, do_evpi: bool):
             capture_output=True,
             text=True,
         )
+        if result.stdout:
+            logger.debug("r-script stdout:\n\n" + result.stdout)
         if result.stderr:
             raise ExecutionError(
                 runtime_input.r_script, runtime_input.estimates_df.to_csv(), result.stdout, result.stderr

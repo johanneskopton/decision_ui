@@ -44,11 +44,10 @@
 </template>
 
 <style scoped lang="scss">
-  .container {
-    width: 675px;
-  }
-
   .table {
-    margin: 16px;
+    margin-top: 16px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 4em;
   }
 </style>
