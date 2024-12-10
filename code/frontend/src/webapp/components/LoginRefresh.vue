@@ -43,3 +43,5 @@
   refreshLoginToken();
   createLoginTokenRefreshTimer();
 </script>
+
+<template></template>

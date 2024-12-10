@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import { ref } from "vue";
 
+  import ExecutionErrorDialog from "./ExecutionErrorDialog.vue";
+
   import clean_model_json from "../helper/clean_model_json";
 
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
 
-  import { doRunModel } from "../backend/models";
+  import { doRunModel, type ExecutionError } from "../backend/models";
 
   const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
 
@@ -14,16 +16,15 @@
   const userStore = useUserStore();
 
   const loading = ref<boolean>(false);
-  const network_error = ref<boolean>(false);
-  const unknown_error = ref<boolean>(false);
-  const execution_error = ref<boolean>(false);
-  const execution_error_msg = ref<string>("");
+  const show_network_error = ref<boolean>(false);
+  const show_unknown_error = ref<boolean>(false);
+  const executionErrorDialog = ref<ExecutionErrorDialog>();
   const success = ref<boolean>();
-  const unauthorized = ref<boolean>(false);
+  const show_unauthorized = ref<boolean>(false);
 
   const callBackend = async () => {
     if (!userStore.isLoggedIn) {
-      unauthorized.value = true;
+      show_unauthorized.value = true;
       return;
     }
 
@@ -41,16 +42,15 @@
       },
       onNetworkError: () => {
         loading.value = false;
-        network_error.value = true;
+        show_network_error.value = true;
       },
       onUnknownError: () => {
         loading.value = false;
-        unknown_error.value = true;
+        show_unknown_error.value = true;
       },
-      onExecutionError: msg => {
+      onExecutionError: (error: ExecutionError) => {
         loading.value = false;
-        execution_error_msg.value = msg;
-        execution_error.value = true;
+        executionErrorDialog.value.showDialog(error);
       }
     });
   };
@@ -79,10 +79,10 @@
     <span>Run</span>
   </v-tooltip>
 
-  <v-snackbar v-model="network_error" :timeout="2000" color="error">
+  <v-snackbar v-model="show_network_error" :timeout="2000" color="error">
     No connection to server!
     <template #actions>
-      <v-btn color="white" variant="text" @click="network_error = false"> Close </v-btn>
+      <v-btn color="white" variant="text" @click="show_network_error = false"> Close </v-btn>
     </template>
   </v-snackbar>
 
@@ -93,22 +93,14 @@
     </template>
   </v-snackbar>
 
-  <v-snackbar v-model="execution_error" :timeout="2000" color="error">
-    Error while executing model: <br />
-    {{ execution_error_msg }}
-    <template #actions>
-      <v-btn color="white" variant="text" @click="execution_error = false"> Close </v-btn>
-    </template>
-  </v-snackbar>
-
-  <v-snackbar v-model="unknown_error" :timeout="2000" color="error">
+  <v-snackbar v-model="show_unknown_error" :timeout="2000" color="error">
     Unknown server error!
     <template #actions>
-      <v-btn color="white" variant="text" @click="unknown_error = false"> Close </v-btn>
+      <v-btn color="white" variant="text" @click="show_unknown_error = false"> Close </v-btn>
     </template>
   </v-snackbar>
 
-  <v-dialog v-model="unauthorized" max-width="400">
+  <v-dialog v-model="show_unauthorized" max-width="400">
     <v-card class="notAuthorizedCard">
       <v-card-title class="text-h5"> Not authorized </v-card-title>
 
@@ -117,11 +109,13 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="grey" variant="text" @click="unauthorized = false"> Cancel </v-btn>
-        <v-btn color="primary" variant="text" to="/login" @click="unauthorized = false"> Login </v-btn>
+        <v-btn color="grey" variant="text" @click="show_unauthorized = false"> Cancel </v-btn>
+        <v-btn color="primary" variant="text" to="/login" @click="show_unauthorized = false"> Login </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <ExecutionErrorDialog ref="executionErrorDialog" />
 </template>
 
 <style scoped lang="scss">

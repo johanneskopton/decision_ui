@@ -10,10 +10,10 @@ export interface ModelData {
   owner_id: string;
 }
 
-interface ExecutionError {
+export interface ExecutionError {
+  reason: string;
   r_script: string;
   estimates: string;
-  stdout: string;
   stderr: string;
 }
 
@@ -81,7 +81,7 @@ export const doRunModel = async ({
   getEvpi: boolean;
   onSuccess: (results: DecisionSupportResult) => void;
   onNetworkError: () => void;
-  onExecutionError: (msg: string) => void;
+  onExecutionError: (error: ExecutionError) => void;
   onUnknownError: () => void;
 }) => {
   const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
@@ -101,8 +101,7 @@ export const doRunModel = async ({
         // unprocessable content
         onUnknownError();
       } else if (error.response?.status === 500) {
-        const executionError = error.response?.data as ExecutionError;
-        onExecutionError(executionError.stderr);
+        onExecutionError(error.response?.data as ExecutionError);
       } else {
         // unknown error
         onUnknownError();

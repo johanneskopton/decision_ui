@@ -85,9 +85,9 @@ def create_app():
         return JSONResponse(
             status_code=500,
             content={
+                "reason": error.reason,
                 "r_script": error.r_script,
                 "estimates": error.estimates,
-                "stdout": error.stdout,
                 "stderr": error.stderr,
             },
         )

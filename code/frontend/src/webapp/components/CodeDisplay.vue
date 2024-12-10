@@ -1,12 +1,6 @@
 <script setup lang="ts">
   import { useModelStore } from "../state/model";
 
-  import hljs from "highlight.js/lib/core";
-  import r from "highlight.js/lib/languages/r";
-  import "highlight.js/styles/github.css";
-
-  hljs.registerLanguage("r", r);
-
   const modelStore = useModelStore();
 </script>
 

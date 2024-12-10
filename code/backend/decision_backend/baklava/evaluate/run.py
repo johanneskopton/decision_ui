@@ -28,6 +28,7 @@ from decision_backend.baklava.translate.variables import VariableManager
 logger = logging.getLogger(__name__)
 
 DSUI_R_SCRIPT_PATH = os.environ.get("DSUI_R_SCRIPT_PATH", "Rscript")
+DSUI_R_MAX_RUNTIME = int(os.environ.get("DSUI_R_MAX_RUNTIME", "10"))  # in seconds
 
 
 class RuntimeInput(NamedTuple):
@@ -38,10 +39,10 @@ class RuntimeInput(NamedTuple):
 
 class ExecutionError(Exception):
 
-    def __init__(self, r_script, estimates, stdout, stderr):
+    def __init__(self, reason, r_script, estimates, stderr):
+        self.reason = reason
         self.r_script = r_script
         self.estimates = estimates
-        self.stdout = stdout
         self.stderr = stderr
 
 
@@ -84,31 +85,62 @@ def _build_r_runtime_input(
 
 def run_baklava_model(model: BaklavaModel, mc_runs: int, do_evpi: bool):
     with open_files_context() as files:
-        runtime_input = _build_r_runtime_input(model, files, mc_runs, do_evpi)
+        # generate R input
+        try:
+            runtime_input = _build_r_runtime_input(model, files, mc_runs, do_evpi)
 
-        # write input files
-        write_estimates_csv_file(runtime_input.estimates_df, files.estimates_file)
-        write_r_script_file(runtime_input.r_script, files.r_script_file)
+            # write input files
+            write_estimates_csv_file(runtime_input.estimates_df, files.estimates_file)
+            write_r_script_file(runtime_input.r_script, files.r_script_file)
+        except Exception as e:
+            raise ExecutionError(f"Error while generating input files for R: " + str(e), None, None, None)
 
         # execute r
-        result = subprocess.run(
-            [DSUI_R_SCRIPT_PATH, files.r_script_file.name],
-            capture_output=True,
-            text=True,
-        )
-        if result.stdout:
-            logger.debug("r-script stdout:\n\n" + result.stdout)
+        try:
+            result = subprocess.run(
+                [DSUI_R_SCRIPT_PATH, files.r_script_file.name],
+                capture_output=True,
+                text=True,
+                timeout=DSUI_R_MAX_RUNTIME,
+            )
+        except subprocess.TimeoutExpired as e:
+            raise ExecutionError(
+                f"R process killed after maximum allowed runtime of {DSUI_R_MAX_RUNTIME} seconds.",
+                runtime_input.r_script,
+                runtime_input.estimates_df.to_csv(),
+                None,
+            )
+        except Exception as e:
+            raise ExecutionError(
+                f"Error while executing R-script: " + str(e),
+                runtime_input.r_script,
+                runtime_input.estimates_df.to_csv(),
+                None,
+            )
+
+        # check r reported any errors
         if result.stderr:
             raise ExecutionError(
-                runtime_input.r_script, runtime_input.estimates_df.to_csv(), result.stdout, result.stderr
+                f"R process reported an error when executing the R-script.",
+                runtime_input.r_script,
+                runtime_input.estimates_df.to_csv(),
+                result.stderr,
             )
 
         # read output files
-        if do_evpi:
-            return DecisionSupportEVPIResult(evpi=read_evpi_file(files.evpi_file.name))
+        try:
+            if do_evpi:
+                return DecisionSupportEVPIResult(evpi=read_evpi_file(files.evpi_file.name))
 
-        return DecisionSupportHistogramResult(
-            estimates=runtime_input.estimates_df.to_csv(),
-            r_script=runtime_input.r_script,
-            hist=read_results_file(files.results_file.name),
-        )
+            return DecisionSupportHistogramResult(
+                estimates=runtime_input.estimates_df.to_csv(),
+                r_script=runtime_input.r_script,
+                hist=read_results_file(files.results_file.name),
+            )
+        except Exception as e:
+            raise ExecutionError(
+                f"Error while reading R result files: " + str(e),
+                runtime_input.r_script,
+                runtime_input.estimates_df.to_csv(),
+                result.stderr,
+            )
