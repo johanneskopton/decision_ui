@@ -185,6 +185,7 @@ NODE_TYPE_TO_TRANSLATOR_MAP_IMPLEMENTATIONS: Mapping[str, NodeTranslator] = {
     "ChanceEvent": ChanceEventNodeTranslator(),
     "ToSeries": ToSeriesNodeTranslator(),
     "NetPresentValue": NetPresentValueNodeTranslator(),
+    "ValueVarier": ValueVarierNodeTranslator(),
     TYPE_CONSTRAINT_NODE_TYPE: PassthroughNodeTranslator(),
     SUBGRAPH_OUTPUT_NODE_TYPE: SubgraphOutputNodeTranslator(),
 }

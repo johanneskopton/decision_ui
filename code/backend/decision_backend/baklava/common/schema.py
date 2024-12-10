@@ -62,7 +62,7 @@ class BaklavaNode(BaseModel):
     type: str
     """The type of the node as declared in the frontend code"""
 
-    width: int
+    width: float
     """The size of the node in pixel as visualized in the fronted editor"""
 
     graphState: "Optional[BaklavaGraph]" = None
