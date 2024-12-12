@@ -137,8 +137,8 @@ export const initializeBaklvaState = (): BaklavaState => {
     const modelStore = useModelStore();
     modelStore.resetValidationErrors();
     for (const graph of editor.graphs) {
-      // only visible graphs have a panning attribute
-      if (!graph.destroying && graph.panning != undefined && graph.panning != null) {
+      // ignore visible subgraphs (with a panning attribute) to not generate duplicate errors
+      if (!graph.destroying && (graph.template == undefined || graph.panning == undefined)) {
         validateGraph(graph, modelStore.addGraphValidationError, modelStore.addNodeValidationError);
       }
     }

@@ -64,7 +64,7 @@
       <v-btn
         class="runButton ma-2 hoverable"
         size="large"
-        color="primary"
+        :color="modelStore.isValidationSuccess ? 'primary' : 'error'"
         v-bind="props"
         :loading="loading"
         @click="callBackend"

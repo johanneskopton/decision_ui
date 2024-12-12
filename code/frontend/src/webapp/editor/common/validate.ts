@@ -88,11 +88,32 @@ export const validateGraph = (
 
   // check all nodes are connected to something
   for (const node of graph.nodes) {
-    if (!isNodeConnected(node) && node.type != "Note") {
-      addNodeValidationError(node, {
-        type: "info",
-        message: `Node is not connected.`
-      });
+    if (!isNodeConnected(node)) {
+      switch (node.type) {
+        case "Note": {
+          break;
+        }
+        case "Result": {
+          addNodeValidationError(node, {
+            type: "error",
+            message: "Result node needs to be connected."
+          });
+          break;
+        }
+        case "__baklava_SubgraphOutputNode": {
+          addNodeValidationError(node, {
+            type: "error",
+            message: "Subgraph output node needs to be connected."
+          });
+          break;
+        }
+        default: {
+          addNodeValidationError(node, {
+            type: "info",
+            message: `Node is not connected.`
+          });
+        }
+      }
     }
   }
 };

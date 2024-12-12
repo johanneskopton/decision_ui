@@ -108,18 +108,18 @@
               <v-badge
                 v-if="modelStore.validationErrorCount > 0"
                 color="error"
-                :content="modelStore.validationErrorCount"
+                :content="modelStore.validationErrorCount + modelStore.validationInfoCount"
               >
-                <v-icon class="dark" size="large"> mdi-alert-outline </v-icon>
+                <v-icon class="dark" size="x-large" color="error"> mdi-alert-circle-outline </v-icon>
               </v-badge>
               <v-badge
                 v-else-if="modelStore.validationInfoCount > 0"
                 color="info'"
-                :content="modelStore.validationInfoCount"
+                :content="modelStore.validationErrorCount + modelStore.validationInfoCount"
               >
-                <v-icon class="dark" size="large"> mdi-information-outline </v-icon>
+                <v-icon class="dark" size="x-large"> mdi-information-outline </v-icon>
               </v-badge>
-              <v-icon v-else class="dark"> mdi-check </v-icon>
+              <v-icon v-else class="dark" size="large"> mdi-check </v-icon>
             </v-btn>
           </template>
         </v-tooltip>

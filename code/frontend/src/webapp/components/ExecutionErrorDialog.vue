@@ -15,7 +15,7 @@
 
 <template>
   <v-dialog v-model="show_dialog" class="executionErrorDialog">
-    <v-card max-width="70%">
+    <v-card max-width="50em">
       <v-card-title class="text-h5"> Model Execution Error </v-card-title>
       <v-card-text>
         <v-list lines="two">

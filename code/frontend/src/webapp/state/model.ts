@@ -39,16 +39,13 @@ interface Settings {
 }
 
 interface NodeValidationErrors {
-  node: {
-    title: string;
-  };
+  nodeTitle: string;
+  graphName: string | null;
   errors: ValidationFeedback[];
 }
 
 interface GraphValidationErrors {
-  graph: {
-    name: string | null;
-  };
+  graphName: string | null;
   errors: ValidationFeedback[];
 }
 
@@ -116,29 +113,36 @@ export const useModelStore = defineStore("model", {
     },
     addGraphValidationError(graph: Graph, error: ValidationFeedback) {
       if (!(graph.id in this.validation.graphs)) {
-        this.validation.graphs[graph.id] = { graph: { name: graph.template?.name || null }, errors: [] };
+        this.validation.graphs[graph.id] = { graphName: graph.template?.name || null, errors: [] };
       }
       this.validation.graphs[graph.id].errors.push(error);
     },
     addNodeValidationError(node: Node<any, any>, error: ValidationFeedback) {
       if (!(node.id in this.validation.nodes)) {
-        this.validation.nodes[node.id] = { node: { title: node.title }, errors: [] };
+        this.validation.nodes[node.id] = {
+          nodeTitle: node.title,
+          graphName: node.graph?.template?.name || null,
+          errors: []
+        };
       }
       this.validation.nodes[node.id].errors.push(error);
     }
   },
   getters: {
-    validationErrorCount(state) {
+    validationErrorCount(state): number {
       return (
         Object.values(state.validation.graphs).reduce((s, g) => s + g.errors.filter(e => e.type == "error").length, 0) +
         Object.values(state.validation.nodes).reduce((s, n) => s + n.errors.filter(e => e.type == "error").length, 0)
       );
     },
-    validationInfoCount(state) {
+    validationInfoCount(state): number {
       return (
         Object.values(state.validation.graphs).reduce((s, g) => s + g.errors.filter(e => e.type == "info").length, 0) +
         Object.values(state.validation.nodes).reduce((s, n) => s + n.errors.filter(e => e.type == "info").length, 0)
       );
+    },
+    isValidationSuccess(): boolean {
+      return this.validationErrorCount == 0;
     }
   }
 });
