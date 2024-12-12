@@ -6,13 +6,7 @@ See https://observablehq.com/@chrispahm/skew-normal-distributions
 for further information.
 */
 
-export default function({
-  rng = Math.random,
-  range = [-Infinity, Infinity],
-  mean,
-  stdDev,
-  skew = 0
-}) {
+export default function ({ rng = Math.random, range = [-Infinity, Infinity], mean, stdDev, skew = 0 }: any) {
   // Before we start, we need to make sure the mean value is actually
   // within our desired range
   if (mean < range[0] || mean > range[1]) {
@@ -20,7 +14,7 @@ export default function({
   }
 
   // Box-Muller transform
-  function randomNormals(rng) {
+  function randomNormals(rng: any) {
     let u1 = 0,
       u2 = 0;
     //Convert [0,1) to (0,1)
@@ -35,20 +29,18 @@ export default function({
   // If a variate is either below or above the desired range,
   // we recursively call the randomSkewNormal function until
   // a value within the desired range is drawn
-  function randomSkewNormal(rng, mean, stdDev, skew = 0) {
+  function randomSkewNormal(rng: any, mean: any, stdDev: any, skew = 0) {
     const [u0, v] = randomNormals(rng);
     if (skew === 0) {
       const value = mean + stdDev * u0;
-      if (value < range[0] || value > range[1])
-        return randomSkewNormal(rng, mean, stdDev, skew);
+      if (value < range[0] || value > range[1]) return randomSkewNormal(rng, mean, stdDev, skew);
       return value;
     }
     const sig = skew / Math.sqrt(1 + skew * skew);
     const u1 = sig * u0 + Math.sqrt(1 - sig * sig) * v;
     const z = u0 >= 0 ? u1 : -u1;
     const value = mean + stdDev * z;
-    if (value < range[0] || value > range[1])
-      return randomSkewNormal(rng, mean, stdDev, skew);
+    if (value < range[0] || value > range[1]) return randomSkewNormal(rng, mean, stdDev, skew);
     return value;
   }
 

@@ -1,14 +1,14 @@
 /* Thanks to Glenn Gordon for the implementation. */
 
-var minPoint;
-var maxPoint;
-var maxTicks;
-var tickSpacing;
-var range;
-var niceMin;
-var niceMax;
+let minPoint: number;
+let maxPoint: number;
+let maxTicks: number;
+let tickSpacing: number;
+let range: number;
+let niceMin: number;
+let niceMax: number;
 
-export default function niceScale(min, max, max_ticks) {
+export default function niceScale(min: number, max: number, max_ticks: number) {
   minPoint = min;
   maxPoint = max;
   maxTicks = max_ticks;
@@ -39,13 +39,10 @@ function calculate() {
  *  round whether to round the result
  *  a "nice" number to be used for the data range
  */
-function niceNum(localRange, round) {
-  var exponent; /** exponent of localRange */
-  var fraction; /** fractional part of localRange */
-  var niceFraction; /** nice, rounded fraction */
-
-  exponent = Math.floor(Math.log10(localRange));
-  fraction = localRange / Math.pow(10, exponent);
+function niceNum(localRange: number, round: boolean) {
+  const exponent = Math.floor(Math.log10(localRange)); /** exponent of localRange */
+  const fraction = localRange / Math.pow(10, exponent); /** fractional part of localRange */
+  let niceFraction: number; /** nice, rounded fraction */
 
   if (round) {
     if (fraction < 1.5) niceFraction = 1;
@@ -68,9 +65,9 @@ function niceNum(localRange, round) {
  *  minPoint the minimum data point on the axis
  *  maxPoint the maximum data point on the axis
  */
-function setMinMaxPoints(localMinPoint, localMaxPoint) {
+export function setMinMaxPoints(localMinPoint: number, localMaxPoint: number) {
   minPoint = localMinPoint;
-  maxPoint = localMaxoint;
+  maxPoint = localMaxPoint;
   calculate();
 }
 
@@ -79,7 +76,7 @@ function setMinMaxPoints(localMinPoint, localMaxPoint) {
  *
  *  maxTicks the maximum number of tick marks for the axis
  */
-function setMaxTicks(localMaxTicks) {
+export function setMaxTicks(localMaxTicks: number) {
   maxTicks = localMaxTicks;
   calculate();
 }

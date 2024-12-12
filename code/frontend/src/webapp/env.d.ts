@@ -1,3 +1,3 @@
 /// <reference types="vite/client" />
 
-declare module 'vue3-excel-editor';
+declare module "vue3-excel-editor";

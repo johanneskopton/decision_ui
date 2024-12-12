@@ -9,6 +9,7 @@ export const DeterministicDistribution: DistributionConfiguration = {
   outputs: {
     value: () => new NodeInterface<number>("Value", 0.0).use(setType, deterministicType)
   },
+  validate_input: () => null,
   generate_output: ({ value }) => {
     return { value };
   }

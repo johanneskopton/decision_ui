@@ -1,18 +1,21 @@
 import gaussian from "gaussian";
 import { NodeInterface, NumberInterface, setType } from "baklavajs";
 
-import type { DistributionConfiguration } from "./base";
+import { validateLowerUpper, type DistributionConfiguration } from "./base";
 import { deterministicType, probabilisticType } from "../common/types";
 
 const q95_Z = 1.6448536269514722;
 
 export const NormalDistrubtion: DistributionConfiguration = {
   inputs: {
-    lower: () => new NumberInterface("lower", -1).use(setType, deterministicType).setPort(false),
+    lower: () => new NumberInterface("lower", 0).use(setType, deterministicType).setPort(false),
     upper: () => new NumberInterface("upper", 1).use(setType, deterministicType).setPort(false)
   },
   outputs: {
     sample: () => new NodeInterface<number[]>("Sample", [0.0]).use(setType, probabilisticType)
+  },
+  validate_input: ({ lower, upper }, registerValidationError) => {
+    validateLowerUpper(lower, upper, registerValidationError);
   },
   generate_output: ({ lower, upper }, { globalValues }) => {
     const mean = (lower + upper) / 2;

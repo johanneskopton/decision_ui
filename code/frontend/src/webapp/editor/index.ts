@@ -27,6 +27,8 @@ import { ComparisonNode } from "./nodes/ComparisonNode";
 import { useModelStore } from "../state/model";
 import { TypeConstraintNode } from "./nodes/TypeConstraintNode";
 import { ChanceEventNode } from "./nodes/ChanceEventNode";
+import { validateGraph } from "./common/validation";
+import { debounce } from "@/common/throttle";
 
 export interface GlobalCalculationData {
   mcRuns: number;
@@ -38,6 +40,29 @@ export interface BaklavaState {
   engine: DependencyEngine<GlobalCalculationData>;
   eventToken: symbol;
 }
+
+/**
+ * Stops the engine while switching graphs in order to improve performance.
+ *
+ * The reason for the slow loading is that nodes are removed on by one from
+ * a graph when it is being switched. Because of that, the engine is triggered
+ * for each node removal again and again.
+ *
+ * @param editor the Baklava editor
+ * @param engine the Baklava engine
+ */
+const fixSlowLoadingWhenSwitchingGraphs = (editor: Editor, engine: DependencyEngine<any>) => {
+  editor.graphEvents.beforeRemoveNode.subscribe(Symbol(), () => {
+    engine.pause();
+  });
+
+  editor.graphEvents.removeNode.subscribe(
+    Symbol(),
+    debounce(() => {
+      engine.start();
+    }, 100)
+  );
+};
 
 export const initializeBaklvaState = (): BaklavaState => {
   const viewPlugin = useBaklava();
@@ -100,6 +125,8 @@ export const initializeBaklvaState = (): BaklavaState => {
   // initialize engine
   const engine = new DependencyEngine<{ mcRuns: number }>(editor);
 
+  fixSlowLoadingWhenSwitchingGraphs(editor, engine);
+
   engine.events.afterRun.subscribe(eventToken, result => {
     engine.pause();
     applyResult(result, editor);
@@ -108,7 +135,14 @@ export const initializeBaklvaState = (): BaklavaState => {
 
   engine.hooks.gatherCalculationData.subscribe(eventToken, () => {
     const modelStore = useModelStore();
-    return { mcRuns: modelStore.settings.mcRuns };
+    modelStore.resetNodeValidationErrors();
+    modelStore.resetGraphValidationErrors();
+    for (const graph of editor.graphs) {
+      if (!graph.destroying) {
+        validateGraph(graph, modelStore.addGraphValidationError);
+      }
+    }
+    return { mcRuns: modelStore.settings.mcRuns, registerValidationError: modelStore.addNodeValidationError };
   });
 
   return {

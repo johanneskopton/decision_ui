@@ -19,7 +19,13 @@ export const ResultNode = defineNode({
       new NodeInterface<FlexibleNumber>("Histogram", null as any).setComponent(markRaw(HistogramOption)).setPort(false)
   },
 
-  calculate({ value }) {
+  calculate({ value }, context) {
+    if (value == undefined || value == null) {
+      context.globalValues.registerValidationError(this, {
+        type: "error",
+        message: "Result node needs to be connected."
+      });
+    }
     return {
       display: value
     };

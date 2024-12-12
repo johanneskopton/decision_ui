@@ -105,7 +105,21 @@
               v-bind="props"
               @click="modelValidationDialog?.showDialog()"
             >
-              <v-icon class="dark"> mdi-check </v-icon>
+              <v-badge
+                v-if="modelStore.validationErrorCount > 0"
+                color="error"
+                :content="modelStore.validationErrorCount"
+              >
+                <v-icon class="dark" size="large"> mdi-alert-outline </v-icon>
+              </v-badge>
+              <v-badge
+                v-else-if="modelStore.validationInfoCount > 0"
+                color="info'"
+                :content="modelStore.validationInfoCount"
+              >
+                <v-icon class="dark" size="large"> mdi-information-outline </v-icon>
+              </v-badge>
+              <v-icon v-else class="dark"> mdi-check </v-icon>
             </v-btn>
           </template>
         </v-tooltip>
