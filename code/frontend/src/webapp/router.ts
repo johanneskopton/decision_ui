@@ -7,7 +7,7 @@ import CodeDashboard from "./components/CodeDashboard.vue";
 import UserArea from "./components/UserArea.vue";
 import LoginForm from "./components/LoginForm.vue";
 import RegistrationForm from "./components/RegistrationForm.vue";
-import Workspace from "./components/Workspace.vue";
+import Workspace from "./components/WorkspaceView.vue";
 import FileView from "./components/FileView.vue";
 import SettingsDashboard from "./components/SettingsDashboard.vue";
 

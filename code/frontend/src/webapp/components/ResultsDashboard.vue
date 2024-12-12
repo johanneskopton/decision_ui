@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Dashboard from "./Dashboard.vue";
+  import Dashboard from "./WorkspaceCards.vue";
   import ResultHistogram from "./ResultHistogram.vue";
   import EvpiTable from "./EvpiTable.vue";
 </script>

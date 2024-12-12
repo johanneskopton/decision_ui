@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Dashboard from "./Dashboard.vue";
+  import Dashboard from "./WorkspaceCards.vue";
   import { useModelStore } from "../state/model";
   import { storeToRefs } from "pinia";
 

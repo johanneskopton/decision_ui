@@ -2,7 +2,7 @@
   import { onMounted, ref, useTemplateRef } from "vue";
   import { useRouter } from "vue-router";
 
-  import Confirm from "./Confirm.vue";
+  import Confirm from "./ConfirmDialog.vue";
 
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
@@ -18,6 +18,13 @@
 
   const nodeCount = (content: string) => {
     return String(JSON.parse(content).graph.nodes.length) + " nodes";
+  };
+
+  const getModelLocalDate = (model: ModelData) => {
+    return new Intl.DateTimeFormat("default", {
+      dateStyle: "short",
+      timeStyle: "short"
+    }).format(new Date(model.saved));
   };
 
   const queryModels = async () => {
@@ -41,7 +48,7 @@
 
   const deleteModel = (model: ModelData) => {
     confirmDelete.value
-      .open("Delete", "Are you sure you want to delete <code>" + model.name + "</code>?", { color: "warning" })
+      ?.open("Delete Model", "Are you sure you want to delete model '" + model.name + "'?", { color: "warning" })
       .then(async (confirm: boolean) => {
         if (confirm) {
           await doDeleteModel({
@@ -68,23 +75,27 @@
   <div class="container">
     <v-card class="card">
       <v-toolbar color="primary" dark>
-        <v-toolbar-title>My files</v-toolbar-title>
+        <v-toolbar-title>My Models</v-toolbar-title>
+        <v-spacer></v-spacer>
+
+        <v-btn to="/user/workspace" class="newModelButton">
+          <template #prepend>
+            <v-icon>mdi-file-plus</v-icon>
+          </template>
+          New Model
+        </v-btn>
       </v-toolbar>
 
-      <v-list lines="two">
-        <v-list-item
-          v-for="model in models"
-          :key="model.saved"
-          :title="model.name"
-          :subtitle="nodeCount(model.content)"
-          @click="open(model)"
-        >
+      <v-list class="list" lines="two">
+        <v-list-item v-for="model in models" :key="model.saved" :title="model.name" @click="open(model)">
           <template #prepend>
             <v-avatar>
               <v-icon class="grey-lighten-1"> mdi-file </v-icon>
             </v-avatar>
           </template>
+          <template #subtitle> {{ nodeCount(model.content) }} </template>
           <template #append>
+            <span class="date">{{ getModelLocalDate(model) }}</span>
             <v-btn icon="mdi-trash-can-outline" size="small" @click.stop="deleteModel(model)"> </v-btn>
           </template>
         </v-list-item>
@@ -109,7 +120,30 @@
   }
 
   .card {
-    width: 60%;
+    display: flex;
+    flex-direction: column;
+    width: max(600px, 60%);
     min-width: 300px;
+    height: 100%;
+    position: relative;
+  }
+
+  .list {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  .date {
+    margin-right: 1.5em;
+    font-size: 0.875rem;
+    opacity: var(--v-list-item-subtitle-opacity, var(--v-medium-emphasis-opacity));
+
+    @media (max-width: 600px) {
+      display: none;
+    }
+  }
+
+  .newModelButton {
+    margin-inline-end: 1em !important;
   }
 </style>

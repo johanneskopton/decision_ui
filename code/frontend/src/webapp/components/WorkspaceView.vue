@@ -7,7 +7,7 @@
 
 <template>
   <div class="workspace-container">
-    <v-navigation-drawer rail permanent>
+    <v-navigation-drawer rail permanent class="workspace-navigation">
       <v-list density="compact" nav>
         <v-tooltip location="right" text="Model editor" open-delay="500">
           <template #activator="{ props }">
@@ -50,48 +50,41 @@
         </v-list>
       </template>
     </v-navigation-drawer>
-    <div class="main-window">
+    <div class="workspace-content">
       <router-view />
+    </div>
+    <div class="run-button">
       <RunButton />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-  nav.v-navigation-drawer {
+  .workspace-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .workspace-navigation {
     position: relative !important;
     top: 0 !important;
     height: 100% !important;
+    flex-grow: 0;
   }
 
-  div.main-window {
+  .workspace-content {
+    background-color: rgb(245, 245, 245);
     position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
+    display: block;
+    flex: 1 1;
+    overflow: scroll;
   }
 
-  div.workspace-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-  }
-
-  .theme--light.v-icon {
-    color: #9e9e9e;
-  }
-
-  .floating_btn_group {
+  .run-button {
     position: absolute;
-    bottom: 16px;
+    bottom: 8px;
+    right: 8px;
     z-index: 5;
-  }
-
-  .floating_btn_group.left {
-    left: 16px;
-  }
-
-  .workspace-container {
-    position: relative;
   }
 </style>

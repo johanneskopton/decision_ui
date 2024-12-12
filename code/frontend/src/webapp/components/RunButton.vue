@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { ref, useTemplateRef } from "vue";
 
   import ExecutionErrorDialog from "./ExecutionErrorDialog.vue";
 
@@ -18,7 +18,7 @@
   const loading = ref<boolean>(false);
   const show_network_error = ref<boolean>(false);
   const show_unknown_error = ref<boolean>(false);
-  const executionErrorDialog = ref<ExecutionErrorDialog>();
+  const executionErrorDialog = useTemplateRef<typeof ExecutionErrorDialog>("executionErrorDialog");
   const success = ref<boolean>();
   const show_unauthorized = ref<boolean>(false);
 
@@ -50,14 +50,14 @@
       },
       onExecutionError: (error: ExecutionError) => {
         loading.value = false;
-        executionErrorDialog.value.showDialog(error);
+        executionErrorDialog.value?.showDialog(error);
       }
     });
   };
 </script>
 
 <template>
-  <v-tooltip location="top">
+  <v-tooltip location="top" open-delay="500">
     <template #activator="{ props }">
       <v-btn
         class="runButton ma-2 hoverable"
@@ -76,7 +76,7 @@
         </div>
       </v-btn>
     </template>
-    <span>Run</span>
+    <span>Run Model</span>
   </v-tooltip>
 
   <v-snackbar v-model="show_network_error" :timeout="2000" color="error">
@@ -120,20 +120,18 @@
 
 <style scoped lang="scss">
   .runButton {
-    position: absolute;
-    bottom: 8px;
-    z-index: 5;
-    right: 8px;
-  }
+    height: auto;
+    padding: 0.857em;
 
-  .runButton.hoverable .onhover,
-  .runButton.hoverable:hover .onnohover {
-    display: none;
-  }
+    &.hoverable .onhover,
+    &.hoverable:hover .onnohover {
+      display: none;
+    }
 
-  .runButton.hoverable .onnohover,
-  .runButton.hoverable:hover .onhover {
-    display: inherit;
+    &.hoverable .onnohover,
+    &.hoverable:hover .onhover {
+      display: inherit;
+    }
   }
 
   .notAuthorizedCard {

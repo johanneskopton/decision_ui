@@ -9,10 +9,13 @@
   import { useModelStore } from "../state/model";
 
   import "@baklavajs/themes/dist/syrup-dark.css";
+  import ModelValidationDialog from "./ModelValidationDialog.vue";
 
   const modelStore = useModelStore();
   const loadfile = useTemplateRef<HTMLInputElement>("loadfile");
   const baklavaRenderKey = ref<number>(1);
+  const modelValidationDialog = useTemplateRef<typeof ModelValidationDialog>("modelValidationDialog");
+  const toggleNone = null;
 
   const token = Symbol();
   modelStore.baklava.editor.nodeEvents.update.subscribe(token, () => {
@@ -75,10 +78,9 @@
 
 <template>
   <div class="editor">
-    <!--<hint-overlay />-->
     <BaklavaEditor :key="baklavaRenderKey" :view-model="modelStore.baklava.viewPlugin as any" />
     <v-sheet class="button-container" color="white" elevation="4" rounded>
-      <v-btn-toggle multiple class="button-toggle">
+      <v-btn-toggle v-model="toggleNone" density="default" multiple class="button-toggle">
         <v-tooltip location="top" text="Download">
           <template #activator="{ props }">
             <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="saveGraph">
@@ -94,9 +96,23 @@
             </v-btn>
           </template>
         </v-tooltip>
+        <v-tooltip location="top" text="Check Model">
+          <template #activator="{ props }">
+            <v-btn
+              class="ma-2 dark"
+              variant="text"
+              color="secondary"
+              v-bind="props"
+              @click="modelValidationDialog?.showDialog()"
+            >
+              <v-icon class="dark"> mdi-check </v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
         <SaveButton />
       </v-btn-toggle>
     </v-sheet>
+    <ModelValidationDialog ref="modelValidationDialog" />
   </div>
 </template>
 
@@ -107,10 +123,14 @@
     height: 100%;
   }
 
-  .editor .button-container {
+  .button-container {
     position: absolute;
     bottom: 1em;
     right: 10em;
+  }
+
+  .button-toggle ::v-deep(.v-btn) {
+    margin: 0 !important;
   }
 </style>
 

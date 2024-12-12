@@ -53,7 +53,7 @@
 
 <template>
   <v-dialog v-if="userStore.login.token" v-model="nameDialog" scrollable max-width="300px">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <v-btn class="ma-2" variant="text" color="secondary" v-bind="props" @click="openDialog">
         <v-icon> mdi-content-save-outline </v-icon>
       </v-btn>

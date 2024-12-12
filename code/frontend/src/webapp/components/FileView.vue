@@ -21,10 +21,10 @@
   @use "vuetify/lib/styles/main.sass" as v;
 
   .fileview {
+    position: relative;
     background-color: map.get(v.$grey, "lighten-4");
     width: 100%;
     height: 100%;
-    position: relative;
   }
 
   .addButton {

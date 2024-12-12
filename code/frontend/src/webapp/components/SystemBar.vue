@@ -8,11 +8,13 @@
 
 <template>
   <v-system-bar class="systemBar">
-    <v-icon v-if="useStore.login.token">mdi-account</v-icon>
-    <v-icon v-else>mdi-account-off</v-icon>
-    <span class="userName">
-      <span v-if="useStore.login.email">{{ useStore.login.email }}</span>
-      <span v-else>guest</span>
+    <span class="profile">
+      <v-icon v-if="useStore.login.token">mdi-account</v-icon>
+      <v-icon v-else>mdi-account-off</v-icon>
+      <span class="userName">
+        <span v-if="useStore.login.email">{{ useStore.login.email }}</span>
+        <span v-else>guest</span>
+      </span>
     </span>
     <v-spacer />
     <span v-if="useStore.login.token" :class="{ unsaved: modelStore.unsaved }">
@@ -33,16 +35,20 @@
 
 <style scoped lang="scss">
   .systemBar {
-    background-color: var(--v-secondary-lighten4) !important;
     position: relative !important;
+    height: auto !important;
+
+    background-color: var(--v-secondary-lighten4) !important;
     border-bottom: solid 1px;
     border-color: rgba(var(--v-border-color), var(--v-border-opacity));
-    height: auto !important;
-    padding: 0.5em 1em !important;
+  }
+
+  .profile {
+    margin: 0.5em 1em 0.5em 0.5em;
   }
 
   .userName {
-    margin-left: 0.25em;
+    margin-left: 0.5em;
   }
 
   .logoutLink {

@@ -2,7 +2,7 @@
   import { onMounted } from "vue";
 
   import { useModelStore, type EstimatesTableRow } from "../state/model";
-  import csv_parser from "../helper/csv_parser";
+  import { parseCSV } from "../helper/csv_parser";
 
   const { live = false } = defineProps<{ live?: boolean }>();
 
@@ -13,7 +13,7 @@
       return modelStore.estimates;
     } else {
       if (modelStore.decisionSupportResult && modelStore.decisionSupportResult.estimates) {
-        return csv_parser(modelStore.decisionSupportResult.estimates);
+        return parseCSV(modelStore.decisionSupportResult.estimates);
       } else {
         return [];
       }
@@ -66,32 +66,31 @@
 </script>
 
 <template>
-  <v-card color="white" elevation="1" class="table-container" :class="[live ? 'fullwidth' : 'narrow']" rounded>
+  <v-card color="white" elevation="1" class="estimatesTable" rounded>
     <v-card-title>{{ title() }}</v-card-title>
-    <vue-excel-editor v-if="estimatesData.length > 0" v-model="estimatesData">
-      <vue-excel-column readonly field="label" label="label" width="150px" />
-      <vue-excel-column readonly field="variable" label="variable" width="150px" />
-      <vue-excel-column readonly field="distribution" label="distribution" />
-      <vue-excel-column :readonly="!live" :change="onLowerChange" field="lower" label="lower" type="number" />
-      <!--<vue-excel-column readonly field="median" label="median" />-->
-      <vue-excel-column :readonly="!live" :change="onUpperChange" field="upper" label="upper" type="number" />
-    </vue-excel-editor>
-    <v-alert v-else type="info" elevation="2">
-      <span v-if="live"> No estimates yet.. </span>
-      <span v-else> No estimates from backend yet.. Run the model first! </span>
-    </v-alert>
+    <v-card-text>
+      <vue-excel-editor v-if="estimatesData.length > 0" v-model="estimatesData" no-paging no-header-edit>
+        <vue-excel-column readonly field="label" label="label" width="150px" sticky />
+        <vue-excel-column readonly field="variable" label="variable" width="150px" />
+        <vue-excel-column readonly field="distribution" label="distribution" />
+        <vue-excel-column :readonly="!live" :change="onLowerChange" field="lower" label="lower" type="number" />
+        <vue-excel-column :readonly="!live" :change="onUpperChange" field="upper" label="upper" type="number" />
+      </vue-excel-editor>
+      <v-alert v-else type="info" elevation="2">
+        <span v-if="live"> No estimates yet.. </span>
+        <span v-else> No estimates from backend yet.. Run the model first! </span>
+      </v-alert>
+    </v-card-text>
   </v-card>
 </template>
 
 <style lang="scss">
-  @use "vuetify/lib/styles/main.sass" as v;
-  .table-container.narrow {
-    width: 45%;
+  .estimatesTable {
+    min-width: 0;
   }
-  .table-container.fullwidth {
-    width: 100%;
-  }
+
   .vue-excel-editor {
-    margin: 16px;
+    display: block;
+    min-width: 0;
   }
 </style>
