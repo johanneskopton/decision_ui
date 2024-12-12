@@ -50,7 +50,7 @@
           <v-list-subheader>
             Node '{{ item.nodeTitle }}' of
             <span v-if="!item.graphName"> the Main Graph </span>
-            <span v-else> of Subgraph '{{ item.graphName }}' </span>
+            <span v-else> Subgraph '{{ item.graphName }}' </span>
           </v-list-subheader>
           <template v-for="(error, idx) in item.errors" :key="idx">
             <v-list-item :class="error.type == 'error' ? 'error' : ''">
