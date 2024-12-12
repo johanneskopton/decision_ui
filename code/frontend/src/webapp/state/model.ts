@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
+import type { Graph, Node } from "baklavajs";
 
 import { initializeBaklvaState, type BaklavaState } from "../editor";
-import type { GraphValidationError, NodeValidationError } from "@/editor/common/validation";
-import type { Graph, Node } from "baklavajs";
+import type { ValidationFeedback } from "../editor/common/validate";
 
 interface HistogramData {
   density: {
@@ -39,13 +39,17 @@ interface Settings {
 }
 
 interface NodeValidationErrors {
-  node: Node<any, any>;
-  errors: NodeValidationError[];
+  node: {
+    title: string;
+  };
+  errors: ValidationFeedback[];
 }
 
 interface GraphValidationErrors {
-  graph: Graph;
-  errors: GraphValidationError[];
+  graph: {
+    name: string | null;
+  };
+  errors: ValidationFeedback[];
 }
 
 interface ValidationState {
@@ -106,21 +110,19 @@ export const useModelStore = defineStore("model", {
     reset() {
       Object.assign(this, initializeModelState());
     },
-    resetNodeValidationErrors() {
+    resetValidationErrors() {
       this.validation.nodes = {};
-    },
-    resetGraphValidationErrors() {
       this.validation.graphs = {};
     },
-    addGraphValidationError(graph: Graph, error: GraphValidationError) {
+    addGraphValidationError(graph: Graph, error: ValidationFeedback) {
       if (!(graph.id in this.validation.graphs)) {
-        this.validation.graphs[graph.id] = { graph, errors: [] };
+        this.validation.graphs[graph.id] = { graph: { name: graph.template?.name || null }, errors: [] };
       }
       this.validation.graphs[graph.id].errors.push(error);
     },
-    addNodeValidationError(node: Node<any, any>, error: NodeValidationError) {
+    addNodeValidationError(node: Node<any, any>, error: ValidationFeedback) {
       if (!(node.id in this.validation.nodes)) {
-        this.validation.nodes[node.id] = { node, errors: [] };
+        this.validation.nodes[node.id] = { node: { title: node.title }, errors: [] };
       }
       this.validation.nodes[node.id].errors.push(error);
     }

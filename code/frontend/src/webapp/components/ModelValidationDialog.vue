@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import { isMainGraph } from "@/editor/common/validation";
-  import { useModelStore } from "@/state/model";
+  import { useModelStore } from "../state/model";
   import { ref } from "vue";
 
   const show_dialog = ref<boolean>(false);
@@ -23,8 +22,8 @@
         </span>
         <v-list v-for="(item, graph_id) in modelStore.validation.graphs" :key="graph_id" lines="one" density="compact">
           <v-list-subheader>
-            <span v-if="isMainGraph(item.graph)">Main Graph</span>
-            <span v-else>Subgraph '{{ item.graph.template?.name }}''</span>
+            <span v-if="!item.graph.name">Main Graph</span>
+            <span v-else>Subgraph '{{ item.graph.name }}''</span>
           </v-list-subheader>
           <template v-for="(error, idx) in item.errors" :key="idx">
             <v-list-item>

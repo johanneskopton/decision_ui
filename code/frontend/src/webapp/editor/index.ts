@@ -27,8 +27,8 @@ import { ComparisonNode } from "./nodes/ComparisonNode";
 import { useModelStore } from "../state/model";
 import { TypeConstraintNode } from "./nodes/TypeConstraintNode";
 import { ChanceEventNode } from "./nodes/ChanceEventNode";
-import { validateGraph } from "./common/validation";
-import { debounce } from "@/common/throttle";
+import { validateGraph } from "./common/validate";
+import { debounce } from "../common/throttle";
 
 export interface GlobalCalculationData {
   mcRuns: number;
@@ -135,11 +135,11 @@ export const initializeBaklvaState = (): BaklavaState => {
 
   engine.hooks.gatherCalculationData.subscribe(eventToken, () => {
     const modelStore = useModelStore();
-    modelStore.resetNodeValidationErrors();
-    modelStore.resetGraphValidationErrors();
+    modelStore.resetValidationErrors();
     for (const graph of editor.graphs) {
-      if (!graph.destroying) {
-        validateGraph(graph, modelStore.addGraphValidationError);
+      // only visible graphs have a panning attribute
+      if (!graph.destroying && graph.panning != undefined && graph.panning != null) {
+        validateGraph(graph, modelStore.addGraphValidationError, modelStore.addNodeValidationError);
       }
     }
     return { mcRuns: modelStore.settings.frontend.mcRuns, registerValidationError: modelStore.addNodeValidationError };

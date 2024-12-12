@@ -1,7 +1,7 @@
 import type { Node } from "baklavajs";
-import type { NodeValidationError } from "./validation";
+import type { ValidationFeedback } from "./validate";
 
 export interface ModelCalculationContext {
   mcRuns: number;
-  registerValidationError: (node: Node<any, any>, error: NodeValidationError) => void;
+  registerValidationError: (node: Node<any, any>, error: ValidationFeedback) => void;
 }

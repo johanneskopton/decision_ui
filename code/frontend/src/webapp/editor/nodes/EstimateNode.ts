@@ -8,7 +8,7 @@ import {
 } from "../distributions";
 
 import { useModelStore, type EstimatesTableRow } from "../../state/model";
-import type { NodeValidationError } from "../common/validation";
+import type { ValidationFeedback } from "../common/validate";
 
 const createEstimatesTableEntry = (title: string, distribution: string, params: any): EstimatesTableRow => {
   return {
@@ -69,7 +69,7 @@ export const EstimateNode = defineDynamicNode({
 
   calculate({ distribution, ...params }, context) {
     updateEstimatesTable(this.title, distribution, params);
-    DISRTIBUTIONS[distribution].validate_input(params, (error: NodeValidationError) => {
+    DISRTIBUTIONS[distribution].validate_input(params, (error: ValidationFeedback) => {
       context.globalValues.registerValidationError(this, error);
     });
     return DISRTIBUTIONS[distribution].generate_output(params, context);
