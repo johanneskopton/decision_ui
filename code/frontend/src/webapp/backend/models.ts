@@ -70,6 +70,8 @@ export const doDeleteModel = async ({
 export const doRunModel = async ({
   token,
   model,
+  mcRuns,
+  bins,
   getEvpi,
   onSuccess,
   onNetworkError,
@@ -78,6 +80,8 @@ export const doRunModel = async ({
 }: {
   token: string;
   model: any;
+  mcRuns: number;
+  bins: number;
   getEvpi: boolean;
   onSuccess: (results: DecisionSupportResult) => void;
   onNetworkError: () => void;
@@ -85,8 +89,9 @@ export const doRunModel = async ({
   onUnknownError: () => void;
 }) => {
   const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
+  const options = `?mcRuns=${mcRuns}` + (getEvpi ? `` : `&bins=${bins}`);
   axios
-    .post((await getBackendBaseURL()) + route, model, {
+    .post((await getBackendBaseURL()) + route + options, model, {
       headers: {
         [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }

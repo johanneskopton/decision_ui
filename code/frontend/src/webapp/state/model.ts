@@ -27,7 +27,15 @@ export interface EstimatesTableRow {
 }
 
 interface Settings {
-  mcRuns: number;
+  frontend: {
+    bins: number;
+    mcRuns: number;
+  };
+  backend: {
+    bins: number;
+    mcRuns: number;
+    evpiMcRuns: number;
+  };
 }
 
 interface NodeValidationErrors {
@@ -64,7 +72,15 @@ const initializeModelState = (): ModelState => {
       graphs: {}
     },
     settings: {
-      mcRuns: 1000
+      frontend: {
+        bins: 30,
+        mcRuns: 1000
+      },
+      backend: {
+        bins: 100,
+        mcRuns: 50000,
+        evpiMcRuns: 1000
+      }
     },
     decisionSupportResult: null,
     estimates: [],

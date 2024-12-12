@@ -54,13 +54,13 @@ def write_r_script_file(r_script: str, file: tempfile.NamedTemporaryFile):
         file.close()
 
 
-def read_results_file(result_fp: str):
+def read_results_file(result_fp: str, bins=100):
     df = pd.read_csv(result_fp)
     res = dict()
     res["density"] = dict()
     combined_df = pd.concat([df[col] for col in df.columns])
     combined_df = combined_df[combined_df.notnull()]
-    _, combined_edges = np.histogram(list(combined_df), bins=100)
+    _, combined_edges = np.histogram(list(combined_df), bins=bins)
     res["bins"] = combined_edges.tolist()
     for column in df:
         mc_runs = list(df[column])

@@ -29,6 +29,8 @@ logger = logging.getLogger(__name__)
 
 DSUI_R_SCRIPT_PATH = os.environ.get("DSUI_R_SCRIPT_PATH", "Rscript")
 DSUI_R_MAX_RUNTIME = int(os.environ.get("DSUI_R_MAX_RUNTIME", "10"))  # in seconds
+DSUI_R_MAX_MCRUNS = int(os.environ.get("DSUI_R_MAX_MCRUNS", "100000"))
+DSUI_R_MAX_BINS = int(os.environ.get("DSUI_MAX_HISTOGRAM_BINS", "200"))
 
 
 class RuntimeInput(NamedTuple):
@@ -83,11 +85,11 @@ def _build_r_runtime_input(
     return RuntimeInput(r_script, estimates_df)
 
 
-def run_baklava_model(model: BaklavaModel, mc_runs: int, do_evpi: bool):
+def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: bool):
     with open_files_context() as files:
         # generate R input
         try:
-            runtime_input = _build_r_runtime_input(model, files, mc_runs, do_evpi)
+            runtime_input = _build_r_runtime_input(model, files, min(DSUI_R_MAX_MCRUNS, mc_runs), do_evpi)
 
             # write input files
             write_estimates_csv_file(runtime_input.estimates_df, files.estimates_file)
@@ -135,7 +137,7 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, do_evpi: bool):
             return DecisionSupportHistogramResult(
                 estimates=runtime_input.estimates_df.to_csv(),
                 r_script=runtime_input.r_script,
-                hist=read_results_file(files.results_file.name),
+                hist=read_results_file(files.results_file.name, max(10, min(DSUI_R_MAX_BINS, bins))),
             )
         except Exception as e:
             raise ExecutionError(

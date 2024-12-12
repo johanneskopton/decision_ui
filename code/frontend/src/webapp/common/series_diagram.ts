@@ -2,7 +2,7 @@ import { BarController, BarElement, CategoryScale, Chart, LinearScale } from "ch
 
 Chart.register(BarController, LinearScale, BarElement, CategoryScale);
 
-export default function (graph: Chart, ctx: CanvasRenderingContext2D, data: any) {
+export default function (graph: Chart | null, ctx: CanvasRenderingContext2D, data: any) {
   const textColor = "rgba(255, 255, 255, 1.0)";
   const gridColor = "rgba(255, 255, 255, 0.2)";
   const barColor = "rgba(178, 223, 219, 1)";

@@ -142,7 +142,7 @@ export const initializeBaklvaState = (): BaklavaState => {
         validateGraph(graph, modelStore.addGraphValidationError);
       }
     }
-    return { mcRuns: modelStore.settings.mcRuns, registerValidationError: modelStore.addNodeValidationError };
+    return { mcRuns: modelStore.settings.frontend.mcRuns, registerValidationError: modelStore.addNodeValidationError };
   });
 
   return {

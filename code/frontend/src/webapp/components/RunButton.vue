@@ -34,6 +34,8 @@
     await doRunModel({
       token: userStore.login.token,
       model,
+      mcRuns: getEvpi ? modelStore.settings.backend.evpiMcRuns : modelStore.settings.backend.mcRuns,
+      bins: modelStore.settings.backend.bins,
       getEvpi,
       onSuccess: result => {
         loading.value = false;

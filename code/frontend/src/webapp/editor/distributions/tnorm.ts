@@ -38,7 +38,7 @@ export const TNormDistirbution: DistributionConfiguration = {
     if (!(lower + (1 - lower) * 0.9 >= upper)) {
       registerValidationError({
         type: "error",
-        message: `Lower bound '${lower}' needs to be higher.`
+        message: `Lower bound '${lower}' and upper bound '${upper}' need to be closer.`
       });
     }
   },

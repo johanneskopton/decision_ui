@@ -70,7 +70,10 @@
   };
 
   const drawProbabilisticChart = (value: FlexibleNumber, ctx: CanvasRenderingContext2D) => {
-    const hist_data = get_bins(makeArray(value, modelStore.settings.mcRuns));
+    const hist_data = get_bins(
+      makeArray(value, modelStore.settings.frontend.mcRuns),
+      modelStore.settings.frontend.bins
+    );
     const bins = hist_data.bins;
     const bin_counts = hist_data.bin_counts;
 

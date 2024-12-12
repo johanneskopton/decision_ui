@@ -12,7 +12,7 @@ export default function (
   bins: number[],
   counts: number[],
   in_node = false
-) {
+): Chart<any> {
   let textColor = "rgba(255, 255, 255, 1)";
   let gridColor = "rgba(255, 255, 255, 0.2)";
   const barColor = "rgba(178, 223, 219, 1)";

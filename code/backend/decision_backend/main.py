@@ -93,12 +93,16 @@ def create_app():
         )
 
     @app.post("/api/v1/monte_carlo", tags=["models"])
-    def monte_carlo(model: BaklavaModel, user: User = Depends(current_active_user)) -> DecisionSupportHistogramResult:
-        return run_baklava_model(model, 50000, do_evpi=False)
+    def monte_carlo(
+        model: BaklavaModel, mcRuns: int = 50000, bins: int = 100, user: User = Depends(current_active_user)
+    ) -> DecisionSupportHistogramResult:
+        return run_baklava_model(model, mcRuns, bins, do_evpi=False)
 
     @app.post("/api/v1/evpi", tags=["models"])
-    def evpi(model: BaklavaModel, user: User = Depends(current_active_user)) -> DecisionSupportEVPIResult:
-        return run_baklava_model(model, 1000, do_evpi=True)
+    def evpi(
+        model: BaklavaModel, mcRuns: int = 1000, user: User = Depends(current_active_user)
+    ) -> DecisionSupportEVPIResult:
+        return run_baklava_model(model, mcRuns, 0, do_evpi=True)
 
     @app.post("/api/v1/decision_model/", response_model=schema.DecisionModel, tags=["models"])
     async def create_item_for_user(
