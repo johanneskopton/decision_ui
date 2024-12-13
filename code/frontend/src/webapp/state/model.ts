@@ -5,16 +5,17 @@ import { initializeBaklvaState, type BaklavaState } from "../editor";
 import type { ValidationFeedback } from "../editor/common/validate";
 
 interface HistogramData {
-  density: {
-    Result: number[];
-  };
+  values: { [variable: string]: number[] };
   bins: number[];
 }
 
 export interface DecisionSupportResult {
   r_script: string;
-  estimates: string;
-  hist: HistogramData[];
+  estimates_csv: string;
+  histogram_data: HistogramData;
+}
+
+export interface EVPIResult {
   evpi: number[];
 }
 

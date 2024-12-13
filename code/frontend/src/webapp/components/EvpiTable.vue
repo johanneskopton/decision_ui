@@ -25,7 +25,7 @@
 </script>
 
 <template>
-  <v-card color="white" elevation="1" class="container" rounded>
+  <v-card color="white" elevation="1" class="card" rounded>
     <v-card-title>Expected Value Of Perfect Information (EVPI)</v-card-title>
     <vue-excel-editor v-if="evpi.length > 0" v-model="evpi" width="100%" class="table">
       <vue-excel-column readonly field="variable" label="variable" width="200px" />
@@ -44,6 +44,10 @@
 </template>
 
 <style scoped lang="scss">
+  .card {
+    flex-basis: 30em;
+  }
+
   .table {
     margin-top: 16px;
     margin-left: 0;

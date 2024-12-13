@@ -81,7 +81,7 @@
     <BaklavaEditor :key="baklavaRenderKey" :view-model="modelStore.baklava.viewPlugin as any" />
     <v-sheet class="button-container" color="white" elevation="4" rounded>
       <v-btn-toggle v-model="toggleNone" density="default" multiple class="button-toggle">
-        <v-tooltip location="top" text="Download">
+        <v-tooltip location="top" text="Download Model" open-delay="500">
           <template #activator="{ props }">
             <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="saveGraph">
               <v-icon class="dark"> mdi-tray-arrow-down </v-icon>
@@ -89,14 +89,20 @@
           </template>
         </v-tooltip>
         <input id="loadfile" ref="loadfile" type="file" style="display: none" @change="loadGraph" />
-        <v-tooltip location="top" text="Upload">
+        <v-tooltip location="top" text="Upload Model" open-delay="500">
           <template #activator="{ props }">
             <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="$refs.loadfile.click()">
               <v-icon class="dark"> mdi-tray-arrow-up </v-icon>
             </v-btn>
           </template>
         </v-tooltip>
-        <v-tooltip location="top" text="Check Model">
+        <SaveButton />
+        <v-tooltip location="top" open-delay="500">
+          <template #default>
+            <span v-if="modelStore.validationErrorCount > 0">Model has Errors</span>
+            <span v-else-if="modelStore.validationInfoCount > 0">Model has Warnings</span>
+            <span v-else>Model is Valid</span>
+          </template>
           <template #activator="{ props }">
             <v-btn
               class="ma-2 dark"
@@ -123,7 +129,6 @@
             </v-btn>
           </template>
         </v-tooltip>
-        <SaveButton />
       </v-btn-toggle>
     </v-sheet>
     <ModelValidationDialog ref="modelValidationDialog" />

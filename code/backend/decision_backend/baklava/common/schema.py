@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 
-from typing import List, Any, Mapping, Optional
+from typing import List, Any, Mapping, Optional, Sequence
 
 
 class BaklavaConnection(BaseModel):
@@ -125,11 +125,21 @@ class BaklavaModel(BaseModel):
     """Subgraphs of the model"""
 
 
+class HistogramData(BaseModel):
+    """Describes histogram data of multiple distributions."""
+
+    values: Mapping[str, Sequence[float]]
+    """Varible to density values of histogram (y-axis)."""
+
+    bins: Sequence[float]
+    """Boundaries for all bins (x-axis)."""
+
+
 class DecisionSupportHistogramResult(BaseModel):
 
-    hist: Any
+    histogram_data: HistogramData
     r_script: str
-    estimates: str
+    estimates_csv: str
 
 
 class DecisionSupportEVPIResult(BaseModel):

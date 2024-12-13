@@ -2,10 +2,12 @@ import tempfile
 import os
 
 from contextlib import contextmanager
-from typing import NamedTuple
+from typing import Mapping, NamedTuple, Sequence
 
 import pandas as pd
 import numpy as np
+
+from decision_backend.baklava.common.schema import HistogramData
 
 
 class FilesContext(NamedTuple):
@@ -54,19 +56,20 @@ def write_r_script_file(r_script: str, file: tempfile.NamedTemporaryFile):
         file.close()
 
 
-def read_results_file(result_fp: str, bins=100):
+def read_results_file(result_fp: str, bins=100) -> HistogramData:
     df = pd.read_csv(result_fp)
-    res = dict()
-    res["density"] = dict()
+
+    # combine data to determine suitable bins for all results
     combined_df = pd.concat([df[col] for col in df.columns])
     combined_df = combined_df[combined_df.notnull()]
-    _, combined_edges = np.histogram(list(combined_df), bins=bins)
-    res["bins"] = combined_edges.tolist()
+    _, combined_bins = np.histogram(list(combined_df), bins=bins)
+
+    # get individual histogram values for each result using combined bins
+    values: Mapping[str, Sequence[float]] = {}
     for column in df:
-        mc_runs = list(df[column])
-        hist_vals, _ = np.histogram(mc_runs, bins=combined_edges, density=True)
-        res["density"][column] = hist_vals.tolist()
-    return res
+        values[str(column)[2:]] = np.histogram(df[column], bins=combined_bins, density=True)[0].tolist()
+
+    return HistogramData(values=values, bins=combined_bins.tolist())
 
 
 def read_evpi_file(evpi_fp: str):

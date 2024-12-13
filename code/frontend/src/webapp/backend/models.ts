@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { AUTHORIZATION_HEADER, getBackendBaseURL } from "./common";
-import type { DecisionSupportResult } from "../state/model";
+import type { DecisionSupportResult, EVPIResult } from "../state/model";
 
 export interface ModelData {
   id: string;
@@ -83,7 +83,7 @@ export const doRunModel = async ({
   mcRuns: number;
   bins: number;
   getEvpi: boolean;
-  onSuccess: (results: DecisionSupportResult) => void;
+  onSuccess: (results: DecisionSupportResult | EVPIResult) => void;
   onNetworkError: () => void;
   onExecutionError: (error: ExecutionError) => void;
   onUnknownError: () => void;

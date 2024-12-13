@@ -4,7 +4,6 @@
   import nj from "@d4c/numjs";
 
   import get_bins from "../../common/get_bins";
-  import histogram from "../../common/histogram";
   import series_diagram from "../../common/series_diagram";
   import { useModelStore } from "../../state/model";
   import { makeArray } from "../common/math";
@@ -16,12 +15,13 @@
     type InterfaceTypeSet,
     type FlexibleNumber
   } from "../common/types";
+  import { drawNodeHistogram } from "@/charts/histogram/node";
 
   const { modelValue = null } = defineProps<{ modelValue: FlexibleNumber | null }>();
 
   const modelStore = useModelStore();
   const canvas = useTemplateRef<HTMLCanvasElement | null>("canvas");
-  const graph = ref<Chart | null>(null);
+  const graph = ref<Chart<"bar"> | Chart<any> | null>(null);
 
   const numberToPrettyString = (value: FlexibleNumber | null) => {
     if (value == null) return "undefined";
@@ -77,7 +77,7 @@
     const bins = hist_data.bins;
     const bin_counts = hist_data.bin_counts;
 
-    graph.value = histogram(graph.value, ctx, bins, bin_counts, true);
+    graph.value = drawNodeHistogram(graph.value, ctx, bins, bin_counts);
   };
 
   const drawSeriesChart = (value: FlexibleNumber, ctx: CanvasRenderingContext2D) => {
@@ -114,7 +114,9 @@
       <span class="mean">Mean: {{ getMean(modelValue) }}</span>
       <span class="std">StdDev: {{ getStdDev(modelValue) }}</span>
     </div>
-    <canvas ref="canvas" />
+    <div class="canvasContainer">
+      <canvas ref="canvas" />
+    </div>
   </div>
 </template>
 
@@ -123,9 +125,20 @@
 <style scoped lang="scss">
   .histogram {
     position: relative;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+  }
+
+  .canvasContainer {
+    aspect-ratio: 1.41;
+    flex-grow: 1;
+    overflow: hidden;
+
+    width: 100%;
+    position: relative;
   }
 
   .header {

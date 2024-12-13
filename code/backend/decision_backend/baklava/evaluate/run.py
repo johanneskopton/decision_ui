@@ -135,9 +135,9 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
                 return DecisionSupportEVPIResult(evpi=read_evpi_file(files.evpi_file.name))
 
             return DecisionSupportHistogramResult(
-                estimates=runtime_input.estimates_df.to_csv(),
+                estimates_csv=runtime_input.estimates_df.to_csv(),
                 r_script=runtime_input.r_script,
-                hist=read_results_file(files.results_file.name, max(10, min(DSUI_R_MAX_BINS, bins))),
+                histogram_data=read_results_file(files.results_file.name, max(10, min(DSUI_R_MAX_BINS, bins))),
             )
         except Exception as e:
             raise ExecutionError(
