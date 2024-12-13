@@ -1,5 +1,5 @@
 import type { ChartOptions, LegendOptions, ScaleChartOptions } from "chart.js";
-import { BarController, BarElement, Chart, LinearScale, Colors, Legend } from "chart.js";
+import { BarController, BarElement, Chart, LinearScale, Colors, Legend, CategoryScale } from "chart.js";
 
 /* eslint @typescript-eslint/no-unsafe-function-type: 0 */
 
@@ -26,7 +26,7 @@ export const CHART_COLORS = [
   "rgba(201, 203, 207, 0.7)" // grey
 ];
 
-Chart.register(BarController, LinearScale, BarElement, Colors, Legend);
+Chart.register(BarController, LinearScale, BarElement, Colors, Legend, CategoryScale);
 
 export const getDefaultHistogramScales = (
   max_ticks: number,
@@ -71,7 +71,7 @@ export const getDefaultHistogramLegend = (textColor: string): DeepPartial<Legend
     labels: {
       color: textColor,
       font: {
-        size: 16
+        size: 14
       }
     }
   };
@@ -83,7 +83,6 @@ export const getDefaultHistogramOptions = (): ChartOptions<"bar"> => {
     resizeDelay: 0,
     animation: false,
     maintainAspectRatio: false,
-    aspectRatio: 1.41,
     hover: { mode: "nearest" }
   };
 };

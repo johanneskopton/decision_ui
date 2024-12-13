@@ -5,13 +5,11 @@ export const doLoginRequest = async ({
   email,
   password,
   onSuccess,
-  onNetworkError,
   onWrongCredentials
 }: {
   email: string;
   password: string;
   onSuccess: (token: string) => void;
-  onNetworkError: () => void;
   onWrongCredentials: () => void;
 }) => {
   const formData = new FormData();
@@ -27,20 +25,11 @@ export const doLoginRequest = async ({
     .then((response: AxiosResponse) => {
       if (response.status === 200) {
         return onSuccess(response.data.access_token);
-      } else {
-        return onNetworkError();
       }
     })
     .catch((error: AxiosError) => {
-      if (error.code === "ERR_NETWORK") {
-        return onNetworkError();
-      } else {
-        if (error.code === "ERR_BAD_REQUEST" && (error.response?.data as any).detail === "LOGIN_BAD_CREDENTIALS") {
-          return onWrongCredentials();
-        } else {
-          console.error(`Unknown loging error: ${JSON.stringify(error, null, 2)}`);
-          return onNetworkError();
-        }
+      if (error.code === "ERR_BAD_REQUEST" && (error.response?.data as any).detail === "LOGIN_BAD_CREDENTIALS") {
+        return onWrongCredentials();
       }
     });
 };
@@ -48,12 +37,10 @@ export const doLoginRequest = async ({
 export const doRefreshRequest = async ({
   token,
   onSuccess,
-  onNetworkError,
   onWrongCredentials
 }: {
   token: string;
   onSuccess: (token: string) => void;
-  onNetworkError: () => void;
   onWrongCredentials: () => void;
 }) => {
   axios
@@ -65,19 +52,11 @@ export const doRefreshRequest = async ({
     .then((response: AxiosResponse) => {
       if (response.status === 200) {
         return onSuccess(response.data.access_token);
-      } else {
-        return onNetworkError();
       }
     })
     .catch((error: AxiosError) => {
-      if (error.code === "ERR_NETWORK") {
-        return onNetworkError();
-      }
       if (error.code === "ERR_BAD_REQUEST" && (error.response?.data as any).detail === "LOGIN_BAD_CREDENTIALS") {
         return onWrongCredentials();
-      } else {
-        console.error(`Unknown error refreshing token: ${JSON.stringify(error, null, 2)}`);
-        return onNetworkError();
       }
     });
 };

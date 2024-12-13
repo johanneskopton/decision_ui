@@ -16,7 +16,7 @@ export interface DecisionSupportResult {
 }
 
 export interface EVPIResult {
-  evpi: number[];
+  evpi: { [variable: string]: { [result: string]: number } };
 }
 
 export interface EstimatesTableRow {
@@ -60,6 +60,7 @@ interface ModelState {
   validation: ValidationState;
   settings: Settings;
   decisionSupportResult: DecisionSupportResult | null;
+  evpiResult: EVPIResult | null;
   estimates: EstimatesTableRow[];
   unsaved: boolean;
   lastSaved: number;
@@ -85,6 +86,7 @@ const initializeModelState = (): ModelState => {
       }
     },
     decisionSupportResult: null,
+    evpiResult: null,
     estimates: [],
     unsaved: true,
     lastSaved: 0,
@@ -95,16 +97,6 @@ const initializeModelState = (): ModelState => {
 export const useModelStore = defineStore("model", {
   state: (): ModelState => initializeModelState(),
   actions: {
-    setDecisionSupportResult(newResult: DecisionSupportResult) {
-      if (!this.decisionSupportResult) {
-        this.decisionSupportResult = newResult;
-      } else {
-        this.decisionSupportResult = {
-          ...this.decisionSupportResult,
-          ...newResult
-        };
-      }
-    },
     reset() {
       Object.assign(this, initializeModelState());
     },

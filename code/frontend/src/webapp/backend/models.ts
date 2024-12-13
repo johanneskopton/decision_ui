@@ -74,7 +74,6 @@ export const doRunModel = async ({
   bins,
   getEvpi,
   onSuccess,
-  onNetworkError,
   onExecutionError,
   onUnknownError
 }: {
@@ -84,7 +83,6 @@ export const doRunModel = async ({
   bins: number;
   getEvpi: boolean;
   onSuccess: (results: DecisionSupportResult | EVPIResult) => void;
-  onNetworkError: () => void;
   onExecutionError: (error: ExecutionError) => void;
   onUnknownError: () => void;
 }) => {
@@ -96,13 +94,15 @@ export const doRunModel = async ({
         [AUTHORIZATION_HEADER]: `Bearer ${token}`
       }
     })
-    .then((response: AxiosResponse) => onSuccess(response.data as DecisionSupportResult))
+    .then((response: AxiosResponse) => {
+      if (getEvpi) {
+        onSuccess(response.data as EVPIResult);
+      } else {
+        onSuccess(response.data as DecisionSupportResult);
+      }
+    })
     .catch((error: AxiosError) => {
-      if (error.code === "ERR_NETWORK") {
-        onNetworkError();
-      } else if (error.response?.status == 401) {
-        // should be picked up by interceptor
-      } else if (error.response?.status === 422) {
+      if (error.response?.status === 422) {
         // unprocessable content
         onUnknownError();
       } else if (error.response?.status === 500) {

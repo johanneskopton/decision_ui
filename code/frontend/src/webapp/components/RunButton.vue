@@ -5,18 +5,17 @@
 
   import clean_model_json from "../helper/clean_model_json";
 
-  import { useModelStore } from "../state/model";
+  import { useModelStore, type DecisionSupportResult, type EVPIResult } from "../state/model";
   import { useUserStore } from "../state/user";
 
   import { doRunModel, type ExecutionError } from "../backend/models";
 
-  const { getEvpi = false, evpiSet = false } = defineProps<{ getEvpi?: boolean; evpiSet?: boolean }>();
+  const { getEvpi = false } = defineProps<{ getEvpi?: boolean }>();
 
   const modelStore = useModelStore();
   const userStore = useUserStore();
 
   const loading = ref<boolean>(false);
-  const show_network_error = ref<boolean>(false);
   const show_unknown_error = ref<boolean>(false);
   const executionErrorDialog = useTemplateRef<typeof ExecutionErrorDialog>("executionErrorDialog");
   const success = ref<boolean>();
@@ -40,11 +39,11 @@
       onSuccess: result => {
         loading.value = false;
         success.value = true;
-        modelStore.setDecisionSupportResult(result);
-      },
-      onNetworkError: () => {
-        loading.value = false;
-        show_network_error.value = true;
+        if (getEvpi) {
+          modelStore.evpiResult = result as EVPIResult;
+        } else {
+          modelStore.decisionSupportResult = result as DecisionSupportResult;
+        }
       },
       onUnknownError: () => {
         loading.value = false;
@@ -59,7 +58,7 @@
 </script>
 
 <template>
-  <v-tooltip location="top" open-delay="500">
+  <v-tooltip location="top" open-delay="500" :disabled="getEvpi">
     <template #activator="{ props }">
       <v-btn
         class="runButton ma-2 hoverable"
@@ -69,24 +68,17 @@
         :loading="loading"
         @click="callBackend"
       >
-        <span v-if="getEvpi" class="button_text"> Calculate EVPI</span>
+        <span v-if="getEvpi" class="button_text"> Calculate EVPI&nbsp;</span>
         <v-icon v-if="!getEvpi" class="onhover"> mdi-rocket-launch-outline </v-icon>
         <v-icon v-if="!getEvpi" class="onnohover"> mdi-rocket-outline </v-icon>
         <div v-else>
-          <v-icon v-if="!evpiSet"> mdi-table-question </v-icon>
+          <v-icon v-if="!modelStore.evpiResult"> mdi-table-question </v-icon>
           <v-icon v-else> mdi-table-refresh </v-icon>
         </div>
       </v-btn>
     </template>
     <span>Run Model</span>
   </v-tooltip>
-
-  <v-snackbar v-model="show_network_error" :timeout="2000" color="error">
-    No connection to server!
-    <template #actions>
-      <v-btn color="white" variant="text" @click="show_network_error = false"> Close </v-btn>
-    </template>
-  </v-snackbar>
 
   <v-snackbar v-model="success" :timeout="2000" color="secondary">
     Model successfully executed!

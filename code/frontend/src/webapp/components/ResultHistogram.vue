@@ -35,6 +35,7 @@
         drawHistogram(dpr);
         return canvas.value;
       },
+      "results",
       filetype,
       2.0
     );

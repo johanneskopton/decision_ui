@@ -144,4 +144,4 @@ class DecisionSupportHistogramResult(BaseModel):
 
 class DecisionSupportEVPIResult(BaseModel):
 
-    evpi: Any
+    evpi: Mapping[str, Mapping[str, float]]

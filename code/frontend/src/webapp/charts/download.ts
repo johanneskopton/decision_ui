@@ -19,6 +19,7 @@ const renderCanvasToDataUrl = (canvas: HTMLCanvasElement | null, format: string,
 
 export const downloadChart = (
   redraw: (device_pixel_ratio: number) => HTMLCanvasElement | null,
+  filename: string,
   filetype: string,
   device_pixel_ratio: number = 2.0
 ) => {
@@ -35,7 +36,7 @@ export const downloadChart = (
   const canvas = redraw(device_pixel_ratio);
   const link = document.createElement("a");
   link.href = renderCanvasToDataUrl(canvas, formats[filetype], backgrounds[filetype]);
-  link.download = "results." + filetype;
+  link.download = `${filename}.${filetype}`;
   link.click();
   redraw(1.0);
 };

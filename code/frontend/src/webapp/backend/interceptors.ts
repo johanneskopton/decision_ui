@@ -13,3 +13,17 @@ export const registerUnauthorizedInterceptor = (onUnauthorized: () => void) => {
     }
   );
 };
+
+export const registerNetworkErrorInterceptor = (onNetworkError: () => void) => {
+  axios.interceptors.response.use(
+    async (response: AxiosResponse) => {
+      return response;
+    },
+    async (error: AxiosError) => {
+      if (error.code === "ERR_NETWORK" || error.code === "ERR_BAD_RESPONSE") {
+        onNetworkError();
+      }
+      throw error;
+    }
+  );
+};

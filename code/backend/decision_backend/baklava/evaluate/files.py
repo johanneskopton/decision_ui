@@ -72,15 +72,12 @@ def read_results_file(result_fp: str, bins=100) -> HistogramData:
     return HistogramData(values=values, bins=combined_bins.tolist())
 
 
-def read_evpi_file(evpi_fp: str):
+def read_evpi_file(evpi_fp: str) -> Mapping[str, Mapping[str, float]]:
     try:
         df = pd.read_csv(evpi_fp)
     except pd.errors.EmptyDataError:
         return []
-    res = []
-    for i, row in df.iterrows():
-        res.append(row.to_dict())
-    return res
+    return {row["variable"]: row.loc[df.columns != "variable"].to_dict() for _, row in df.iterrows()}
 
 
 @contextmanager

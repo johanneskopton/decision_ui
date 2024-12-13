@@ -30,9 +30,6 @@
         userStore.doLogin(email.value, token);
         router.push("/user/files");
       },
-      onNetworkError: () => {
-        snackbarNetworkErrorVisible.value = true;
-      },
       onWrongCredentials: () => {
         snackbarLoginFailedVisible.value = true;
         formErrorMessage.value = "Wrong email or password";

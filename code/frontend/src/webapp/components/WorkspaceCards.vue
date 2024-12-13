@@ -9,11 +9,13 @@
     display: flex;
     flex-wrap: wrap;
     align-items: start;
-    gap: max(10px, 1%);
-    padding: max(10px, 1%);
+
+    gap: 0.75em;
+    padding: 0.75em;
   }
+
   div.dashboard .v-card {
     flex-grow: 1;
-    padding: max(10px, 1%);
+    padding: 1em;
   }
 </style>

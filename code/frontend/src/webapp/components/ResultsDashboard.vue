@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import Dashboard from "./WorkspaceCards.vue";
   import ResultHistogram from "./ResultHistogram.vue";
-  import EvpiTable from "./EvpiTable.vue";
+  import EvpiChart from "./EvpiChart.vue";
 </script>
 
 <template>
   <Dashboard>
     <ResultHistogram />
-    <EvpiTable />
+    <EvpiChart />
   </Dashboard>
 </template>

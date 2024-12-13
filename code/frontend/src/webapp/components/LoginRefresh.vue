@@ -20,9 +20,6 @@
     if (userStore.login.token) {
       await doRefreshRequest({
         token: userStore.login.token,
-        onNetworkError: () => {
-          // do nothing? and try again a bit later
-        },
         onSuccess: (token: string) => {
           userStore.refreshToken(token);
         },
@@ -44,4 +41,4 @@
   createLoginTokenRefreshTimer();
 </script>
 
-<template></template>
+<template><div v-if="false" /></template>

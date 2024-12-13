@@ -4,42 +4,44 @@
   import { storeToRefs } from "pinia";
   import { computed } from "vue";
 
-  const { decisionSupportResult } = storeToRefs(useModelStore());
+  const modelStore = useModelStore();
+  const { evpiResult } = storeToRefs(modelStore);
 
-  const evpi = computed(() => {
-    if (!decisionSupportResult.value) return [];
-    if (!decisionSupportResult.value.evpi) return [];
-    return decisionSupportResult.value.evpi;
+  const result_variables = computed((): string[] => {
+    if (evpiResult.value == null) {
+      return [];
+    }
+    const evpi = evpiResult.value.evpi;
+    return Object.keys(evpi[Object.keys(evpi)[0]]);
   });
 
-  const result_vars = computed(() => {
-    const evpi_line = evpi.value[0];
-    const res: string[] = [];
-    Object.keys(evpi_line).forEach(key => {
-      if (key != "variable" && key != "$id") {
-        res.push(key);
-      }
+  const table_data = computed(() => {
+    if (evpiResult.value == null) {
+      return [];
+    }
+    const evpi = evpiResult.value.evpi;
+    return Object.keys(evpi).map(k => {
+      return { variable: k, ...evpi[k] };
     });
-    return res;
   });
 </script>
 
 <template>
   <v-card color="white" elevation="1" class="card" rounded>
     <v-card-title>Expected Value Of Perfect Information (EVPI)</v-card-title>
-    <vue-excel-editor v-if="evpi.length > 0" v-model="evpi" width="100%" class="table">
+    <vue-excel-editor v-if="evpiResult" v-model="table_data" width="100%" class="table">
       <vue-excel-column readonly field="variable" label="variable" width="200px" />
       <vue-excel-column
-        v-for="result_var in result_vars"
-        :key="result_var"
-        :field="result_var"
-        :label="result_var"
+        v-for="v in result_variables"
+        :key="v"
+        :field="v"
+        :label="v"
         readonly
         width="150px"
         type="number"
       />
     </vue-excel-editor>
-    <RunButton get-evpi :evpi-set="evpi.length > 0" />
+    <RunButton get-evpi />
   </v-card>
 </template>
 

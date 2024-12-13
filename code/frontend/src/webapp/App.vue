@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import LoginRefresh from "./components/LoginRefresh.vue";
+  import NetworkErrorSnackbar from "./components/NetworkErrorSnackbar.vue";
 </script>
 
 <template>
   <v-app>
-    <LoginRefresh />
     <router-view />
+    <LoginRefresh />
+    <NetworkErrorSnackbar />
   </v-app>
 </template>
 
