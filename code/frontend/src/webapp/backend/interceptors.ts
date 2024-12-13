@@ -20,7 +20,7 @@ export const registerNetworkErrorInterceptor = (onNetworkError: () => void) => {
       return response;
     },
     async (error: AxiosError) => {
-      if (error.code === "ERR_NETWORK" || error.code === "ERR_BAD_RESPONSE") {
+      if (error.code === "ERR_NETWORK") {
         onNetworkError();
       }
       throw error;

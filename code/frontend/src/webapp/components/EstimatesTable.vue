@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { onMounted } from "vue";
+  import { onMounted, computed } from "vue";
 
   import { useModelStore, type EstimatesTableRow } from "../state/model";
   import { parseCSV } from "../helper/csv_parser";
@@ -8,23 +8,17 @@
 
   const modelStore = useModelStore();
 
-  const getEstimatesData = () => {
+  const estimatesData = computed(() => {
     if (live) {
       return modelStore.estimates;
     } else {
-      if (modelStore.decisionSupportResult && modelStore.decisionSupportResult.estimates) {
-        return parseCSV(modelStore.decisionSupportResult.estimates);
+      if (modelStore.decisionSupportResult && modelStore.decisionSupportResult.estimates_csv) {
+        return parseCSV(modelStore.decisionSupportResult.estimates_csv);
       } else {
         return [];
       }
     }
-  };
-
-  const estimatesData = getEstimatesData();
-
-  const title = () => {
-    return live ? "Estimate editor" : "Generated estimates";
-  };
+  });
 
   onMounted(() => {
     const estimate_names: string[] = [];
@@ -67,7 +61,16 @@
 
 <template>
   <v-card color="white" elevation="1" class="estimatesTable" rounded>
-    <v-card-title>{{ title() }}</v-card-title>
+    <v-card-item>
+      <template #title>
+        <span v-if="live">Estimate editor</span>
+        <span v-else>Generated estimates</span>
+      </template>
+      <template #subtitle>
+        <span v-if="live">All estimates of the model synchronized with the model editor:</span>
+        <span v-else>Backend estimates that were used to run the monte carlo simulation:</span>
+      </template>
+    </v-card-item>
     <v-card-text>
       <vue-excel-editor v-if="estimatesData.length > 0" v-model="estimatesData" no-paging no-header-edit>
         <vue-excel-column readonly field="label" label="label" width="150px" sticky />

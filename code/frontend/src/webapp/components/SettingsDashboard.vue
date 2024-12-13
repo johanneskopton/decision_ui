@@ -9,7 +9,12 @@
 <template>
   <Dashboard class="dashboard">
     <v-card color="white" elevation="1" rounded class="card">
-      <v-card-title>Settings</v-card-title>
+      <v-card-item>
+        <template #title>Settings</template>
+        <template #subtitle
+          >Choose from various option that influence both the frontend and backend calculations:</template
+        >
+      </v-card-item>
       <v-card-text>
         <v-table class="settingsTable" density="compact">
           <tbody>
