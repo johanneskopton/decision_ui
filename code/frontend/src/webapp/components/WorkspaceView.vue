@@ -78,7 +78,7 @@
     position: relative;
     display: block;
     flex: 1 1;
-    overflow: scroll;
+    overflow: auto;
   }
 
   .run-button {

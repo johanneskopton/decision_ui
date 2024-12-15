@@ -4,8 +4,8 @@
   import { type Chart } from "chart.js";
 
   import { storeToRefs } from "pinia";
-  import { drawCombinedResultsHistogram } from "@/charts/histogram/combined";
-  import { downloadChart } from "@/charts/download";
+  import { drawCombinedResultsHistogram } from "../charts/histogram/combined";
+  import { downloadChart } from "../charts/download";
 
   const modelStore = useModelStore();
   const { decisionSupportResult } = storeToRefs(modelStore);

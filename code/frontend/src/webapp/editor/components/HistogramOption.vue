@@ -15,7 +15,7 @@
     type InterfaceTypeSet,
     type FlexibleNumber
   } from "../common/types";
-  import { drawNodeHistogram } from "@/charts/histogram/node";
+  import { drawNodeHistogram } from "../../charts/histogram/node";
 
   const { modelValue = null } = defineProps<{ modelValue: FlexibleNumber | null }>();
 

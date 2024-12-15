@@ -57,7 +57,7 @@
 
     pre {
       max-height: 12em;
-      overflow-y: scroll;
+      overflow-y: auto;
       border: 1px solid #ddd;
       background: #eee;
       min-height: 2em;

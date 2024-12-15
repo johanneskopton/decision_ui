@@ -73,7 +73,7 @@
   .codeCard {
     pre {
       margin: 1em;
-      overflow-y: scroll;
+      overflow-y: auto;
       border: 1px solid #ddd;
       min-height: 2em;
       font-size: 11pt;

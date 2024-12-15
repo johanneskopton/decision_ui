@@ -8,7 +8,7 @@
 
   import "@baklavajs/themes/dist/syrup-dark.css";
   import ModelValidationDialog from "./ModelValidationDialog.vue";
-  import { useUserStore } from "@/state/user";
+  import { useUserStore } from "../state/user";
   import SaveModelDialog from "./SaveModelDialog.vue";
 
   const modelStore = useModelStore();

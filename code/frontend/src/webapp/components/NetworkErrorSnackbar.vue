@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { registerNetworkErrorInterceptor } from "@/backend/interceptors";
+  import { registerNetworkErrorInterceptor } from "../backend/interceptors";
   import { ref } from "vue";
 
   const show = ref<boolean>(false);

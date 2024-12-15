@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { storeToRefs } from "pinia";
 
-  import { useModelStore } from "@/state/model";
+  import { useModelStore } from "../state/model";
   import { useTemplateRef, ref, watch, onMounted, computed } from "vue";
   import type { Chart } from "chart.js";
-  import { drawEvpiBoxChart } from "@/charts/histogram/evpi";
+  import { drawEvpiBoxChart } from "../charts/histogram/evpi";
   import RunButton from "./RunButton.vue";
-  import { downloadChart } from "@/charts/download";
+  import { downloadChart } from "../charts/download";
 
   const modelStore = useModelStore();
   const { evpiResult } = storeToRefs(modelStore);
