@@ -72,7 +72,14 @@
       </template>
     </v-card-item>
     <v-card-text>
-      <vue-excel-editor v-if="estimatesData.length > 0" v-model="estimatesData" no-paging no-header-edit>
+      <vue-excel-editor
+        v-if="estimatesData.length > 0"
+        v-model="estimatesData"
+        no-paging
+        no-header-edit
+        no-sorting
+        no-mass-update
+      >
         <vue-excel-column readonly field="label" label="label" width="150px" sticky />
         <vue-excel-column readonly field="variable" label="variable" width="150px" />
         <vue-excel-column readonly field="distribution" label="distribution" />
@@ -93,6 +100,7 @@
   }
 
   .vue-excel-editor {
+    margin-top: 1em;
     display: block;
     min-width: 0;
   }

@@ -47,8 +47,12 @@
 <style scoped lang="scss">
   .executionErrorDialog {
     .v-card {
-      padding: 0.5em;
+      padding: 1.5em 1em 1em 1em;
       margin: 0 auto;
+    }
+
+    .v-card-text {
+      overflow: auto;
     }
 
     pre {

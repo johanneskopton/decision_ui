@@ -67,7 +67,8 @@ def read_results_file(result_fp: str, bins=100) -> HistogramData:
     # get individual histogram values for each result using combined bins
     values: Mapping[str, Sequence[float]] = {}
     for column in df:
-        values[str(column)[2:]] = np.histogram(df[column], bins=combined_bins, density=True)[0].tolist()
+        variable_name = str(column)[2:] if str(column).startswith("y.") else str(column)
+        values[variable_name] = np.histogram(df[column], bins=combined_bins, density=True)[0].tolist()
 
     return HistogramData(values=values, bins=combined_bins.tolist())
 

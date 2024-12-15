@@ -36,7 +36,7 @@
     const evpi = evpiResult.value.evpi;
     const estimates = Object.keys(evpi).length;
     const results = Object.keys(evpi[Object.keys(evpi)[0]]).length;
-    return estimates * results * 1.5 + "em";
+    return `${5 + estimates * (results + 1) * 1.0}em`;
   });
 
   const downloadEvpiChart = (filetype: string) => {
@@ -102,10 +102,10 @@
 
   .canvasContainer {
     height: v-bind(chartHeight);
+    min-height: 15em;
+    width: 100%;
     flex-grow: 1;
-    max-height: 40em;
     overflow: hidden;
-
     position: relative;
 
     canvas {

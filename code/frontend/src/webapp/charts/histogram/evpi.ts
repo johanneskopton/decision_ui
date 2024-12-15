@@ -13,11 +13,8 @@ export const drawEvpiBoxChart = (
 ): Chart<"bar"> => {
   if (chart) chart.destroy();
 
-  console.log("evpi: " + JSON.stringify(evpi));
   const estimate_variables = Object.keys(evpi);
   const result_variables = Object.keys(evpi[Object.keys(evpi)[0]]);
-  console.log("estimate_variables: " + JSON.stringify(estimate_variables));
-  console.log("result variables: " + JSON.stringify(result_variables));
 
   return new Chart<"bar">(ctx, {
     type: "bar",
@@ -52,6 +49,7 @@ export const drawEvpiBoxChart = (
         y: {
           type: "category",
           ticks: {
+            autoSkip: false,
             color: TEXT_COLOR,
             font: {
               size: 14

@@ -46,30 +46,41 @@
       .catch(response => receiveResultsError(response));
   };
 
-  const openDialog = () => {
-    modelName.value = modelStore.name;
-  };
+  defineExpose({
+    openDialog() {
+      nameDialog.value = true;
+      modelName.value = modelStore.name;
+    }
+  });
 </script>
 
 <template>
-  <v-dialog v-if="userStore.login.token" v-model="nameDialog" scrollable max-width="300px">
-    <template #activator="{ props }">
-      <v-btn class="ma-2" variant="text" color="secondary" v-bind="props" @click="openDialog">
-        <v-icon> mdi-content-save-outline </v-icon>
-      </v-btn>
-    </template>
-    <v-card>
-      <v-card-title>Model name:</v-card-title>
-      <v-divider />
+  <v-dialog v-model="nameDialog" max-width="400px">
+    <v-card class="nameCard">
+      <v-card-item title="Save Model" subtitle="Choose a name for this model:" />
       <v-card-text>
-        <v-text-field v-model="modelName" autofocus @keyup.enter="saveGraphUser()" />
+        <v-text-field
+          v-model="modelName"
+          placeholder="a name describing the model"
+          autofocus
+          @keyup.enter="saveGraphUser()"
+        />
       </v-card-text>
-      <v-divider />
       <v-card-actions>
-        <v-btn color="grey-darken-1" variant="text" @click="nameDialog = false"> Cancel </v-btn>
+        <v-btn color="dark" variant="text" @click="nameDialog = false"> Cancel </v-btn>
         <v-spacer />
-        <v-btn color="primary-darken-1" variant="text" @click="saveGraphUser()"> Save </v-btn>
+        <v-btn color="primary" :disabled="!modelName" variant="text" @click="saveGraphUser()"> Save </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
+
+<style scoped lang="scss">
+  .nameCard {
+    padding: 0.5em;
+
+    .v-card-actions {
+      padding: 0 1em;
+    }
+  }
+</style>

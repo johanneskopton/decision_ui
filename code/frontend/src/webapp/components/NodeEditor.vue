@@ -3,24 +3,21 @@
   import { BaklavaEditor } from "@baklavajs/renderer-vue";
   import { saveAs } from "file-saver";
 
-  import SaveButton from "./SaveButton.vue";
-
   import clean_model_json from "../helper/clean_model_json";
   import { useModelStore } from "../state/model";
 
   import "@baklavajs/themes/dist/syrup-dark.css";
   import ModelValidationDialog from "./ModelValidationDialog.vue";
+  import { useUserStore } from "@/state/user";
+  import SaveModelDialog from "./SaveModelDialog.vue";
 
   const modelStore = useModelStore();
+  const userStore = useUserStore();
   const loadfile = useTemplateRef<HTMLInputElement>("loadfile");
+  const saveModelDialog = useTemplateRef<typeof SaveModelDialog>("saveModelDialog");
   const baklavaRenderKey = ref<number>(1);
   const modelValidationDialog = useTemplateRef<typeof ModelValidationDialog>("modelValidationDialog");
   const toggleNone = null;
-
-  const token = Symbol();
-  modelStore.baklava.editor.nodeEvents.update.subscribe(token, () => {
-    modelStore.unsaved = true;
-  });
 
   const updateGraphCalculation = () => {
     if (modelStore.baklava.editor.graph.nodes.length > 0) {
@@ -96,7 +93,13 @@
             </v-btn>
           </template>
         </v-tooltip>
-        <SaveButton />
+        <v-tooltip v-if="userStore.login.token" location="top" text="Save Model" open-delay="500">
+          <template #activator="{ props }">
+            <v-btn class="ma-2" variant="text" color="secondary" v-bind="props" @click="saveModelDialog?.openDialog()">
+              <v-icon> mdi-content-save-outline </v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
         <v-tooltip location="top" open-delay="500">
           <template #default>
             <span v-if="modelStore.validationErrorCount > 0">Model has Errors</span>
@@ -131,6 +134,7 @@
         </v-tooltip>
       </v-btn-toggle>
     </v-sheet>
+    <SaveModelDialog ref="saveModelDialog" />
     <ModelValidationDialog ref="modelValidationDialog" />
   </div>
 </template>

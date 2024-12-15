@@ -109,8 +109,14 @@ export const initializeBaklvaState = (): BaklavaState => {
   // register subgraph nodes
   editor.registerNodeType(TypeConstraintNode, operationsCategory);
 
-  // auto modify node titles to make them unique
+  // update unsaved
   const eventToken = Symbol();
+  editor.nodeEvents.update.subscribe(eventToken, () => {
+    const modelStore = useModelStore();
+    modelStore.unsaved = true;
+  });
+
+  // auto modify node titles to make them unique
   editor.graph.events.beforeAddNode.subscribe(eventToken, (node, _, graph) => {
     const isTitleUnique = (title: string) => {
       return !graph.nodes.find(n => n.title == title);
