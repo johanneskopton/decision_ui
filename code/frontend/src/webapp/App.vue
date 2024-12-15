@@ -19,11 +19,13 @@
   body {
     margin: 0;
     font-family: Roboto !important;
+    
   }
 
   html,
   body,
   #app {
     height: 100%;
+    overflow: hidden;
   }
 </style>
