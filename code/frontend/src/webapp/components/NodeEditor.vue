@@ -19,11 +19,6 @@
   const modelValidationDialog = useTemplateRef<typeof ModelValidationDialog>("modelValidationDialog");
   const toggleNone = null;
 
-  const updateGraphCalculation = () => {
-    modelStore.baklava.engine.stop();
-    modelStore.baklava.engine.start();
-  };
-
   const saveGraph = () => {
     let model = modelStore.baklava.editor.save();
     model = clean_model_json(model);
@@ -33,35 +28,24 @@
     saveAs(blob, "graph.json");
   };
 
-  const loadGraph = () => {
+  const loadGraph = async () => {
     if (loadfile.value && loadfile.value.files) {
-      const file = loadfile.value.files[0];
-      const reader = new FileReader();
-      reader.addEventListener(
-        "load",
-        () => {
-          // reset model store, otherwise bakalva will return error during loading (probably related to subgraphs)
-          modelStore.reset();
+      const json = await loadfile.value.files[0].text();
+      modelStore.baklava.engine.stop();
 
-          // load json file
-          modelStore.baklava.editor.load(JSON.parse(reader.result as string));
+      // reset model store, otherwise bakalva will return error during loading (probably related to subgraphs)
+      modelStore.reset();
 
-          // restart engine and do one calculation
-          modelStore.baklava.engine.start();
-          updateGraphCalculation();
+      // load json file
+      modelStore.baklava.editor.load(JSON.parse(json));
 
-          // force re-render of baklava editor (otherwise it looks broken)
-          baklavaRenderKey.value = baklavaRenderKey.value + 1;
-        },
-        false
-      );
-      reader.readAsText(file);
+      // restart engine and do one calculation
+      modelStore.baklava.engine.start();
+
+      // force re-render of baklava editor (otherwise it looks broken)
+      baklavaRenderKey.value = baklavaRenderKey.value + 1;
     }
   };
-
-  onMounted(() => {
-    updateGraphCalculation();
-  });
 
   onMounted(() => {
     modelStore.baklava.engine.start();

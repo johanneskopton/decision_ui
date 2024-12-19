@@ -152,9 +152,11 @@ export const initializeBaklvaState = (): BaklavaState => {
   });
 
   // restart engine after node title change in order to update model validation
-  editor.nodeEvents.titleChanged.subscribe(Symbol(), () => {
-    engine.stop();
-    engine.start();
+  editor.nodeEvents.titleChanged.subscribe(Symbol(), (_, node) => {
+    // do not update if title was changed as part of a loading process (e.g. when switching to a subgraph)
+    if (!(node as any).preventUpdate) {
+      useModelStore().refreshCalculation();
+    }
   });
 
   return {

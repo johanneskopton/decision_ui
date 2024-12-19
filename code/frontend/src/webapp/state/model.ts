@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Graph, Node } from "baklavajs";
+import { EngineStatus, type Graph, type Node } from "baklavajs";
 
 import { initializeBaklvaState, type BaklavaState } from "../editor";
 import type { ValidationFeedback } from "../editor/common/validate";
@@ -100,6 +100,12 @@ export const useModelStore = defineStore("model", {
   actions: {
     reset() {
       Object.assign(this, initializeModelState());
+    },
+    refreshCalculation() {
+      if (this.baklava.engine.status !== EngineStatus.Stopped) {
+        this.baklava.engine.stop();
+        this.baklava.engine.start();
+      }
     },
     resetValidationErrors() {
       this.validation.nodes = {};
