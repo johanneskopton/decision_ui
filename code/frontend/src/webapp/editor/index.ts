@@ -38,7 +38,6 @@ export interface BaklavaState {
   viewPlugin: IBaklavaViewModel;
   editor: Editor;
   engine: DependencyEngine<GlobalCalculationData>;
-  eventToken: symbol;
 }
 
 /**
@@ -110,14 +109,13 @@ export const initializeBaklvaState = (): BaklavaState => {
   editor.registerNodeType(TypeConstraintNode, operationsCategory);
 
   // update unsaved
-  const eventToken = Symbol();
-  editor.nodeEvents.update.subscribe(eventToken, () => {
+  editor.nodeEvents.update.subscribe(Symbol(), () => {
     const modelStore = useModelStore();
     modelStore.unsaved = true;
   });
 
   // auto modify node titles to make them unique
-  editor.graph.events.beforeAddNode.subscribe(eventToken, (node, _, graph) => {
+  editor.graph.events.beforeAddNode.subscribe(Symbol(), (node, _, graph) => {
     const isTitleUnique = (title: string) => {
       return !graph.nodes.find(n => n.title == title);
     };
@@ -130,16 +128,15 @@ export const initializeBaklvaState = (): BaklavaState => {
 
   // initialize engine
   const engine = new DependencyEngine<{ mcRuns: number }>(editor);
-
   fixSlowLoadingWhenSwitchingGraphs(editor, engine);
 
-  engine.events.afterRun.subscribe(eventToken, result => {
+  engine.events.afterRun.subscribe(Symbol(), result => {
     engine.pause();
     applyResult(result, editor);
     engine.resume();
   });
 
-  engine.hooks.gatherCalculationData.subscribe(eventToken, () => {
+  engine.hooks.gatherCalculationData.subscribe(Symbol(), () => {
     const modelStore = useModelStore();
     modelStore.resetValidationErrors();
     for (const graph of editor.graphs) {
@@ -151,10 +148,15 @@ export const initializeBaklvaState = (): BaklavaState => {
     return { mcRuns: modelStore.settings.frontend.mcRuns, registerValidationError: modelStore.addNodeValidationError };
   });
 
+  // restart engine after node title change in order to update model validation
+  editor.nodeEvents.titleChanged.subscribe(Symbol(), () => {
+    engine.stop();
+    engine.start();
+  });
+
   return {
     editor,
     viewPlugin,
-    engine,
-    eventToken
+    engine
   };
 };

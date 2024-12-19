@@ -1,5 +1,11 @@
 import { NodeInterfaceType } from "baklavajs";
 
+export const ESTIMATE_NODE_TYPE = "Estimate";
+export const RESULT_NODE_TYPE = "Result";
+export const SUBGRAPH_INPUT_NODE_TYPE = "__baklava_SubgraphInputNode";
+export const SUBGRAPH_OUTPUT_NODE_TYPE = "__baklava_SubgraphOutputNode";
+export const SUBGRAPH_INSTANCE_NODE_TYPE_PREFIX = "__baklava_GraphNode";
+
 export const FLEXIBLE_TYPE_NAME = "flexible";
 
 export const DETERMINISTIC_TYPE = "deterministic";

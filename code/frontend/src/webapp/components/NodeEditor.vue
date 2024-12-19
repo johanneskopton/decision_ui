@@ -20,9 +20,8 @@
   const toggleNone = null;
 
   const updateGraphCalculation = () => {
-    if (modelStore.baklava.editor.graph.nodes.length > 0) {
-      modelStore.baklava.editor.graph.nodes[0].events.update.emit(null);
-    }
+    modelStore.baklava.engine.stop();
+    modelStore.baklava.engine.start();
   };
 
   const saveGraph = () => {
