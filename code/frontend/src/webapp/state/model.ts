@@ -25,6 +25,7 @@ export interface EstimatesTableRow {
   distribution: string;
   lower: number;
   upper: number;
+  comment: string;
 }
 
 interface Settings {
@@ -61,7 +62,7 @@ interface ModelState {
   settings: Settings;
   decisionSupportResult: DecisionSupportResult | null;
   evpiResult: EVPIResult | null;
-  estimates: EstimatesTableRow[];
+  estimates: { [nodeId: string]: EstimatesTableRow };
   unsaved: boolean;
   lastSaved: number;
   name: string;
@@ -87,7 +88,7 @@ const initializeModelState = (): ModelState => {
     },
     decisionSupportResult: null,
     evpiResult: null,
-    estimates: [],
+    estimates: {},
     unsaved: true,
     lastSaved: 0,
     name: ""

@@ -29,6 +29,7 @@ import { TypeConstraintNode } from "./nodes/TypeConstraintNode";
 import { ChanceEventNode } from "./nodes/ChanceEventNode";
 import { validateGraph } from "./common/validate";
 import { debounce } from "../common/throttle";
+import { generateEstimatesTableFromGraph } from "./common/estimates";
 
 export interface GlobalCalculationData {
   mcRuns: number;
@@ -145,6 +146,8 @@ export const initializeBaklvaState = (): BaklavaState => {
         validateGraph(graph, modelStore.addGraphValidationError, modelStore.addNodeValidationError);
       }
     }
+    // upadate estimates table
+    modelStore.estimates = generateEstimatesTableFromGraph(editor.graph);
     return { mcRuns: modelStore.settings.frontend.mcRuns, registerValidationError: modelStore.addNodeValidationError };
   });
 
