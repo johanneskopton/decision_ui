@@ -22,7 +22,7 @@ asarUnpack:
   - resources/**
 win:
   executableName: decision-support-ui
-  icon: resources/images/logo.ico
+  icon: public/favicon.ico
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -33,7 +33,7 @@ nsis:
   createDesktopShortcut: always
   createStartMenuShortcut: true
   runAfterFinish: false
-  installerIcon: resources/images/logo.ico
+  installerIcon: public/favicon.ico
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
