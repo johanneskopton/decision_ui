@@ -67,15 +67,39 @@
       <template #subtitle> The results of the value of information analysis: </template>
 
       <template #append>
-        <v-btn-group v-show="evpiResult != null" density="compact">
+        <v-btn-group density="compact">
           <v-tooltip location="bottom" text="download chart as PNG image" open-delay="500">
             <template #activator="{ props }">
-              <v-btn density="compact" v-bind="props" @click.prevent="() => downloadEvpiChart('png')"> png </v-btn>
+              <v-btn
+                v-show="evpiResult != null"
+                density="compact"
+                v-bind="props"
+                @click.prevent="() => downloadEvpiChart('png')"
+              >
+                png
+              </v-btn>
             </template>
           </v-tooltip>
           <v-tooltip location="bottom" text="download chart as JPG image" open-delay="500">
             <template #activator="{ props }">
-              <v-btn density="compact" v-bind="props" @click.prevent="() => downloadEvpiChart('jpg')"> jpg </v-btn>
+              <v-btn
+                v-show="evpiResult != null"
+                density="compact"
+                v-bind="props"
+                @click.prevent="() => downloadEvpiChart('jpg')"
+              >
+                jpg
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <v-tooltip location="bottom" text="go to help section" open-delay="500">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" to="/user/workspace/help/advanced-features/evpi/">
+                <template #prepend>
+                  <v-icon size="large"> mdi-help-circle-outline </v-icon>
+                </template>
+                Help
+              </v-btn>
             </template>
           </v-tooltip>
         </v-btn-group>

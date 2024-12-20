@@ -10,6 +10,7 @@ import RegistrationForm from "./components/RegistrationForm.vue";
 import Workspace from "./components/WorkspaceView.vue";
 import FileView from "./components/FileView.vue";
 import SettingsDashboard from "./components/SettingsDashboard.vue";
+import HelpDashboard from "./components/HelpDashboard.vue";
 
 const routes = [
   {
@@ -39,6 +40,10 @@ const routes = [
           {
             path: "code",
             component: CodeDashboard
+          },
+          {
+            path: "help/:path*",
+            component: HelpDashboard
           },
           {
             path: "settings",

@@ -7,6 +7,7 @@ yarn-debug.log*
 yarn-error.log*
 /test/unit/coverage/
 resources/decision-support-ui-backend
+public/static/documentation
 
 # Editor directories and files
 .idea

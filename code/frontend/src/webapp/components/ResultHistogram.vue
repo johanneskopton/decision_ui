@@ -58,15 +58,39 @@
       <template #subtitle> The results of the monte carlo simulation: </template>
 
       <template #append>
-        <v-btn-group v-show="decisionSupportResult != null" density="compact">
+        <v-btn-group density="compact">
           <v-tooltip location="bottom" text="download histogram as PNG image" open-delay="500">
             <template #activator="{ props }">
-              <v-btn density="compact" v-bind="props" @click.prevent="() => downloadHistogram('png')"> png </v-btn>
+              <v-btn
+                v-show="decisionSupportResult != null"
+                density="compact"
+                v-bind="props"
+                @click.prevent="() => downloadHistogram('png')"
+              >
+                png
+              </v-btn>
             </template>
           </v-tooltip>
           <v-tooltip location="bottom" text="download histogram as JPG image" open-delay="500">
             <template #activator="{ props }">
-              <v-btn density="compact" v-bind="props" @click.prevent="() => downloadHistogram('jpg')"> jpg </v-btn>
+              <v-btn
+                v-show="decisionSupportResult != null"
+                density="compact"
+                v-bind="props"
+                @click.prevent="() => downloadHistogram('jpg')"
+              >
+                jpg
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <v-tooltip location="bottom" text="go to help section" open-delay="500">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" to="/user/workspace/help/user-interface/result-dashboard/">
+                <template #prepend>
+                  <v-icon size="large"> mdi-help-circle-outline </v-icon>
+                </template>
+                Help
+              </v-btn>
             </template>
           </v-tooltip>
         </v-btn-group>

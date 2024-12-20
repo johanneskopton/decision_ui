@@ -47,6 +47,11 @@
               />
             </template>
           </v-tooltip>
+          <v-tooltip location="right" text="Help" open-delay="500">
+            <template #activator="{ props }">
+              <v-list-item v-bind="props" to="/user/workspace/help" prepend-icon="mdi-help-circle-outline" />
+            </template>
+          </v-tooltip>
         </v-list>
       </template>
     </v-navigation-drawer>

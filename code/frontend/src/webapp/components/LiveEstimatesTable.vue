@@ -92,12 +92,27 @@
           </v-tooltip>
           <v-tooltip location="bottom" text="upload CSV file" open-delay="500">
             <template #activator="{ props }">
-              <v-btn density="compact" v-bind="props" @click="uploadEstimatesInput?.click()">
+              <v-btn
+                v-show="estimatesData.length > 0"
+                density="compact"
+                v-bind="props"
+                @click="uploadEstimatesInput?.click()"
+              >
                 <template #prepend>
                   <v-icon> mdi-tray-arrow-up </v-icon>
                 </template>
                 <input ref="uploadEstimatesInput" type="file" style="display: none" @change="onUploadEstimates" />
                 upload
+              </v-btn>
+            </template>
+          </v-tooltip>
+          <v-tooltip location="bottom" text="go to help section" open-delay="500">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" to="/user/workspace/help/user-interface/estimate-editor/">
+                <template #prepend>
+                  <v-icon size="large"> mdi-help-circle-outline </v-icon>
+                </template>
+                Help
               </v-btn>
             </template>
           </v-tooltip>

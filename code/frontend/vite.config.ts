@@ -15,6 +15,7 @@ const commitHash = childProcess.execSync("git rev-parse --short HEAD").toString(
 export default defineConfig({
   root: "src/webapp/",
   envDir: "../../config",
+  publicDir: "../../public",
   build: {
     outDir: "../../dist/webapp",
     emptyOutDir: true
