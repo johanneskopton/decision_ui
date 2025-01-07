@@ -2,199 +2,191 @@
 
 This application can be installed in multiple ways:
 
-- [Desktop Installation on Windows](#desktop-installation-on-windows)
-- [Docker Installation on Linux](docker-linux)
-- [Installation From Source](from-source)
+- Desktop Installation on Windows
+- Container Installation on Linux
+- Container Installation on MacOS
+- Installation From Source
 
 ## Desktop Installation on Windows
 
-Test test test
+In order to install the Decision Support UI as a desktop application, please download and run the latest Windows
+installation wizard executable from the [releases page](https://github.com/johanneskopton/decision_ui/releases) on
+GitHub (e.g. the file `decision-support-ui-X.X.X-setup.exe`).
 
-Test test test
-Test test test
+![GitHub releases page](./github-releases-page.webp)
 
-Test test test
-Test test test
+There a no additional requirements. The installation wizard will guide you through the installation process.
 
-Test test test
-Test test test
+![Installation Wizard](./installation-wizard.webp)
 
-Test test test
-Test test test
+Afterwards, you can start the application by clicking on the corresponding desktop icon or start menu entry.
 
-Test test test
-Test test test
+![Desktop Application](./desktop-application.webp)
 
-Test test test
-Test test test
+### Uninstall
 
-Test test test
-Test test test
+You can remove the applicatiom from the Windows settings page called `Apps & features` or `Add and Remove Programs`:
 
-Test test test
-Test test test
+![Uninstall the Application](./uninstall-application.webp)
 
-Test test test
-Test test test
+### Backup
 
-Test test test
-Test test test
+You may create a backup of your data (user accounts and models) by copying the file `decision-support-ui-backend.db`
+from the directory `%APPDATA%\decision-support-ui`.
 
-Test test test
-Test test test
+![Backup Database](./backup-database.webp)
 
-Test test test
-Test test test
+Please keep in mind that this file is most likely not compatible with a different version of the application.
 
-Test test test
-Test test test
+## Container Installation on Linux
 
-Test test test
-Test test test
+On Linux, you can install the application using [Docker](https://www.docker.com/), [Podman](https://podman.io/) or
+similar container management tools. Please follow their respective installation instructions or install the tools
+from the software repository of your favorite Linux distribution.
 
-Test test test
-Test test test
+The following instructions are based on Fedora Linux and Podman.
 
-Test test test
-Test test test
+### Build Container Image
 
-Test test test
-Test test test
+As of now, there are no pre-built images available on [Docker Hub](https://hub.docker.com/). Instead, you have to build
+an image yourself.
 
-Test test test
-Test test test
+First, download the source code from GitHub:
 
-Test test test
-Test test test
+```
+git clone https://github.com/johanneskopton/decision_ui.git
+```
 
-Test test test
-Test test test
+You can find the necessary files in the directory `deployment/staging`. For performance reasons, the Dockerfile is
+split into two files:
 
-Test test test
-Test test test
+- `Dockerfile.base`: installs basic build and software dependencies
+- `Dockerfile.server`: installs and runs the application
 
-Test test test
-Test test test
+Both images need to be built before the application can be started.
 
-Test test test
-Test test test
+```
+podman build -f deployment/staging/src/Dockerfile.base -t localhost/decision-support-ui/base:latest .
+podman build -f deployment/staging/src/Dockerfile.server -t localhost/decision-support-ui/server:latest .
+```
 
-Test test test
-Test test test
+Building the base image will download, compile and install R and the [decisionSupport](https://cran.r-project.org/web/packages/decisionSupport/index.html) package from CRAN. This process might take a long time (up to 30 minutes). Building the
+server image should only take a few seconds.
 
-Test test test
-Test test test
+### Run Image
 
-Test test test
-Test test test
+Once the build process has finished successfully, the server container can be started:
 
-Test test test
-Test test test
+```
+podman run \
+    --rm -it \
+    -v /path/to/some/directory:/root/workspace/code/backend/data:Z \
+    -p 8080:8080 \
+    -e DSUI_SECRET=default_secret \
+    localhost/decision-support-ui/server:latest
+```
 
-Test test test
-Test test test
+The following arguments can to be provided:
 
-Test test test
-Test test test
+- `--rm` \
+  delete the container after stopping it
+- `-it` \
+  run container as interactive terminal
+- `-v /path/to/some/directory:/root/workspace/code/backend/data` \
+  mount the data directory such that models are stored permanently on the host machine
+  (append `:Z` on Linux distributions with [SELinux](https://en.wikipedia.org/wiki/Security-Enhanced_Linux))
+- `-e DSUI_SECRET=default_secret` \
+  specify a custom secret (random characters, similiar to a password) to ensure that the application can securely
+  encrypt login data
+- `-e JWT_TOKEN_LIFETIME=600` \
+  lifetime of the JSON Web Tokens (JWT) in seconds (default is 10 minutes)
+- `-e DSUI_LOG_LEVEL=DEBUG` \
+  show debug messages (default level is `INFO`)
+- `-e DSUI_R_MAX_RUNTIME=10` \
+  maximum runtime of R script in seconds (default 10 seconds)
+- `-e DSUI_R_MAX_MCRUNS=100000` \
+  maximum number of monte carlo runs that are allowed to run in the backend (default 100.000)
+- `-e DSUI_R_MAX_BINS=200` \
+  maximum number of histogram bins that can be generated in the backend (default 200)
 
-Test test test
-Test test test
+As soon as the application is started, you can access the user interface from your browser using the address
+[`http://localhost:8080`](http://localhost:8080).
 
-Test test test
-Test test test
+You can stop the application by typing `CTRL + C` in the terminal.
 
-Test test test
-Test test test
+## Container Installation on MacOS
 
-Test test test
-Test test test
+As of now, an installation on MacOS was not tested yet. However, it should be possible to use
+[Podman](https://podman.io/) on MacOS by following the
+[instructions](https://www.redhat.com/en/blog/run-containers-mac-podman) to setup the Podman command line
+interface on MacOS and adapting the `Container Installation on Linux` instructions above.
 
-Test test test
-Test test test
+## Installation from Source
 
-Test test test
-Test test test
+In all other scenarios, you may also install the decision support user interface from its source code. The are three
+main requirements:
 
-Test test test
-Test test test
+- [Python 3](https://www.python.org) (tested with v3.13.0)
+- [NodeJS](https://nodejs.org/) (tested with v22.11.0)
+- [R](https://www.r-project.org/) (tested with v4.4.2)
 
-Test test test
-Test test test
+### Install R and the decisionSupport package
 
-Test test test
-Test test test
+On Windows, you can use the batch script `code/backend/bin/install-r.bat`. It will download and install R in the
+directory `code/backend/resources/R`.
 
-Test test test
-Test test test
+For other operating systems, please follow the respective installation instructions for that plattform.
 
-Test test test
-Test test test
+In addition, you need to install the
+[`decisionSupport`](https://cran.r-project.org/web/packages/decisionSupport/index.html) and `readr` package from CRAN.
+You can install them with the following R command:
 
-Test test test
-Test test test
+```
+install.packages(c("decisionSupport", "readr"))
+```
 
-Test test test
-Test test test
+The application needs to know the correct location of the R executable file. In case the `Rscript` command is available
+on your terminal, Python should detect it and use it by default. Otherwise, you need to specify the envionment variable
+`DSUI_R_SCRIPT_PATH` with your custom path to the `Rscript` executable file. Make sure that the respective R
+environment contains the required packages. Run the following R commands and verify that there are not error messages:
 
-Test test test
-Test test test
+```
+library(readr);
+library(decisionSupport);
+```
 
-Test test test
-Test test test
+### Install Python
 
-Test test test
-Test test test
+For Python, please follow the official [installation instructions](https://docs.python.org/3/using/index.html).
+Make sure that the `python` command is available in your terminal.
 
-Test test test
-Test test test
+### Install NodeJS
 
-Test test test
-Test test test
+For NodeJS, please follow the official [installation instructions](https://nodejs.org/en/download). Make sure that the
+`node` and `npm` command is available in your terminal. Also install the Javascript tool
+[`concurrently`](https://www.npmjs.com/package/concurrently) by executing:
 
-Test test test
-Test test test
+```
+npm install -g concurrently
+```
 
-Test test test
-Test test test
+### Download Source Code and Install Dependencies
 
-Test test test
-Test test test
+Download the source code from GitHub:
 
-Test test test
-Test test test
+```
+git clone https://github.com/johanneskopton/decision_ui.git
+```
 
-Test test test
-Test test test
+Install further software libraries (python packages and Javascript libraries) by executing the bash script
+`bin/install.sh` (or Windows batch file `bin/install.bat`).
 
-Test test test
-Test test test
+### Build the application
 
-Test test test
-Test test test
+You can build the application by executing the bash script `bin/build.sh` (or Windows batch file
+`bin/build.bat`).
 
-Test test test
-Test test test
+### Run the application
 
-Test test test
-Test test test
-
-Test test test
-Test test test
-
-Test test test
-Test test test
-
-Test test test
-Test test test
-
-Test test test
-Test test test
-
-Test test test
-Test test test
-
-Test test test
-Test test test
-
-Test test test
-vv
+You can start the application by executing the bash script `bin/run-webapp.sh` (or Windows batch file
+`bin/run-webapp.bat`).
