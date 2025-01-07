@@ -132,3 +132,5 @@ dmypy.json
 *.db
 resources/*
 !resources/README.md
+data/*
+!data/README.md

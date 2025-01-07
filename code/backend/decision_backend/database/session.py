@@ -13,7 +13,7 @@ from decision_backend.database.schema import Base, User
 
 logger = logging.getLogger(__name__)
 
-DSUI_DATABASE_PATH = os.environ.get("DSUI_DATABASE_PATH", "./decision-support-ui-backend.db")
+DSUI_DATABASE_PATH = os.environ.get("DSUI_DATABASE_PATH", "./data/decision-support-ui-backend.db")
 
 DATABASE_URL = f"sqlite+aiosqlite:///{DSUI_DATABASE_PATH}"
 

@@ -41,7 +41,7 @@ def main():
         "--store",
         metavar="PATH",
         dest="store",
-        help='file path to the sqlite database file (default "./decision-support-ui-backend.db")',
+        help='file path to the sqlite database file (default "./data/decision-support-ui-backend.db")',
         type=str,
     )
 
