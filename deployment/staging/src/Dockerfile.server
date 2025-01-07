@@ -1,22 +1,17 @@
-FROM registry.gitlab.knopflogik.de/uni-bonn/decision-support-ui/base:latest
-
-RUN echo "Hello World"
+FROM localhost/decision-support-ui/base:latest
 
 # copy code
+COPY bin /root/workspace/bin
+COPY documentation /root/workspace/documentation
 COPY code /root/workspace/code
 COPY .git /root/workspace/.git
 
 # install dependencies
-RUN cd /root/workspace/code/backend/bin && bash install.sh
-RUN cd /root/workspace/code/frontend/bin && bash install.sh
-RUN cd /root/workspace/code/server/bin && bash install.sh
+RUN bash /root/workspace/bin/install.sh
 
 # build
 ENV VITE_BACKEND_AUTH_HEADER="X-Auth-Token"
-RUN cd /root/workspace/code/frontend/bin && bash build-webapp.sh
-RUN cd /root/workspace/code/server/bin && bash build.sh
+RUN bash /root/workspace/bin/build.sh
 
 # start backend and frontend
-CMD concurrently \
-    "cd /root/workspace/code/backend/bin && bash run.sh" \
-    "cd /root/workspace/code/server/bin && bash run.sh"
+CMD bash /root/workspace/bin/run-webapp.sh
