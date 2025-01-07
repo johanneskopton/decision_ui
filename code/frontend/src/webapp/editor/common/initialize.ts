@@ -9,27 +9,27 @@ import {
   probabilisticSeriesType,
   deterministicType,
   deterministicIntegerType
-} from "./common/types";
+} from "./types";
 
-import { MathNode } from "./nodes/MathNode";
-import { RoundNode } from "./nodes/RoundNode";
-import { SumNode } from "./nodes/SumNode";
-import { EstimateNode } from "./nodes/EstimateNode";
-import { DebugNode } from "./nodes/DebugNode";
-import { HistogramNode } from "./nodes/HistogramNode";
-import { ResultNode } from "./nodes/ResultNode";
-import { NoteNode } from "./nodes/NoteNode";
-import { ToSeriesNode } from "./nodes/ToSeriesNode";
-import { NPVNode } from "./nodes/NetPresentValueNode";
-import { ValueVarierNode } from "./nodes/ValueVarierNode";
-import { ComparisonNode } from "./nodes/ComparisonNode";
+import { MathNode } from "../nodes/MathNode";
+import { RoundNode } from "../nodes/RoundNode";
+import { SumNode } from "../nodes/SumNode";
+import { EstimateNode } from "../nodes/EstimateNode";
+import { DebugNode } from "../nodes/DebugNode";
+import { HistogramNode } from "../nodes/HistogramNode";
+import { ResultNode } from "../nodes/ResultNode";
+import { NoteNode } from "../nodes/NoteNode";
+import { ToSeriesNode } from "../nodes/ToSeriesNode";
+import { NPVNode } from "../nodes/NetPresentValueNode";
+import { ValueVarierNode } from "../nodes/ValueVarierNode";
+import { ComparisonNode } from "../nodes/ComparisonNode";
 
-import { useModelStore } from "../state/model";
-import { TypeConstraintNode } from "./nodes/TypeConstraintNode";
-import { ChanceEventNode } from "./nodes/ChanceEventNode";
-import { validateGraph } from "./common/validate";
-import { debounce } from "../common/throttle";
-import { generateEstimatesTableFromGraph } from "./common/estimates";
+import { useModelStore } from "../../state/model";
+import { TypeConstraintNode } from "../nodes/TypeConstraintNode";
+import { ChanceEventNode } from "../nodes/ChanceEventNode";
+import { validateGraph } from "./validate";
+import { debounce } from "../../common/throttle";
+import { generateEstimatesTableFromGraph } from "./estimates";
 
 export interface GlobalCalculationData {
   mcRuns: number;

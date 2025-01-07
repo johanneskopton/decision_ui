@@ -2,6 +2,7 @@ import type { IEditorState } from "baklavajs";
 import { getTrivialModel } from "./trivial";
 import { getMultipleOutputsModel } from "./outputs";
 import { getNpvModel } from "./npv";
+import { getSubgraphModel } from "./subgraph";
 
 export type ExampleModel = {
   name: string;
@@ -25,6 +26,11 @@ export const getExampleModels = (): ExampleModel[] => {
       name: "Net Present Value",
       description: "A model calculating the net present value of a single cost estimate",
       stateGenerator: getNpvModel
+    },
+    {
+      name: "An NPV Subgraph",
+      description: "A model containing a reusable subgraph that calculates a 10-year NPV",
+      stateGenerator: getSubgraphModel
     }
   ];
 };

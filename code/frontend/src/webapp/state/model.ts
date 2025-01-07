@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { EngineStatus, type Graph, type Node } from "baklavajs";
 
-import { initializeBaklvaState, type BaklavaState } from "../editor";
+import { initializeBaklvaState, type BaklavaState } from "../editor/common/initialize";
 import type { ValidationFeedback } from "../editor/common/validate";
 
 interface HistogramData {

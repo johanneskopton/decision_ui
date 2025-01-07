@@ -82,12 +82,12 @@
 <template>
   <div class="container">
     <v-card class="card">
-      <v-tabs class="tabs" v-model="tab" bg-color="primary" slider-color="#aad5ff">
+      <v-tabs v-model="tab" class="tabs" bg-color="primary" slider-color="#aad5ff">
         <v-tab value="my-models">My Models</v-tab>
         <v-tab value="examples">Examples</v-tab>
       </v-tabs>
 
-      <v-tabs-window v-model="tab">
+      <v-tabs-window v-model="tab" class="window">
         <v-tabs-window-item value="my-models">
           <v-list class="list" lines="two">
             <v-list-item v-for="model in models" :key="model.saved" :title="model.name" @click="openModel(model)">
@@ -113,6 +113,7 @@
           <v-list class="list" lines="two">
             <v-list-item
               v-for="model in getExampleModels()"
+              :key="model.name"
               :title="model.name"
               :subtitle="model.description"
               @click="openExample(model)"
@@ -149,7 +150,7 @@
     position: relative;
   }
 
-  .list {
+  .window {
     height: 100%;
     overflow-y: auto;
   }
@@ -164,17 +165,19 @@
     }
   }
 
-  .tabs,
-  .tabs ::v-deep(.v-btn) {
+  .tabs {
     height: 55px;
-  }
+    flex-grow: 0;
+    flex-shrink: 0;
 
-  .tabs ::v-deep(.v-btn) {
-    padding: 0 1.5em;
-  }
+    ::v-deep(.v-btn) {
+      height: 55px;
+      padding: 0 1.5em;
+    }
 
-  .tabs ::v-deep(.v-tab__slider) {
-    height: 3px;
+    ::v-deep(.v-tab__slider) {
+      height: 3px;
+    }
   }
 
   .newModelButton {
