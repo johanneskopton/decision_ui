@@ -91,7 +91,7 @@ class ResultNodeTranslator(OneOutputNodeTranslator):
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         values = _prepare_node_input_values(graph, node, variables)
-        return [f"{variables.get_variable_name_for_node(node)} <- {values["value"]}"]
+        return [f"{variables.get_variable_name_for_node(node)} <- {values["sample"]}"]
 
 
 class MathNodeTranslator(OneOutputNodeTranslator):
