@@ -11,7 +11,7 @@ export const ResultNode = defineNode({
   title: "Result",
 
   inputs: {
-    value: () => new NodeInterface<number[]>("Value", null as any).use(setType, probabilisticType)
+    sample: () => new NodeInterface<number[]>("Sample", null as any).use(setType, probabilisticType)
   },
 
   outputs: {
@@ -19,9 +19,9 @@ export const ResultNode = defineNode({
       new NodeInterface<FlexibleNumber>("Histogram", null as any).setComponent(markRaw(HistogramOption)).setPort(false)
   },
 
-  calculate({ value }) {
+  calculate({ sample }) {
     return {
-      display: value
+      display: sample
     };
   },
 

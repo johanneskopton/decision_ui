@@ -7,11 +7,13 @@
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
   import { doDeleteModel, doQueryModels, type ModelData } from "../backend/models";
+  import { getExampleModels, type ExampleModel } from "@/editor/examples";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();
   const router = useRouter();
 
+  const tab = ref();
   const confirmDelete = useTemplateRef<typeof Confirm>("confirmDelete");
 
   const models = ref<ModelData[] | null>(null);
@@ -39,10 +41,16 @@
     });
   };
 
-  const open = (model: ModelData) => {
+  const openModel = (model: ModelData) => {
     modelStore.name = model.name;
     modelStore.baklava.editor.load(JSON.parse(model.content));
     modelStore.unsaved = false;
+    router.push("/user/workspace");
+  };
+
+  const openExample = (example: ExampleModel) => {
+    modelStore.baklava.editor.load(example.stateGenerator());
+    modelStore.unsaved = true;
     router.push("/user/workspace");
   };
 
@@ -74,37 +82,50 @@
 <template>
   <div class="container">
     <v-card class="card">
-      <v-toolbar color="primary" dark>
-        <v-toolbar-title>My Models</v-toolbar-title>
-        <v-spacer></v-spacer>
+      <v-tabs class="tabs" v-model="tab" bg-color="primary" slider-color="#aad5ff">
+        <v-tab value="my-models">My Models</v-tab>
+        <v-tab value="examples">Examples</v-tab>
+      </v-tabs>
 
-        <v-btn to="/user/workspace" class="newModelButton">
-          <template #prepend>
-            <v-icon>mdi-file-plus</v-icon>
-          </template>
-          New Model
-        </v-btn>
-      </v-toolbar>
-
-      <v-list class="list" lines="two">
-        <v-list-item v-for="model in models" :key="model.saved" :title="model.name" @click="open(model)">
-          <template #prepend>
-            <v-avatar>
-              <v-icon class="grey-lighten-1"> mdi-file </v-icon>
-            </v-avatar>
-          </template>
-          <template #subtitle> {{ nodeCount(model.content) }} </template>
-          <template #append>
-            <span class="date">{{ getModelLocalDate(model) }}</span>
-            <v-btn icon="mdi-trash-can-outline" size="small" @click.stop="deleteModel(model)"> </v-btn>
-          </template>
-        </v-list-item>
-        <v-list-item v-if="models?.length == 0">
-          No models yet! Click on the
-          <v-icon> mdi-file-plus </v-icon>
-          button below to create your first!
-        </v-list-item>
-      </v-list>
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item value="my-models">
+          <v-list class="list" lines="two">
+            <v-list-item v-for="model in models" :key="model.saved" :title="model.name" @click="openModel(model)">
+              <template #prepend>
+                <v-avatar>
+                  <v-icon class="grey-lighten-1"> mdi-file </v-icon>
+                </v-avatar>
+              </template>
+              <template #subtitle> {{ nodeCount(model.content) }} </template>
+              <template #append>
+                <span class="date">{{ getModelLocalDate(model) }}</span>
+                <v-btn icon="mdi-trash-can-outline" size="small" @click.stop="deleteModel(model)"> </v-btn>
+              </template>
+            </v-list-item>
+            <v-list-item v-if="models?.length == 0">
+              No models yet! Click on the
+              <v-icon> mdi-file-plus </v-icon>
+              button below to create your first!
+            </v-list-item>
+          </v-list>
+        </v-tabs-window-item>
+        <v-tabs-window-item value="examples">
+          <v-list class="list" lines="two">
+            <v-list-item
+              v-for="model in getExampleModels()"
+              :title="model.name"
+              :subtitle="model.description"
+              @click="openExample(model)"
+            >
+              <template #prepend>
+                <v-avatar>
+                  <v-icon class="grey-lighten-1"> mdi-file </v-icon>
+                </v-avatar>
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-tabs-window-item>
+      </v-tabs-window>
     </v-card>
   </div>
   <Confirm ref="confirmDelete" />
@@ -141,6 +162,19 @@
     @media (max-width: 600px) {
       display: none;
     }
+  }
+
+  .tabs,
+  .tabs ::v-deep(.v-btn) {
+    height: 55px;
+  }
+
+  .tabs ::v-deep(.v-btn) {
+    padding: 0 1.5em;
+  }
+
+  .tabs ::v-deep(.v-tab__slider) {
+    height: 3px;
   }
 
   .newModelButton {
