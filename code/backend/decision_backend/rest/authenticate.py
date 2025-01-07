@@ -19,7 +19,7 @@ from decision_backend.database.session import get_user_db
 logger = logging.getLogger(__name__)
 
 DSUI_SECRET = os.environ.get("DSUI_SECRET", "default_secret")
-DSUI_JWT_TOKEN_LIFETIME = int(os.environ.get("JWT_TOKEN_LIFETIME", "1800"))  # 1800 seconds = 30 minutes
+DSUI_JWT_TOKEN_LIFETIME = int(os.environ.get("JWT_TOKEN_LIFETIME", "600"))  # 600 seconds = 10 minutes
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
