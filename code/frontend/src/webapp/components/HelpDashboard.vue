@@ -139,13 +139,13 @@
 
     ::v-deep(h2) {
       font-size: 1.3em;
-      margin-top: 1em;
+      margin-top: 2em;
       margin-bottom: 0.5em;
     }
 
     ::v-deep(h3) {
       font-size: 1.2em;
-      margin-top: 1em;
+      margin-top: 1.5em;
       margin-bottom: 0.5em;
     }
 
@@ -159,6 +159,16 @@
       display: block;
       margin: 0 auto;
       max-width: 100%;
+    }
+
+    ::v-deep(p) {
+      margin: 1em 0;
+    }
+
+    ::v-deep(code) {
+      display: inline-block;
+      background-color: #eee;
+      padding: 0 0.25em;
     }
   }
 </style>
