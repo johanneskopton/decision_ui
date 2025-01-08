@@ -18,7 +18,8 @@ export default defineConfig({
   publicDir: "../../public",
   build: {
     outDir: "../../dist/webapp",
-    emptyOutDir: true
+    emptyOutDir: true,
+    chunkSizeWarningLimit: 4096
   },
   server: {
     proxy: {
