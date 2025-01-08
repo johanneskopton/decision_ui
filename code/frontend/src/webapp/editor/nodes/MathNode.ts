@@ -2,16 +2,16 @@ import nj from "@d4c/numjs";
 
 import { defineMathNode } from "./AbstractMathNode";
 
-type SupportedOperationType = "add" | "subtract" | "multiply" | "divide";
+export type SupportedMathOperationType = "add" | "subtract" | "multiply" | "divide";
 
-export const MathNode = defineMathNode<SupportedOperationType>({
+export const MathNode = defineMathNode<SupportedMathOperationType>({
   type: "Math",
 
   title: "Math",
 
   availableOperations: ["add", "subtract", "multiply", "divide"],
 
-  defaultOperation: "add" as SupportedOperationType,
+  defaultOperation: "add" as SupportedMathOperationType,
 
   deterministcOperations: {
     add: (a, b) => a + b,

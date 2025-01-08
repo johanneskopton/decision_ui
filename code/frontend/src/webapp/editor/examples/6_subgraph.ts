@@ -76,7 +76,7 @@ export const getSubgraphModel = () => {
   displayedGraph.addNode(noteNode);
   noteNode.inputs.note.value =
     `This model calculates the same net present value (as in the previous example) but uses a subgraph node. ` +
-    `Subgraphs hide complexity, which allows to build larger models. ` +
+    `Subgraphs hide complexity, which allows building larger models. ` +
     `Subgraphs can also be reused multiple times, and are translated to standalone R functions. ` +
     `You can edit the subgraph 'NPV 10-year' from the 3-dot menu of the green graph instance node`;
   noteNode.position = { x: 300, y: 100 };
