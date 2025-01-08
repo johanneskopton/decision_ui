@@ -13,6 +13,7 @@ import {
 } from "./common";
 import { DETERMINISTIC_DISTRIBUTION, POSITIVE_NORMAL_DISTRIBUTION } from "../distributions";
 import { initializeBaklvaState } from "../common/initialize";
+import { NoteNode } from "../nodes/NoteNode";
 
 const getNpvTemplate = (editor: Editor) => {
   const subgraph = new Graph(editor);
@@ -141,6 +142,16 @@ export const getExampleSheepVsAppleModel = () => {
   const { editor, viewPlugin } = initializeBaklvaState();
   const displayedGraph = viewPlugin.displayedGraph;
 
+  const noteNode = new NoteNode();
+  displayedGraph.addNode(noteNode);
+  noteNode.inputs.note.value =
+    `This model investigates the decision of whether to add an apple agroforestry. ` +
+    `It is based on the Seminar 9.1 of the lecture 'Decision Analysis and Forecasting for Agricultural Development' ` +
+    `by Cory Whitney and Eike Luedeling, see:\n` +
+    `https://agtools.app/decision_analysis/#section-voi_1`;
+  noteNode.position = { x: 570, y: 100 };
+  noteNode.width = 550;
+
   const npvTemplate = getNpvTemplate(editor);
   const NpvSubgraphType = createGraphNodeType(npvTemplate);
   editor.addGraphTemplate(npvTemplate);
@@ -152,50 +163,56 @@ export const getExampleSheepVsAppleModel = () => {
   const sheepIncome = addEstimateNode(
     displayedGraph,
     "Sheep Income",
+    "Income from sheep (euro/year)",
     POSITIVE_NORMAL_DISTRIBUTION,
     { lower: 3000, upper: 5000 },
-    { x: 300, y: 100 }
+    { x: 300, y: 200 }
   );
 
   const appleIncome = addEstimateNode(
     displayedGraph,
     "Apple Income",
+    "Income from apple (euro/year)",
     POSITIVE_NORMAL_DISTRIBUTION,
     { lower: 30000, upper: 60000 },
-    { x: 300, y: 380 }
+    { x: 300, y: 480 }
   );
 
   const sheepCosts = addEstimateNode(
     displayedGraph,
     "Sheep Costs",
+    "Cost of sheep (euro/year)",
     POSITIVE_NORMAL_DISTRIBUTION,
     { lower: 1000, upper: 2500 },
-    { x: 300, y: 670 }
+    { x: 300, y: 770 }
   );
 
   const appleCosts = addEstimateNode(
     displayedGraph,
     "Apple Costs",
+    "Cost of apple (euro/year)",
     POSITIVE_NORMAL_DISTRIBUTION,
     { lower: 15000, upper: 30000 },
-    { x: 300, y: 945 }
+    { x: 300, y: 1045 }
   );
 
   const discount = addEstimateNode(
     displayedGraph,
     "Discount",
+    "Discount rate per year in %",
     DETERMINISTIC_DISTRIBUTION,
     { value: 10 },
-    { x: 630, y: 980 }
+    { x: 600, y: 1080 }
   );
 
   const decisionNode = new DecisionSubgraphType();
   displayedGraph.addNode(decisionNode);
-  decisionNode.position = { x: 880, y: 400 };
+  decisionNode.position = { x: 880, y: 500 };
 
-  const bothResult = addResultNode(displayedGraph, "Both", { x: 1180, y: 120 });
-  const sheepOnlyResult = addResultNode(displayedGraph, "Sheep Only", { x: 1530, y: 200 });
-  const benefitResult = addResultNode(displayedGraph, "Decision Benefit", { x: 1180, y: 580 });
+  const bothResult = addResultNode(displayedGraph, "Both", { x: 1180, y: 220 });
+  const sheepOnlyResult = addResultNode(displayedGraph, "Sheep Only", { x: 1530, y: 300 });
+  const benefitResult = addResultNode(displayedGraph, "Decision Benefit", { x: 1180, y: 680 });
+  benefitResult.width = 500;
 
   const inputKeys = Object.keys(decisionNode.inputs);
   const outputKeys = Object.keys(decisionNode.outputs);
@@ -207,6 +224,9 @@ export const getExampleSheepVsAppleModel = () => {
   displayedGraph.addConnection(decisionNode.outputs[outputKeys[0]], bothResult.inputs.sample);
   displayedGraph.addConnection(decisionNode.outputs[outputKeys[1]], sheepOnlyResult.inputs.sample);
   displayedGraph.addConnection(decisionNode.outputs[outputKeys[2]], benefitResult.inputs.sample);
+
+  displayedGraph.scaling = 0.8;
+  displayedGraph.panning = { x: 50, y: 0 };
 
   return editor.save();
 };

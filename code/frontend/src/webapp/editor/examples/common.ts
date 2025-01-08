@@ -9,6 +9,7 @@ import { ResultNode } from "../nodes/ResultNode";
 export const addEstimateNode = (
   graph: Graph,
   title: string,
+  comment: string,
   distribution: AvailableDistributionsType,
   params: any,
   position: { x: number; y: number }
@@ -16,6 +17,7 @@ export const addEstimateNode = (
   const node = new EstimateNode();
   graph.addNode(node);
   node.title = title;
+  node.inputs.comment.value = comment;
   node.inputs.distribution.value = distribution;
   node.position = position;
   if (distribution == DETERMINISTIC_DISTRIBUTION) {
