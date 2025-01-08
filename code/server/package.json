@@ -4,7 +4,7 @@
   "description": "webserver hosting decision support ui",
   "private": true,
   "scripts": {
-    "build": "rm -rf build && eslint . ; tsc -p .",
+    "build": "tsc -p .",
     "watch-build": "tsc -p . -w --preserveWatchOutput",
     "watch-server": "nodemon -w ./build ./build/src/run.js",
     "watch": "concurrently -k -c auto -n build,server \"npm run watch-build\" \"npm run watch-server\"",

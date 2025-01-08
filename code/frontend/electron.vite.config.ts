@@ -1,13 +1,18 @@
 import { resolve } from "path";
-import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+
 import vue from "@vitejs/plugin-vue";
 import childProcess from "child_process";
-
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import vuetify from "vite-plugin-vuetify";
+
+import { normalizePath } from "vite";
+import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { fileURLToPath } from "url";
+
+
+
+
 
 const commitHash = childProcess.execSync("git rev-parse --short HEAD").toString().trim();
 
@@ -54,7 +59,7 @@ export default defineConfig({
       viteStaticCopy({
         targets: [
           {
-            src: fileURLToPath(new URL("../../documentation", import.meta.url)),
+            src: normalizePath(resolve(__dirname, "../../documentation")),
             dest: "static"
           }
         ],

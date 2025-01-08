@@ -4,10 +4,10 @@ setlocal
 REM change to backend directory
 CD /D "%~dp0/../"
 
-REM build backend
+REM package backend
 call code\backend\bin\package.bat
 
-REM build electron
+REM package electron
 call code\frontend\bin\package-electron.bat
 
 endlocal

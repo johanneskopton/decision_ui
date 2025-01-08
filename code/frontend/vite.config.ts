@@ -1,11 +1,13 @@
+import { resolve } from "path";
 import { fileURLToPath, URL } from "node:url";
-import { defineConfig } from "vite";
-import childProcess from "child_process";
 
+import childProcess from "child_process";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import legacy from "@vitejs/plugin-legacy";
 import vuetify from "vite-plugin-vuetify";
+
+import { defineConfig, normalizePath } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
@@ -35,7 +37,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: fileURLToPath(new URL("../../documentation", import.meta.url)),
+          src: normalizePath(resolve(__dirname, "../../documentation")),
           dest: "static"
         }
       ],
