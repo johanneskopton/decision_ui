@@ -64,7 +64,7 @@
   const updateMarkdown = async () => {
     markdown.value = "";
     const path = Array.isArray(route.params.path) ? route.params.path.join("/") : route.params.path;
-    const readme_url = `/static/documentation/${path}/README.md`;
+    const readme_url = `/static/documentation/${path}/README.md`.replace(/\/\//g, "/");
 
     const md = markdownit();
 

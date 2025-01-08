@@ -6,6 +6,7 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import legacy from "@vitejs/plugin-legacy";
 import vuetify from "vite-plugin-vuetify";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // import vueDevTools from "vite-plugin-vue-devtools";
@@ -31,6 +32,17 @@ export default defineConfig({
     }
   },
   plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: fileURLToPath(new URL("../../documentation", import.meta.url)),
+          dest: "static"
+        }
+      ],
+      watch: {
+        reloadPageOnChange: true
+      }
+    }),
     vue(),
     vueJsx(),
     nodePolyfills(),
