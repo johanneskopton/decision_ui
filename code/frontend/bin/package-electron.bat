@@ -10,7 +10,7 @@ if not exist resources\decision-support-ui-backend (
 )
 
 REM delete database
-DEL /s /q resources\decision-support-ui-backend\decision-support-ui-backend.db
+DEL /s /q resources\decision-support-ui-backend\data\decision-support-ui-backend.db
 
 REM build setup.exe distributable
 npm run build:electron:win
