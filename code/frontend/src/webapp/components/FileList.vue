@@ -7,7 +7,7 @@
   import { useModelStore } from "../state/model";
   import { useUserStore } from "../state/user";
   import { doDeleteModel, doQueryModels, type ModelData } from "../backend/models";
-  import { getExampleModels, type ExampleModel } from "@/editor/examples";
+  import { getExampleModels, type ExampleModel } from "../editor/examples";
 
   const userStore = useUserStore();
   const modelStore = useModelStore();
