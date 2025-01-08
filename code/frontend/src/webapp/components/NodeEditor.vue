@@ -4,12 +4,14 @@
   import { saveAs } from "file-saver";
 
   import clean_model_json from "../helper/clean_model_json";
+  import { getAlwaysNullRef } from "../common/components";
   import { useModelStore } from "../state/model";
+  import { useUserStore } from "../state/user";
+
+  import ModelValidationDialog from "./ModelValidationDialog.vue";
+  import SaveModelDialog from "./SaveModelDialog.vue";
 
   import "@baklavajs/themes/dist/syrup-dark.css";
-  import ModelValidationDialog from "./ModelValidationDialog.vue";
-  import { useUserStore } from "../state/user";
-  import SaveModelDialog from "./SaveModelDialog.vue";
 
   const modelStore = useModelStore();
   const userStore = useUserStore();
@@ -17,7 +19,7 @@
   const saveModelDialog = useTemplateRef<typeof SaveModelDialog>("saveModelDialog");
   const baklavaRenderKey = ref<number>(1);
   const modelValidationDialog = useTemplateRef<typeof ModelValidationDialog>("modelValidationDialog");
-  const toggleNone = null;
+  const toggleNone = getAlwaysNullRef();
 
   const saveGraph = () => {
     let model = modelStore.baklava.editor.save();
