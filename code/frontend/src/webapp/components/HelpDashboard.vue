@@ -12,14 +12,18 @@
 
   const BREADCRUMB_TITLE_BY_SUBPATH: { [subpath: string]: string } = {
     "user-interface": "User Interface",
+    "model-list": "Model List",
+    "model-editor": "Model Editor",
     "estimate-editor": "Estimate Editor",
     "result-dashboard": "Result Dashboard",
+    "r-code": "R-Code",
     "getting-started": "Getting Started",
     "developer-guide": "Developer Guide",
     "advanced-features": "Advanced Features",
     evpi: "Expected Value of Perfect Information",
     subgraphs: "Subgraphs",
-    installation: "Installation"
+    installation: "Installation",
+    settings: "Settings"
   };
 
   const route = useRoute();

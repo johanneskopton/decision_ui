@@ -32,10 +32,10 @@
       <template #title>Generated R code</template>
       <template #subtitle>The R script that was used to run the monte carlo simulation:</template>
       <template #append>
-        <v-btn-group v-if="modelStore.decisionSupportResult !== null">
+        <v-btn-group>
           <v-tooltip location="bottom" open-delay="500">
             <template #activator="{ props }">
-              <v-btn v-bind="props" @click.prevent="copyCode">
+              <v-btn v-if="modelStore.decisionSupportResult !== null" v-bind="props" @click.prevent="copyCode">
                 <template #prepend>
                   <v-icon> mdi-content-copy </v-icon>
                 </template>
@@ -46,7 +46,7 @@
           </v-tooltip>
           <v-tooltip location="bottom" open-delay="500">
             <template #activator="{ props }">
-              <v-btn v-bind="props" @click.prevent="saveZip">
+              <v-btn v-if="modelStore.decisionSupportResult !== null" v-bind="props" @click.prevent="saveZip">
                 <template #prepend>
                   <v-icon> mdi-folder-download-outline </v-icon>
                 </template>
@@ -54,6 +54,16 @@
               </v-btn>
             </template>
             <span>Download as ZIP</span>
+          </v-tooltip>
+          <v-tooltip location="bottom" text="go to help section" open-delay="500">
+            <template #activator="{ props }">
+              <v-btn v-bind="props" to="/user/workspace/help/user-interface/r-code/">
+                <template #prepend>
+                  <v-icon size="large"> mdi-help-circle-outline </v-icon>
+                </template>
+                Help
+              </v-btn>
+            </template>
           </v-tooltip>
         </v-btn-group>
       </template>

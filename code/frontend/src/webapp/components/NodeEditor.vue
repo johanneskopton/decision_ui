@@ -63,10 +63,23 @@
     <BaklavaEditor :key="baklavaRenderKey" :view-model="modelStore.baklava.viewPlugin as any" />
     <v-sheet class="button-container" color="white" elevation="4" rounded>
       <v-btn-toggle v-model="toggleNone" density="default" multiple class="button-toggle">
+        <v-tooltip location="top" text="Go to Help" open-delay="500">
+          <template #activator="{ props }">
+            <v-btn
+              class="ma-2 dark"
+              variant="text"
+              color="secondary"
+              v-bind="props"
+              to="/user/workspace/help/user-interface/model-editor"
+            >
+              <v-icon class="dark" size="large"> mdi-help-circle-outline </v-icon>
+            </v-btn>
+          </template>
+        </v-tooltip>
         <v-tooltip location="top" text="Download Model" open-delay="500">
           <template #activator="{ props }">
             <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="saveGraph">
-              <v-icon class="dark"> mdi-tray-arrow-down </v-icon>
+              <v-icon class="dark" size="large"> mdi-tray-arrow-down </v-icon>
             </v-btn>
           </template>
         </v-tooltip>
@@ -74,14 +87,14 @@
         <v-tooltip location="top" text="Upload Model" open-delay="500">
           <template #activator="{ props }">
             <v-btn class="ma-2 dark" variant="text" color="secondary" v-bind="props" @click="$refs.loadfile.click()">
-              <v-icon class="dark"> mdi-tray-arrow-up </v-icon>
+              <v-icon class="dark" size="large"> mdi-tray-arrow-up </v-icon>
             </v-btn>
           </template>
         </v-tooltip>
         <v-tooltip v-if="userStore.login.token" location="top" text="Save Model" open-delay="500">
           <template #activator="{ props }">
             <v-btn class="ma-2" variant="text" color="secondary" v-bind="props" @click="saveModelDialog?.openDialog()">
-              <v-icon> mdi-content-save-outline </v-icon>
+              <v-icon class="dark" size="large"> mdi-content-save-outline </v-icon>
             </v-btn>
           </template>
         </v-tooltip>

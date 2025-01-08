@@ -14,6 +14,20 @@
         <template #subtitle
           >Choose from various option that influence both the frontend and backend calculations:</template
         >
+        <template #append>
+          <v-btn-group>
+            <v-tooltip location="bottom" text="go to help section" open-delay="500">
+              <template #activator="{ props }">
+                <v-btn v-bind="props" to="/user/workspace/help/user-interface/settings/">
+                  <template #prepend>
+                    <v-icon size="large"> mdi-help-circle-outline </v-icon>
+                  </template>
+                  Help
+                </v-btn>
+              </template>
+            </v-tooltip>
+          </v-btn-group>
+        </template>
       </v-card-item>
       <v-card-text>
         <v-table class="settingsTable" density="compact">

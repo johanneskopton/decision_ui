@@ -1,8 +1,5 @@
 <script setup lang="ts">
-  import { useUserStore } from "../state/user";
   import RunButton from "./RunButton.vue";
-
-  const userStore = useUserStore();
 </script>
 
 <template>
@@ -39,12 +36,7 @@
         <v-list density="compact" nav>
           <v-tooltip location="right" text="Files" open-delay="500">
             <template #activator="{ props }">
-              <v-list-item
-                v-if="userStore.login.token"
-                v-bind="props"
-                to="/user/files"
-                prepend-icon="mdi-format-list-text"
-              />
+              <v-list-item v-bind="props" to="/user/files" prepend-icon="mdi-format-list-text" />
             </template>
           </v-tooltip>
           <v-tooltip location="right" text="Help" open-delay="500">

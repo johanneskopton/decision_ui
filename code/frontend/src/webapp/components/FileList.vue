@@ -74,7 +74,9 @@
   };
 
   onMounted(() => {
-    queryModels();
+    if (userStore.isLoggedIn) {
+      queryModels();
+    }
     modelStore.reset();
   });
 </script>
@@ -82,14 +84,45 @@
 <template>
   <div class="container">
     <v-card class="card">
-      <v-tabs v-model="tab" class="tabs" bg-color="primary" slider-color="#aad5ff">
-        <v-tab value="my-models">My Models</v-tab>
-        <v-tab value="examples">Examples</v-tab>
-      </v-tabs>
+      <v-toolbar color="primary">
+        <template #title>
+          <v-tabs v-model="tab" class="tabs" bg-color="primary" slider-color="#aad5ff">
+            <v-tab value="my-models">My Models</v-tab>
+            <v-tab value="examples">Examples</v-tab>
+          </v-tabs>
+        </template>
+        <template #append>
+          <v-btn-group>
+            <v-btn to="/user/workspace" color="primary" class="newModelButton">
+              <template #prepend>
+                <v-icon>mdi-file-plus</v-icon>
+              </template>
+              New Model
+            </v-btn>
+            <v-tooltip location="bottom" text="go to help section" open-delay="500">
+              <template #activator="{ props }">
+                <v-btn v-bind="props" to="/user/workspace/help/user-interface/model-list/" color="primary">
+                  <template #prepend>
+                    <v-icon size="large"> mdi-help-circle-outline </v-icon>
+                  </template>
+                  Help
+                </v-btn>
+              </template>
+            </v-tooltip>
+          </v-btn-group>
+        </template>
+      </v-toolbar>
 
       <v-tabs-window v-model="tab" class="window">
         <v-tabs-window-item value="my-models">
-          <v-list class="list" lines="two">
+          <v-list v-if="!userStore.isLoggedIn">
+            <v-list-item>
+              <v-alert color="gray" icon="mdi-information-outline" elevation="2">
+                You need to <router-link to="/login">Login</router-link> to load and save custom models.
+              </v-alert>
+            </v-list-item>
+          </v-list>
+          <v-list v-else class="list" lines="two">
             <v-list-item v-for="model in models" :key="model.saved" :title="model.name" @click="openModel(model)">
               <template #prepend>
                 <v-avatar>
@@ -166,12 +199,10 @@
   }
 
   .tabs {
-    height: 55px;
     flex-grow: 0;
     flex-shrink: 0;
 
     ::v-deep(.v-btn) {
-      height: 55px;
       padding: 0 1.5em;
     }
 

@@ -1,7 +1,8 @@
 # User Interface
 
-Contents
+This section describes each individual user interface page in detail:
 
+- [Model List](model-list)
 - [Model Editor](model-editor)
 - [Estimate Editor](estimate-editor)
 - [Result Dashboard](result-dashboard)

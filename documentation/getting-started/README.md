@@ -1,16 +1,25 @@
 # Getting Started
 
-- [Create an Account]()
-- [Your First Model](getting-started/)
+Welcome to the Decision Support UI! In this section, we will go through every step of this application, starting with:
 
-## Create an Account
+1. Create an Account and Login
+2. Load an Example Model
+3. Run a Monte Carlo Simulation
+4. Create Your Own Model
+5. Save and Load a Model
+6. Inspect the R-Code
+7. Change Settings
 
-## Login
+## Create an Account and Login
 
-## Your first Model
+## Load an Example Model
 
-## Simulate a Model
+## Run a Monte Carlo Simulation
 
-## Inspect Results
+## Create Your Own Model
 
-## View R-Code
+## Save and Load a Model
+
+## Inspect the R-Code
+
+## Change Settings
