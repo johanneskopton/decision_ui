@@ -64,7 +64,7 @@
   const updateMarkdown = async () => {
     markdown.value = "";
     const path = Array.isArray(route.params.path) ? route.params.path.join("/") : route.params.path;
-    const readme_url = `/static/documentation/${path}/README.md`.replace(/\/\//g, "/");
+    const readme_url = `./static/documentation/${path}/README.md`.replace(/\/\//g, "/");
 
     const md = markdownit();
 
@@ -72,7 +72,7 @@
     md.use(markdownit_replace_link, {
       replaceLink: (link, env, token) => {
         if (token.type == "image") {
-          return `/static/documentation/${path}/${link}`;
+          return `./static/documentation/${path}/${link}`;
         }
         if (link.startsWith("http://") || link.startsWith("https://")) {
           token.attrSet("target", "_blank");
