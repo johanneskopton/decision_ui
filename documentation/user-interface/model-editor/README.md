@@ -321,7 +321,8 @@ The bottom menu allows loading, saving, validating and running the model:
 From left to right, the following buttons are available:
 
 - Got to Help - opens this help page
-- Save Model - saves and downloads the current model as a file
-- Load Model - loads a model from a file previously downloaded with the save button
+- Download Model - downloads the current model as a file
+- Upload Model - loads a model from a file
+- Save Model - saves a model in the database of the application (requires login)
 - Validate - shows warning and error messages about the model
-- Run - evaluate the model by running a monte carlo simulation
+- Run - evaluate the model by running a monte carlo simulation (requires login)
