@@ -15,7 +15,7 @@
     "model-list": "Model List",
     "model-editor": "Model Editor",
     "estimate-editor": "Estimate Editor",
-    "result-dashboard": "Result Dashboard",
+    "results-dashboard": "Results Dashboard",
     "r-code": "R-Code",
     "getting-started": "Getting Started",
     "developer-guide": "Developer Guide",
@@ -163,6 +163,7 @@
       display: block;
       margin: 0 auto;
       max-width: 100%;
+      border: 1px solid #aaa;
     }
 
     ::v-deep(p) {
@@ -173,6 +174,14 @@
       display: inline-block;
       background-color: #eee;
       padding: 0 0.25em;
+    }
+
+    ::v-deep(blockquote) {
+      display: block;
+      background-color: #eee;
+      border-left: 4px solid #aaa;
+      padding: 0.25em 1em;
+      margin: 1em 0;
     }
   }
 </style>

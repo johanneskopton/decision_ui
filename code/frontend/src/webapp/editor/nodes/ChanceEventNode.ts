@@ -146,5 +146,9 @@ export const ChanceEventNode = defineFlexibleDynamicNode({
       default:
         return null;
     }
+  },
+
+  onPlaced() {
+    this.width = 230;
   }
 });

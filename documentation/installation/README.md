@@ -36,7 +36,7 @@ from the directory `%APPDATA%\decision-support-ui`.
 
 ![Backup Database](./backup-database.webp)
 
-Please keep in mind that this file is most likely not compatible with a different version of the application.
+> NOTE: Please keep in mind that this file is most likely not compatible with a different version of the application.
 
 ## Container Installation on Linux
 
@@ -148,7 +148,7 @@ install.packages(c("decisionSupport", "readr"))
 The application needs to know the correct location of the R executable file. In case the `Rscript` command is available
 on your terminal, Python should detect it and use it by default. Otherwise, you need to specify the envionment variable
 `DSUI_R_SCRIPT_PATH` with your custom path to the `Rscript` executable file. Make sure that the respective R
-environment contains the required packages. Run the following R commands and verify that there are not error messages:
+environment contains the required packages. Run the following R commands and verify that there are no error messages:
 
 ```
 library(readr);
