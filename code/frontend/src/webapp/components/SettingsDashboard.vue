@@ -12,7 +12,7 @@
       <v-card-item>
         <template #title>Settings</template>
         <template #subtitle
-          >Choose from various option that influence both the frontend and backend calculations:</template
+          >Choose from various options that influence both the frontend and backend calculations:</template
         >
         <template #append>
           <v-btn-group>

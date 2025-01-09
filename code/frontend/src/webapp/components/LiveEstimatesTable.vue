@@ -45,6 +45,7 @@
           }
         }
       }
+      modelStore.updateEstimates();
     }
   };
 
@@ -68,6 +69,7 @@
     modelStore.baklava.editor.graph.nodes.forEach(node => {
       if (node.id == row.nodeId) {
         updateNodeField(node as Node<any, any>, field.name, newVal, row);
+        modelStore.updateEstimates();
       }
     });
   };

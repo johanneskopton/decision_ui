@@ -3,6 +3,7 @@ import { EngineStatus, type Graph, type Node } from "baklavajs";
 
 import { initializeBaklvaState, type BaklavaState } from "../editor/common/initialize";
 import type { ValidationFeedback } from "../editor/common/validate";
+import { generateEstimatesTableFromGraph } from "@/editor/common/estimates";
 
 interface HistogramData {
   values: { [variable: string]: number[] };
@@ -126,6 +127,9 @@ export const useModelStore = defineStore("model", {
         };
       }
       this.validation.nodes[node.id].errors.push(error);
+    },
+    updateEstimates() {
+      this.estimates = generateEstimatesTableFromGraph(this.baklava.editor.graph as Graph);
     }
   },
   getters: {
