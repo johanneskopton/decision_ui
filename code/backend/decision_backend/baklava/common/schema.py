@@ -56,13 +56,13 @@ class BaklavaNode(BaseModel):
     title: str
     """The title of the node in the editor"""
 
-    twoColumn: bool
+    twoColumn: Optional[bool] = False
     """Whether input and output options are visualized using two columns"""
 
     type: str
     """The type of the node as declared in the frontend code"""
 
-    width: float
+    width: Optional[float] = None
     """The size of the node in pixel as visualized in the fronted editor"""
 
     graphState: "Optional[BaklavaGraph]" = None
