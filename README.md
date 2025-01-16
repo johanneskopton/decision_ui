@@ -6,7 +6,7 @@ aimed at supporting decision-making. It is based on the R package
 
 A detailed documentation can be found in the [documentation](documentation/) directory, including:
 
-- Instatllation instructions for [Windows](documentation/installation/windows/),
+- Installation instructions for [Windows](documentation/installation/windows/),
   [MacOS](documentation/installation/macos/) and [Linux](documentation/installation/linux/)
 - [A Getting Started Guide](./documentation/getting-started/)
 - [Notes for Developers](./documentation/developer-guide/)
