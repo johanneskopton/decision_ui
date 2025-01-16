@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "decision_backend"
-version = "0.0.1"
+version = "0.0.5"
 description = "Backend for decision_UI using the decisionSupport R package."
 authors = [{ name = "Johannes Kopton", email = "johannes@kopton.org" }]
 license = { text = "tbd" }

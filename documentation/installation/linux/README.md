@@ -8,45 +8,17 @@ from the software repository of your favorite Linux distribution.
 
 The following instructions are based on Fedora Linux and Podman.
 
-### Build the Container Image
+### Start the Container
 
-As of now, there are no pre-built images available on [Docker Hub](https://hub.docker.com/). Instead, you have to build
-an image yourself.
-
-First, download the source code from GitHub:
-
-```
-git clone https://github.com/johanneskopton/decision_ui.git
-```
-
-You can find the necessary files in the directory `deployment/staging`. For performance reasons, the Dockerfile is
-split into two files:
-
-- `Dockerfile.base`: installs basic build and software dependencies
-- `Dockerfile.server`: installs and runs the application
-
-Both images need to be built before the application can be started.
-
-```
-podman build -f deployment/staging/src/Dockerfile.base -t localhost/decision-support-ui/base:latest .
-podman build -f deployment/staging/src/Dockerfile.server -t localhost/decision-support-ui/server:latest .
-```
-
-Building the base image will download, compile and install R and the
-[decisionSupport](https://cran.r-project.org/web/packages/decisionSupport/index.html) package from CRAN.
-This process might take a long time (up to 30 minutes). Building the server image should only take a few seconds.
-
-### Run Image
-
-Once the build process has finished successfully, the server container can be started:
+You can run the server container with the following command:
 
 ```
 podman run \
     --rm -it \
-    -v /path/to/some/directory:/root/workspace/code/backend/data:Z \
+    -v $(pwd):/root/workspace/code/backend/data:Z \
     -p 8080:8080 \
     -e DSUI_SECRET=default_secret \
-    localhost/decision-support-ui/server:latest
+    docker.io/knopflogik/inres_decision-support-ui_server:latest
 ```
 
 The following arguments can to be provided:
@@ -76,6 +48,34 @@ As soon as the application is started, you can access the user interface from yo
 [`http://localhost:8080`](http://localhost:8080).
 
 You can stop the application by typing `CTRL + C` in the terminal.
+
+### Build the Container Image
+
+To build the container image yourself, download the source code from GitHub:
+
+```
+git clone https://github.com/johanneskopton/decision_ui.git
+```
+
+You can find the necessary files in the directory `deployment/staging`. For performance reasons, the Dockerfile is
+split into two files:
+
+- `Dockerfile.base`: installs basic build and software dependencies
+- `Dockerfile.server`: installs and runs the application
+
+Both images need to be built before the application can be started.
+
+```
+podman build -f deployment/staging/src/Dockerfile.base -t localhost/decision-support-ui/base:latest .
+podman build -f deployment/staging/src/Dockerfile.server -t localhost/decision-support-ui/server:latest .
+```
+
+Building the base image will download, compile and install R and the
+[decisionSupport](https://cran.r-project.org/web/packages/decisionSupport/index.html) package from CRAN.
+This process might take a long time (up to 30 minutes). Building the server image should only take a few seconds.
+
+Then, you can start the Decision Support UI using the same `podman run` command (see above), except that you need to
+replace the last parameter with `localhost/decision-support-ui/server:latest`.
 
 ## Installation from Source
 
