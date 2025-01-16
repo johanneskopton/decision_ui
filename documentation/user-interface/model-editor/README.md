@@ -34,9 +34,9 @@ Alternatively, you can right-click on the work space area and select a node type
 A node consists of various parts:
 
 - Name of the Node - references a node and is converted to a matching variable name in the R-code
-- 3-dot Menu - allows to renaming or deleting a node
-- Node Inputs - properties that influence the calculation that is done inside a node
-- Node Outputs - the result of the calculation that is done inside a node
+- 3-dot Menu - allows renaming or deleting a node
+- Node Inputs - properties that influence the calculations inside a node
+- Node Outputs - the results of these calculations
 - Connection Points - contact points that can be used to connect the output of one node to the input of another node
 
 ![Node Overview](./node-overview.webp)
@@ -167,7 +167,7 @@ A math node provides basic mathematical operations on two input variables:
 
 #### Round Node
 
-The round node replaces input numbers with suitable integer numbers. You can chosse from three strategies:
+The round node replaces input numbers with suitable integer numbers. You can choose from three strategies:
 
 - `round` - round to the nearest integer number (e.g. 1.4 to 1, 1.6 to 2)
 - `floor` - round to the lower integer number (e.g. 1.9 to 1)
@@ -260,7 +260,7 @@ The value varier node generates a random series or trend based on the specified 
 ### Subgraph Nodes
 
 Subgraph nodes are special nodes only relevant when using subgraphs. A subgraph is a dedicated set of connected
-nodes that can be reused multiple times. Essentially, they allow to create custom node types that perform any
+nodes that can be reused multiple times. Essentially, they allow creating custom node types that perform any
 calculations defined by the subgraph. For more information, please check out the help page "Subgraphs" in the
 "Advanced Features" section.
 
@@ -270,7 +270,7 @@ A subgraph node references a single subgraph. A subgraph node is only available 
 created first. The inputs and outputs of a subgraph node depend on how the subgraph was defined. Each subgraph node
 input or output requires that a corresponding subgraph input or output node exists inside the subgraph.
 
-In order for the subgraph node to work correctly, every input needs to be provided by connecting a node to it.
+In order for the subgraph node to work correctly, every input needs to be connected to another node.
 
 Note that renaming a subgraph node will rename the subgraph itself and all other subgraph nodes referencing the same
 subgraph.
@@ -325,4 +325,4 @@ From left to right, the following buttons are available:
 - Upload Model - loads a model from a file
 - Save Model - saves a model in the database of the application (requires login)
 - Validate - shows warning and error messages about the model
-- Run - evaluate the model by running a monte carlo simulation (requires login)
+- Run - evaluate the model by running a Monte Carlo simulation (requires login)
