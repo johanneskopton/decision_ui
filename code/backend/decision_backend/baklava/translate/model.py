@@ -120,14 +120,14 @@ def translate_model(model: ModelParser, variables: VariableManager) -> Tuple[str
         result += f"\t# subgraph {graph.get_name()}\n"
         result += f"\t{function_name} <- function({", ".join(sorted(state.get_input_variables()))}){{\n"
         result += "".join(f"\t\t{line}\n" for line in state.get_translations())
-        result += f"\t\treturn(list({", ".join([f"{n}={n}" for n in state.get_output_variables()])}))\n"
+        result += f"\t\treturn(list({", ".join([f"{n}={n}" for n in sorted(state.get_output_variables())])}))\n"
         result += "\t}\n\n"
 
     state = translate_graph(model.get_main_graph(), variables, ESTIMATE_NODE_TYPE, RESULT_NODE_TYPE)
 
     result += "".join(f"\t{line}\n" for line in state.get_translations())
     result += "\t# generate list of output variables\n"
-    result += f"\treturn(list({", ".join([f"{n}={n}" for n in state.get_output_variables()])}))\n"
+    result += f"\treturn(list({", ".join([f"{n}={n}" for n in sorted(state.get_output_variables())])}))\n"
     result += "}\n"
 
     logger.debug("translated model function:\n\n%s", result)

@@ -1,167 +1,60 @@
+"""Test Baklava model to R-code translation"""
+
+# pylint: disable=protected-access
+
 import json
 import os
-import pandas as pd
-import numpy as np
-import jinja2
-import subprocess
 
-from decision_backend.baklava.run import Translator
+
 from decision_backend.baklava.common.schema import BaklavaModel
-
-test_dir = os.path.dirname(__file__)
-test_data_dir = os.path.join(test_dir, "data")
-
-templateLoader = jinja2.FileSystemLoader(searchpath=test_data_dir)
-templateEnv = jinja2.Environment(loader=templateLoader)
-
-model_path = "model.json"
-model_dict = json.load(open(os.path.join(test_data_dir, model_path), "r"))
-model = BaklavaModel(**model_dict)
-
-model_path_clean = "model_clean.json"
-model_dict_clean = json.load(open(os.path.join(test_data_dir, model_path_clean), "r"))
-model_clean = BaklavaModel(**model_dict_clean)
+from decision_backend.baklava.model.parser import ModelParser
+from decision_backend.baklava.translate.model import translate_model
+from decision_backend.baklava.translate.variables import VariableManager, _generate_variable_name
 
 
-def test_create_translator():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        assert len(translator.model.graph.nodes) == 15
+FIXTURES_DIRECTORY = os.path.join(os.path.dirname(__file__), "fixtures")
+
+
+def test_example_translations():
+    """Check each example by translating it and verifying it matches the stored fixture translation."""
+    for example_name in os.listdir(os.path.join(FIXTURES_DIRECTORY, "examples")):
+        model_path = os.path.join(FIXTURES_DIRECTORY, "examples", example_name, "graph.json")
+        translation_path = os.path.join(FIXTURES_DIRECTORY, "examples", example_name, "translation.R")
+
+        # load files
+        with open(model_path, "r", encoding="utf8") as f:
+            model_json = json.load(f)
+
+        with open(translation_path, "r", encoding="utf8") as f:
+            translation_txt = f.read()
+
+        model_parser = ModelParser(BaklavaModel(**model_json))
+        variables = VariableManager(model_parser)
+        model_function = translate_model(model_parser, variables)
+
+        print(repr(model_function))
+        print(repr(translation_txt))
+
+        assert model_function == translation_txt
 
 
 def test_create_variable_name():
-    name = Translator._create_variable_name("a a")
+    """Test removal of special characters and adding number suffix to generate unique variable names."""
+
+    name = _generate_variable_name("a a", {})
     assert name == "a_a"
 
-    name = Translator._create_variable_name("a a ")
+    name = _generate_variable_name("a a ", {})
     assert name == "a_a"
 
-    name = Translator._create_variable_name("a a_")
-    assert name == "a_a"
+    name = _generate_variable_name("a a_", {})
+    assert name == "a_a_"
 
-    name = Translator._create_variable_name('a"§$%&/()=')
+    name = _generate_variable_name('a"§$%&/()=', {})
     assert name == "a"
 
-    name = Translator._create_variable_name("a", {"a"})
+    name = _generate_variable_name("a", {"a"})
     assert name == "a_2"
 
-    name = Translator._create_variable_name("a", {"a", "a_2"})
+    name = _generate_variable_name("a", {"a", "a_2"})
     assert name == "a_3"
-
-
-def test_extract_estimates():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        translator.extract_estimates()
-        assert type(translator.estimates_df) == pd.DataFrame
-        print(translator.estimates_df.loc[:, "upper"])
-        assert (translator.estimates_df.loc[:, "lower"] == [30000, 1.8, 40, 0.2]).all()
-        assert (translator.estimates_df.loc[:, "upper"] == [50000, 2.4, 50, 0.5]).all()
-        assert np.isnan(translator.estimates_df.loc[0, "median"])
-
-
-def test_translate_math_node():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        r_line = translator._translate_node("Profit")
-        assert r_line == "Profit <- Revenue - Cost"
-
-
-def test_translate_sum_node():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        r_line = translator._translate_node("Cost")
-        assert r_line == "Cost <- Variable_Cost + Fixed_Cost"
-
-
-def test_translate_chance_event_node():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        r_line = translator._translate_node("Selling_Price")
-        target = "Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)"
-        assert r_line == target
-
-
-def test_translate_display_node():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        r_line = translator._translate_node("ProfitResult")
-        assert r_line == "ProfitResult <- Profit"
-
-
-def test_translate_subgraph():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        subgraph = translator._translate_subgraph("ProfitResult")
-        print(subgraph)
-        target = "\
-Yield_t <- Yield_kg / 1000\n\
-Variable_Cost <- Yield_t * Cost_Per_Yield\n\
-Cost <- Variable_Cost + Fixed_Cost\n\
-Yield_t <- Yield_kg / 1000\n\
-Selling_Price <- chance_event(0.1, 1, Selling_Price_Base)\n\
-Revenue <- Selling_Price * Yield_t\n\
-Profit <- Revenue - Cost\n\
-ProfitResult <- Profit\n"
-        assert subgraph == target
-
-
-def test_write_script():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        translator.translate_to_files()
-        r_script_template_file = "model.R"
-        r_script_template = templateEnv.get_template(r_script_template_file)
-        r_script_target = r_script_template.render(
-            estimates_path=translator.estimates_file.name,
-            results_path=translator.results_file.name,
-            evpi_path=translator.evpi_file.name,
-        )
-        r_script = open(translator.r_script_file.name, "r").read()
-
-        csv_target = open(os.path.join(test_data_dir, "model.csv"), "r").read()
-        csv = open(translator.estimates_file.name, "r").read()
-
-        translator.clean()
-
-        assert r_script == r_script_target
-        assert csv == csv_target
-
-
-def test_write_script_evpi():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 10, do_evpi=True)
-        translator.translate_to_files()
-        r_script_template_file = "model_evpi.R"
-        r_script_template = templateEnv.get_template(r_script_template_file)
-        r_script_target = r_script_template.render(
-            estimates_path=translator.estimates_file.name,
-            results_path=translator.results_file.name,
-            evpi_path=translator.evpi_file.name,
-        )
-        r_script = open(translator.r_script_file.name, "r").read()
-
-        csv_target = open(os.path.join(test_data_dir, "model.csv"), "r").read()
-        csv = open(translator.estimates_file.name, "r").read()
-
-        translator.clean()
-
-        assert r_script == r_script_target
-        assert csv == csv_target
-
-
-def test_execute_r_mc():
-    for this_model in [model, model_clean]:
-        translator = Translator(this_model, 100)
-        translator.translate_to_files()
-
-        subprocess.run(["Rscript", translator.r_script_file.name])
-        df = pd.read_csv(translator.results_file.name)
-        target_columns = {
-            "y.ProfitResult",
-            "y.ProfitAltResult",
-        }
-
-        translator.clean()
-
-        assert set(df.columns) == target_columns

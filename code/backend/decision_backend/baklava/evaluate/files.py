@@ -9,7 +9,7 @@ from typing import Mapping, NamedTuple, Sequence
 import pandas as pd
 import numpy as np
 
-from decision_backend.baklava.common.schema import HistogramData
+from decision_backend.rest.schema import HistogramData
 
 
 class FilesContext(NamedTuple):
