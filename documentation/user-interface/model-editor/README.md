@@ -165,15 +165,24 @@ A math node provides basic mathematical operations on two input variables:
 
 ![Math Node](./node-math.webp)
 
-#### Round Node
+#### Function Node
 
-The round node replaces input numbers with suitable integer numbers. You can choose from three strategies:
+The function node applies a mathematical function to its input value. You can choose from the following functions:
 
-- `round` - round to the nearest integer number (e.g. 1.4 to 1, 1.6 to 2)
+- `abs` - make negative values positive (e.g. -5 to 5)
+- `ceiling` - round to the higher integer number (e.g. 1.1 to 2)
+- `cos` - cosine function
+- `exp` - exponential function (i.e., `e^x`)
 - `floor` - round to the lower integer number (e.g. 1.9 to 1)
-- `ceil` - round to the higher integer number (e.g. 1.1 to 2)
+- `log` - natural logarithm
+- `log10` - logarithm with base 10
+- `round` - round to the nearest integer number (e.g. 1.4 to 1, 1.6 to 2)
+- `sin` - sine function
+- `sqrt` - square root
+- `tan` - tangent function
+- `trunc` - remove floating point information of a number (e.g. -1.4 to -1)
 
-![Round Node](./node-round.webp)
+![Function Node](./node-function.webp)
 
 #### Sum Node
 

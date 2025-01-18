@@ -120,13 +120,28 @@ class ComparisonNodeTranslator(OneOutputNodeTranslator):
         return f"({values["a"]} {values["operation"]} {values["b"]}) * 1"
 
 
-class RoundNodeTranslator(OneOutputNodeTranslator):
-    """Round node translator"""
+class FunctionNodeTranslator(OneOutputNodeTranslator):
+    """Function node translator"""
 
-    FUNCTIONS = {"ceiling": "ceiling", "floor": "floor", "round": "round"}
+    SUPPORTED_FUNCTIONS = [
+        "abs",
+        "ceiling",
+        "cos",
+        "exp",
+        "floor",
+        "log",
+        "log10",
+        "round",
+        "sin",
+        "sqrt",
+        "tan",
+        "trunc",
+    ]
 
     def translate_one_output(self, values: Mapping[str, Any]):
-        return f"{self.FUNCTIONS[values["operation"]]}({values["x"]})"
+        if values["operation"] not in self.SUPPORTED_FUNCTIONS:
+            raise RuntimeError(f"operation '{values["operation"]}' not supported")
+        return f"{values["operation"]}({values["x"]})"
 
 
 class SumNodeTranslator(OneOutputNodeTranslator):
@@ -200,7 +215,7 @@ class NetPresentValueNodeTranslator(OneOutputNodeTranslator):
 NODE_TYPE_TO_TRANSLATOR_MAP_IMPLEMENTATIONS: Mapping[str, NodeTranslator] = {
     "Math": MathNodeTranslator(),
     "Sum": SumNodeTranslator(),
-    "Round": RoundNodeTranslator(),
+    "Function": FunctionNodeTranslator(),
     "Comparison": ComparisonNodeTranslator(),
     "Result": ResultNodeTranslator(),
     "ChanceEvent": ChanceEventNodeTranslator(),

@@ -12,7 +12,7 @@ import {
 } from "./types";
 
 import { MathNode } from "../nodes/MathNode";
-import { RoundNode } from "../nodes/RoundNode";
+import { FunctionNode } from "../nodes/FunctionNode";
 import { SumNode } from "../nodes/SumNode";
 import { EstimateNode } from "../nodes/EstimateNode";
 import { DebugNode } from "../nodes/DebugNode";
@@ -90,7 +90,7 @@ export const initializeBaklvaState = (): BaklavaState => {
 
   // register operation nodes
   editor.registerNodeType(MathNode, operationsCategory);
-  editor.registerNodeType(RoundNode, operationsCategory);
+  editor.registerNodeType(FunctionNode, operationsCategory);
   editor.registerNodeType(SumNode, operationsCategory);
   editor.registerNodeType(ComparisonNode, operationsCategory);
   editor.registerNodeType(ChanceEventNode, operationsCategory);

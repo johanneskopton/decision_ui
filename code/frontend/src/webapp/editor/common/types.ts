@@ -28,6 +28,7 @@ export type FlexibleNumber = number | number[] | number[][];
 export const DETERMINISTIC_TYPE_SET = [DETERMINISTIC_TYPE, DETERMINISTIC_INT_TYPE];
 export const PROBABILISTIC_TYPE_SET = [PROBABILISTIC_TYPE, PROBABILISTIC_INT_TYPE];
 export const SERIES_TYPE_SET = [PROBABILISTIC_SERIES_TYPE];
+export const INTEGER_TYPE_SET = [DETERMINISTIC_INT_TYPE, PROBABILISTIC_INT_TYPE];
 
 export const isDeterministicType = (name: InterfaceTypeSet) => DETERMINISTIC_TYPE_SET.includes(name);
 export const isProbabilisticType = (name: InterfaceTypeSet) => PROBABILISTIC_TYPE_SET.includes(name);
