@@ -1,10 +1,11 @@
+import logging
 import os
 import subprocess
-import jinja2
-import logging
-import pandas as pd
 
 from typing import NamedTuple
+
+import jinja2
+import pandas as pd
 
 from decision_backend.baklava.model.parser import ModelParser
 from decision_backend.baklava.translate.estimates import build_estimates_df
@@ -24,13 +25,9 @@ from decision_backend.baklava.common.schema import (
     DecisionSupportHistogramResult,
 )
 from decision_backend.baklava.translate.variables import VariableManager
+from decision_backend.env import DSUI_R_MAX_BINS, DSUI_R_MAX_MCRUNS, DSUI_R_MAX_RUNTIME, DSUI_R_SCRIPT_PATH
 
 logger = logging.getLogger(__name__)
-
-DSUI_R_SCRIPT_PATH = os.environ.get("DSUI_R_SCRIPT_PATH", "Rscript")
-DSUI_R_MAX_RUNTIME = int(os.environ.get("DSUI_R_MAX_RUNTIME", "10"))  # in seconds
-DSUI_R_MAX_MCRUNS = int(os.environ.get("DSUI_R_MAX_MCRUNS", "100000"))
-DSUI_R_MAX_BINS = int(os.environ.get("DSUI_MAX_HISTOGRAM_BINS", "200"))
 
 
 class RuntimeInput(NamedTuple):
@@ -95,7 +92,7 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
             write_estimates_csv_file(runtime_input.estimates_df, files.estimates_file)
             write_r_script_file(runtime_input.r_script, files.r_script_file)
         except Exception as e:
-            raise ExecutionError(f"Error while generating input files for R: " + str(e), None, None, None)
+            raise ExecutionError(f"Error while generating input files for R: {str(e)}", None, None, None) from e
 
         # execute r
         try:
@@ -104,6 +101,7 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
                 capture_output=True,
                 text=True,
                 timeout=DSUI_R_MAX_RUNTIME,
+                check=False,
             )
         except subprocess.TimeoutExpired as e:
             raise ExecutionError(
@@ -111,19 +109,19 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
                 runtime_input.r_script,
                 runtime_input.estimates_df.to_csv(),
                 None,
-            )
+            ) from e
         except Exception as e:
             raise ExecutionError(
-                f"Error while executing R-script: " + str(e),
+                f"Error while executing R-script: {str(e)}",
                 runtime_input.r_script,
                 runtime_input.estimates_df.to_csv(),
                 None,
-            )
+            ) from e
 
         # check r reported any errors
         if result.stderr:
             raise ExecutionError(
-                f"R process reported an error when executing the R-script.",
+                "R process reported an error when executing the R-script.",
                 runtime_input.r_script,
                 runtime_input.estimates_df.to_csv(),
                 result.stderr,
@@ -141,8 +139,8 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
             )
         except Exception as e:
             raise ExecutionError(
-                f"Error while reading R result files: " + str(e),
+                f"Error while reading R result files: {str(e)}",
                 runtime_input.r_script,
                 runtime_input.estimates_df.to_csv(),
                 result.stderr,
-            )
+            ) from e

@@ -87,7 +87,7 @@ export const doRunModel = async ({
   onUnknownError: () => void;
 }) => {
   const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
-  const options = `?mcRuns=${mcRuns}` + (getEvpi ? `` : `&bins=${bins}`);
+  const options = `?mc_runs=${mcRuns}` + (getEvpi ? `` : `&bins=${bins}`);
   axios
     .post((await getBackendBaseURL()) + route + options, model, {
       headers: {

@@ -4,6 +4,13 @@ from typing import List
 from uuid import UUID
 
 
+class ExecutionErrorMessage(BaseModel):
+    reason: str
+    r_script: str
+    estimates: str
+    stderr: str
+
+
 class DecisionModelBase(BaseModel):
     name: str
     saved: int
