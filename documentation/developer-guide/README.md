@@ -50,7 +50,7 @@ Afterward, you can use various batch scripts from the `bin` directory to start d
 
 ### Windows Distribution & Packaging
 
-On Windows, it is possible to distribute a pre-built version of R alongside the electron app. The `install.bat` batch file will download R and run the setup wizard in silent mode to install R in the directory `code/backend/resources/R`. All files of the R installation seem to run independently and do not require any further setup or configuration. When packaging the electron app, the R directory is simply copied. When the electron app is installed on by a user, the R directory is simply extracted and ready to go. The exact path to the `Rscript.exe` is determined in a custom Python hook, see `code/backend/decision_backend/packaging/win-env-hook.py`.
+On Windows, it is possible to distribute a pre-built version of R alongside the electron app. The `install.bat` batch file will download R and run the setup wizard in silent mode to install R in the directory `code/backend/resources/R`. All files of the R installation seem to run independently and do not require any further setup or configuration. When packaging the electron app, the R directory is simply copied. When the electron app is installed on by a user, the R directory is simply extracted and ready to go. The exact path to the `Rscript.exe` is determined in a custom Python hook, see `code/backend/decision_backend/packaging/win_env_hook.py`.
 
 ## MacOS Development
 

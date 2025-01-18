@@ -27,15 +27,18 @@ from decision_backend.env import (
 from decision_backend.rest import schema
 from decision_backend.baklava.evaluate.run import ExecutionError, run_baklava_model
 from decision_backend.rest.authenticate import initialize_user_authentication
-from decision_backend.rest.schema import ExecutionErrorMessage, UserCreate, UserRead, UserUpdate
-from decision_backend.database.schema import User
-from decision_backend.database.session import create_db_and_tables
-from decision_backend.baklava.common.schema import (
-    BaklavaModel,
+from decision_backend.rest.schema import (
     DecisionSupportEVPIResult,
     DecisionSupportHistogramResult,
+    ExecutionErrorMessage,
+    UserCreate,
+    UserRead,
+    UserUpdate,
 )
-from decision_backend.rest.crud import models
+from decision_backend.database.schema import User
+from decision_backend.database.session import create_db_and_tables
+from decision_backend.baklava.common.schema import BaklavaModel
+from decision_backend.database import crud
 from decision_backend.database.session import get_db
 
 
@@ -219,13 +222,13 @@ def create_app():
         user: User = Depends(current_active_user),
     ):
         """Save Baklava model in the database."""
-        return await models.create_user_decision_model(db=db, decision_model=decision_model, user=user)
+        return await crud.create_user_decision_model(db=db, decision_model=decision_model, user=user)
 
     # add route that returns saved models
     @app.get("/api/v1/decision_models/", response_model=List[schema.DecisionModel], tags=["models"])
     async def read_decision_models(db: Session = Depends(get_db), user: User = Depends(current_active_user)):
         """Return all models for a user from the database."""
-        return await models.get_user_decision_models(db, user)
+        return await crud.get_user_decision_models(db, user)
 
     # add route that deletes a model
     @app.delete("/api/v1/decision_models/{decision_model_id}", tags=["models"])
@@ -235,6 +238,6 @@ def create_app():
         user: User = Depends(current_active_user),
     ):
         """Delete a single model from the database."""
-        return await models.delete_decision_model(db, user, decision_model_id)
+        return await crud.delete_decision_model(db, user, decision_model_id)
 
     return app

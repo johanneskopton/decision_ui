@@ -1,10 +1,14 @@
+"""Command line interface"""
+
 import logging
-import argparse
-import uvicorn
 import os
+import argparse
+
+import uvicorn
 
 
 def main():
+    """Parse arguments provided by the user and start the backend server."""
     parser = argparse.ArgumentParser(
         prog="decision-support-ui-backend",
         description="Backend REST API of the decision-support-ui, which stores models and user information.",
@@ -32,7 +36,7 @@ def main():
         "--host",
         metavar="HOST",
         dest="host",
-        default="0.0.0.0",
+        default="0.0.0.0",  # nosec
         help="the host address that is used to serve the rest api (default 0.0.0.0)",
         type=str,
     )

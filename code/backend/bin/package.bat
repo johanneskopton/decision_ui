@@ -1,4 +1,4 @@
-@ECHO OFF 
+@ECHO OFF
 setlocal
 
 REM change to backend directory
@@ -13,7 +13,7 @@ pyinstaller^
     --hidden-import aiosqlite^
     --hidden-import decision_backend.main^
     --collect-data decision_backend.baklava.templates^
-    --runtime-hook decision_backend\packaging\win-env-hook.py^
+    --runtime-hook decision_backend\packaging\win_env_hook.py^
     --add-data resources/R:resources/R^
     --name decision-support-ui-backend^
     --noconfirm^

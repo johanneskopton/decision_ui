@@ -1,3 +1,5 @@
+"""Configuration of FastApi authentication backend"""
+
 import uuid
 import logging
 import os
@@ -23,18 +25,21 @@ DSUI_JWT_TOKEN_LIFETIME = int(os.environ.get("JWT_TOKEN_LIFETIME", "600"))  # 60
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
+    """Implementation of FastApi user manager"""
+
     reset_password_token_secret = DSUI_SECRET
     verification_token_secret = DSUI_SECRET
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
-        logger.info(f"user {user.id} has registered")
+        logger.info("user %s has registered", str(user.id))
 
 
 def initialize_user_authentication():
+    """Initialize the user authentication backend using the JWT strategy."""
 
-    logger.debug(f"jwt token lifetime is {DSUI_JWT_TOKEN_LIFETIME} seconds")
+    logger.debug("jwt token lifetime is %d seconds", DSUI_JWT_TOKEN_LIFETIME)
 
-    if DSUI_SECRET == "default_secret":
+    if DSUI_SECRET == "default_secret":  # nosec
         logger.warning("No secret provided! Please specify environment variable DSUI_SECRET with a custom secret!")
 
     async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):

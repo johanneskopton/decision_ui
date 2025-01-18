@@ -1,3 +1,5 @@
+"""Methods to save and load CSV files."""
+
 import tempfile
 import os
 
@@ -11,6 +13,8 @@ from decision_backend.baklava.common.schema import HistogramData
 
 
 class FilesContext(NamedTuple):
+    """Combines various temporary files"""
+
     estimates_file: tempfile.NamedTemporaryFile
     r_script_file: tempfile.NamedTemporaryFile
     results_file: tempfile.NamedTemporaryFile
@@ -18,6 +22,8 @@ class FilesContext(NamedTuple):
 
 
 class FilePaths(NamedTuple):
+    """Combines file paths of temporary files."""
+
     estimates_fp: str
     r_script_fp: str
     results_fp: str
@@ -25,6 +31,7 @@ class FilePaths(NamedTuple):
 
 
 def prepare_filepaths(files: FilesContext) -> FilePaths:
+    """Prepare filepaths depending on operating system."""
 
     r_script_fp = files.r_script_file.name
     estimates_fp = files.estimates_file.name
@@ -32,6 +39,7 @@ def prepare_filepaths(files: FilesContext) -> FilePaths:
     evpi_fp = files.evpi_file.name
 
     if os.name == "nt":
+        # add extra path delimiter escape for Windows
         r_script_fp = r_script_fp.replace("\\", "\\\\")
         estimates_fp = estimates_fp.replace("\\", "\\\\")
         results_fp = results_fp.replace("\\", "\\\\")
@@ -41,6 +49,7 @@ def prepare_filepaths(files: FilesContext) -> FilePaths:
 
 
 def write_estimates_csv_file(estimates_df: pd.DataFrame, file: tempfile.NamedTemporaryFile):
+    """Write estimates csv file to disk."""
     try:
         estimates_df.to_csv(file.name)
         file.flush()
@@ -49,6 +58,7 @@ def write_estimates_csv_file(estimates_df: pd.DataFrame, file: tempfile.NamedTem
 
 
 def write_r_script_file(r_script: str, file: tempfile.NamedTemporaryFile):
+    """Write r-code file to disk."""
     try:
         file.write(r_script)
         file.flush()
@@ -57,6 +67,7 @@ def write_r_script_file(r_script: str, file: tempfile.NamedTemporaryFile):
 
 
 def read_results_file(result_fp: str, bins=100) -> HistogramData:
+    """Read and parse Monte Carlo results file."""
     df = pd.read_csv(result_fp)
 
     # combine data to determine suitable bins for all results
@@ -74,6 +85,7 @@ def read_results_file(result_fp: str, bins=100) -> HistogramData:
 
 
 def read_evpi_file(evpi_fp: str) -> Mapping[str, Mapping[str, float]]:
+    """Read and parse EVPI results file."""
     try:
         df = pd.read_csv(evpi_fp)
     except pd.errors.EmptyDataError:
@@ -83,6 +95,7 @@ def read_evpi_file(evpi_fp: str) -> Mapping[str, Mapping[str, float]]:
 
 @contextmanager
 def open_files_context():
+    """Contextmanager to keep track of temporary files."""
     estimates_file = tempfile.NamedTemporaryFile("w+t", delete=False, suffix=".csv", prefix="decision_ui_estimate_")
     r_script_file = tempfile.NamedTemporaryFile("w+t", delete=False, suffix=".R", prefix="decision_ui_script_")
     results_file = tempfile.NamedTemporaryFile("w+t", delete=False, suffix=".csv", prefix="decision_ui_result_")

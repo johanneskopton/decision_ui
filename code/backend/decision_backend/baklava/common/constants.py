@@ -1,3 +1,5 @@
+"""Baklava model constants"""
+
 from typing import Final
 
 RESULT_NODE_TYPE: Final[str] = "Result"

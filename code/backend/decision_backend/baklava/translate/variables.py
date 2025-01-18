@@ -1,9 +1,9 @@
-import collections
-from itertools import chain
+"""Generating and keeping track of variable names for nodes and connections."""
+
 import re
 import logging
 
-from typing import Iterator, Mapping, Set
+from typing import Mapping, Set
 
 from decision_backend.baklava.common.constants import (
     RESULT_NODE_TYPE,
@@ -13,7 +13,7 @@ from decision_backend.baklava.common.constants import (
     TYPE_CONSTRAINT_NODE_TYPE,
 )
 from decision_backend.baklava.model.parser import GraphParser, ModelParser
-from decision_backend.baklava.common.schema import BakalvaNodeInterface, BaklavaGraph, BaklavaNode
+from decision_backend.baklava.common.schema import BakalvaNodeInterface, BaklavaNode
 
 logger = logging.getLogger(__name__)
 
@@ -50,15 +50,15 @@ class VariableManager:
         return generated_name
 
     def _register_graph_variable(self, graph: GraphParser, name: str):
-        logger.debug(f"register function '{name}' for subgraph with id '{graph.get_id()}'")
+        logger.debug("register function '%s' for subgraph with id '%s'", name, graph.get_id())
         self.graph_id_to_name[graph.get_id()] = name
 
     def _register_node_variable(self, node: BaklavaNode, name: str):
-        logger.debug(f"register variable '{name}' for node with id '{node.id}'")
+        logger.debug("register variable '%s' for node with id '%s'", name, node.id)
         self.node_id_to_name[node.id] = name
 
     def _register_interface_variable(self, intf: BakalvaNodeInterface, name: str):
-        logger.debug(f"register variable '{name}' for node interface with id '{intf.id}'")
+        logger.debug("register variable '%s' for node interface with id '%s'", name, intf.id)
         self.intf_id_to_name[intf.id] = name
 
     def _register_subgraph(self, graph: GraphParser, output_node_type: str):
@@ -133,6 +133,7 @@ class VariableManager:
         self._register_subgraph(model.get_main_graph(), RESULT_NODE_TYPE)
 
     def get_function_name_for_subgraph(self, graph: GraphParser) -> str:
+        """Return R-code function name for a subgraph."""
         if graph.get_id() in self.graph_id_to_name:
             return self.graph_id_to_name[graph.get_id()]
         raise KeyError(f"subgraph with id '{graph.get_id()}' does not have a function name assigned to it")
@@ -144,6 +145,7 @@ class VariableManager:
         raise KeyError(f"node interface with id '{intf.id}' does not have a variable name assigned to it")
 
     def get_variable_name_for_node(self, node: BaklavaNode) -> str:
+        """Return variable name of a node."""
         if node.id in self.node_id_to_name:
             return self.node_id_to_name[node.id]
         raise KeyError(f"node with id '{node.id}' does not have a variable name assigned to it")

@@ -1,3 +1,7 @@
+"""Translations for each individual node type."""
+
+# pylint: disable=too-few-public-methods
+
 import string
 from typing import Any, List, Mapping
 import numpy as np
@@ -63,6 +67,7 @@ class SubgraphInstanceNodeTranslator(NodeTranslator):
 
 
 class SubgraphOutputNodeTranslator(NodeTranslator):
+    """Subgraph output node translator"""
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         input_values = _prepare_node_input_values(graph, node, variables)
@@ -70,12 +75,14 @@ class SubgraphOutputNodeTranslator(NodeTranslator):
 
 
 class PassthroughNodeTranslator(NodeTranslator):
+    """Passthrough translator used for Type Contraint nodes. Will not generate any R-code."""
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         return []
 
 
 class OneOutputNodeTranslator(NodeTranslator):
+    """Abstract node translator that only has a single output."""
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         input_values = _prepare_node_input_values(graph, node, variables)
@@ -84,10 +91,12 @@ class OneOutputNodeTranslator(NodeTranslator):
         return [f"{variable_name} <- {right_side}"]
 
     def translate_one_output(self, values: Mapping[str, Any]) -> str:
+        """Translation function that needs to implemented by specific node type with one output variable."""
         raise NotImplementedError()
 
 
-class ResultNodeTranslator(OneOutputNodeTranslator):
+class ResultNodeTranslator(NodeTranslator):
+    """Result node translator"""
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         values = _prepare_node_input_values(graph, node, variables)
@@ -95,6 +104,7 @@ class ResultNodeTranslator(OneOutputNodeTranslator):
 
 
 class MathNodeTranslator(OneOutputNodeTranslator):
+    """Math node translator"""
 
     OPERATORS = {"add": "+", "subtract": "-", "multiply": "*", "divide": "/"}
 
@@ -104,18 +114,23 @@ class MathNodeTranslator(OneOutputNodeTranslator):
 
 
 class ComparisonNodeTranslator(OneOutputNodeTranslator):
+    """Comparison node translator"""
 
     def translate_one_output(self, values: Mapping[str, Any]):
         return f"({values["a"]} {values["operation"]} {values["b"]}) * 1"
 
 
 class RoundNodeTranslator(OneOutputNodeTranslator):
+    """Round node translator"""
+
+    FUNCTIONS = {"ceiling": "ceiling", "floor": "floor", "round": "round"}
 
     def translate_one_output(self, values: Mapping[str, Any]):
-        return "{}({})".format(values["operation"], values["x"])
+        return f"{self.FUNCTIONS[values["operation"]]}({values["x"]})"
 
 
 class SumNodeTranslator(OneOutputNodeTranslator):
+    """ "Sum node translator"""
 
     def translate_one_output(self, values: Mapping[str, Any]):
         res_str = values["a"]
@@ -123,32 +138,36 @@ class SumNodeTranslator(OneOutputNodeTranslator):
             if i not in values:
                 break
             if values[i] != 0:
-                res_str += " + {}".format(values[i])
+                res_str += f" + {values[i]}"
         return res_str
 
 
 class ChanceEventNodeTranslator(OneOutputNodeTranslator):
+    """Chance event node translator"""
 
     def translate_one_output(self, values: Mapping[str, Any]):
         return f"chance_event({values["chance"]}, {values["value_if"]}, {values["value_if_not"]})"
 
 
 class ValueVarierNodeTranslator(OneOutputNodeTranslator):
+    """Value varier node translator"""
 
     def translate_one_output(self, values: Mapping[str, Any]):
         if values["trend"] == 0:
-            return "vv(var_mean={}, var_CV={}, n={})".format(values["var_mean"], values["var_cv"], values["n"])
-        else:
-            return "vv(var_mean={}, var_CV={}, n={}, {}_trend={})".format(
-                values["var_mean"],
-                values["var_cv"],
-                values["n"],
-                values["trend_type"],
-                values["trend"],
-            )
+            return f"vv(var_mean={values["var_mean"]}, var_CV={values["var_cv"]}, n={values["n"]})"
+
+        return (
+            "vv("
+            + f"var_mean={values["var_mean"]}, "
+            + f"var_CV={values["var_cv"]}, "
+            + f"n={values["n"]}, "
+            + f"{values["trend_type"]}_trend={values["trend"]}"
+            + ")"
+        )
 
 
 class ToSeriesNodeTranslator(NodeTranslator):
+    """To series node translator"""
 
     def __call__(self, graph: GraphParser, node: BaklavaNode, variables: VariableManager) -> List[str]:
         values = _prepare_node_input_values(graph, node, variables)
@@ -156,21 +175,23 @@ class ToSeriesNodeTranslator(NodeTranslator):
 
         if values["timestep_method"] == "every":
             return [f"{variable_name} <- rep({values["x"]}, {values["n"]})"]
-        elif values["timestep_method"] == "as defined":
+        if values["timestep_method"] == "as defined":
             timestep = values["timestep"]
             if type(timestep) in [int, float, np.int64]:
                 return [
                     f"{variable_name} <- rep(0, {values["n"]})",
                     f"[{values["timestep"] + 1}] <- {values["x"]}",
                 ]
-            else:
-                return [
-                    f"{variable_name} <- rep(0, {values["n"]})",
-                    f"[{values["timestep"]}+1] <- {values["x"]}",
-                ]
+
+            return [
+                f"{variable_name} <- rep(0, {values["n"]})",
+                f"[{values["timestep"]}+1] <- {values["x"]}",
+            ]
+        raise RuntimeError(f"Unknown timestep_method '{values["timestep_method"]}'")
 
 
 class NetPresentValueNodeTranslator(OneOutputNodeTranslator):
+    """Net present value node translator"""
 
     def translate_one_output(self, values: Mapping[str, Any]):
         return f"discount({values["x"]}, {values["discount"]}, calculate_NPV=TRUE)"

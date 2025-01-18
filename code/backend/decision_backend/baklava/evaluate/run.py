@@ -1,6 +1,8 @@
+"""Method to call Rscript binary."""
+
 import logging
 import os
-import subprocess
+import subprocess  # nosec
 
 from typing import NamedTuple
 
@@ -19,24 +21,23 @@ from decision_backend.baklava.evaluate.files import (
     write_r_script_file,
 )
 from decision_backend.baklava.translate.model import translate_model
-from decision_backend.baklava.common.schema import (
-    BaklavaModel,
-    DecisionSupportEVPIResult,
-    DecisionSupportHistogramResult,
-)
+from decision_backend.baklava.common.schema import BaklavaModel
 from decision_backend.baklava.translate.variables import VariableManager
 from decision_backend.env import DSUI_R_MAX_BINS, DSUI_R_MAX_MCRUNS, DSUI_R_MAX_RUNTIME, DSUI_R_SCRIPT_PATH
+from decision_backend.rest.schema import DecisionSupportEVPIResult, DecisionSupportHistogramResult
 
 logger = logging.getLogger(__name__)
 
 
 class RuntimeInput(NamedTuple):
+    """Runtime input values required for running Rscript."""
 
     r_script: str
     estimates_df: pd.DataFrame
 
 
 class ExecutionError(Exception):
+    """Execution error that is raised in case of Rscript error."""
 
     def __init__(self, reason, r_script, estimates, stderr):
         self.reason = reason
@@ -47,9 +48,9 @@ class ExecutionError(Exception):
 
 def _load_jinja_template():
     template_dir = os.path.join(os.path.dirname(__file__), "../templates")
-    templateLoader = jinja2.FileSystemLoader(searchpath=template_dir)
-    templateEnv = jinja2.Environment(loader=templateLoader)
-    return templateEnv.get_template("mc.R")
+    template_loader = jinja2.FileSystemLoader(searchpath=template_dir)
+    template_env = jinja2.Environment(loader=template_loader, autoescape=False)  # nosec
+    return template_env.get_template("mc.R")
 
 
 def _build_r_runtime_input(
@@ -83,6 +84,7 @@ def _build_r_runtime_input(
 
 
 def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: bool):
+    """Execute the R-script for a Baklava model."""
     with open_files_context() as files:
         # generate R input
         try:
@@ -96,7 +98,7 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
 
         # execute r
         try:
-            result = subprocess.run(
+            result = subprocess.run(  # nosec
                 [DSUI_R_SCRIPT_PATH, files.r_script_file.name],
                 capture_output=True,
                 text=True,
