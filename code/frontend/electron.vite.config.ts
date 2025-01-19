@@ -4,15 +4,12 @@ import vue from "@vitejs/plugin-vue";
 import childProcess from "child_process";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import vuetify from "vite-plugin-vuetify";
+import svgLoader from "vite-svg-loader";
 
 import { normalizePath } from "vite";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-
-
-
-
 
 const commitHash = childProcess.execSync("git rev-parse --short HEAD").toString().trim();
 
@@ -68,6 +65,7 @@ export default defineConfig({
         }
       }),
       vue(),
+      svgLoader(),
       vueJsx(),
       nodePolyfills(),
       vuetify()

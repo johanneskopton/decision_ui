@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { onMounted, ref, useTemplateRef } from "vue";
-  import { useRouter } from "vue-router";
+  import { useRoute, useRouter } from "vue-router";
 
   import Confirm from "./ConfirmDialog.vue";
 
@@ -12,8 +12,9 @@
   const userStore = useUserStore();
   const modelStore = useModelStore();
   const router = useRouter();
+  const route = useRoute();
 
-  const tab = ref();
+  const tab = ref<string>(!!route.query.examples ? "examples" : "my-models");
   const confirmDelete = useTemplateRef<typeof Confirm>("confirmDelete");
 
   const models = ref<ModelData[] | null>(null);

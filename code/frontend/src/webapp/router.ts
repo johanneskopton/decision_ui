@@ -11,6 +11,7 @@ import Workspace from "./components/WorkspaceView.vue";
 import FileView from "./components/FileView.vue";
 import SettingsDashboard from "./components/SettingsDashboard.vue";
 import HelpDashboard from "./components/HelpDashboard.vue";
+import WelcomePage from "./components/WelcomePage.vue";
 
 const routes = [
   {
@@ -68,7 +69,7 @@ const routes = [
   },
   {
     path: "/",
-    redirect: "/login/"
+    component: WelcomePage
   }
 ];
 

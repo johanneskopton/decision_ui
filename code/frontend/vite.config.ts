@@ -6,6 +6,7 @@ import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import legacy from "@vitejs/plugin-legacy";
 import vuetify from "vite-plugin-vuetify";
+import svgLoader from "vite-svg-loader";
 
 import { defineConfig, normalizePath } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
@@ -46,6 +47,7 @@ export default defineConfig({
       }
     }),
     vue(),
+    svgLoader(),
     vueJsx(),
     nodePolyfills(),
     vuetify(),
