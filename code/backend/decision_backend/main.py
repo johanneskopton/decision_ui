@@ -6,7 +6,6 @@ This module creates a fastapi app and configures its route.
 
 from contextlib import asynccontextmanager
 import logging
-import os
 
 from typing import List
 
@@ -21,8 +20,10 @@ from decision_backend.env import (
     DSUI_CORS_HEADERS,
     DSUI_CORS_METHODS,
     DSUI_CORS_ORIGINS,
+    DSUI_LOG_LEVEL,
     DSUI_R_MAX_BINS,
     DSUI_R_MAX_MCRUNS,
+    DSUI_R_MAX_RUNTIME,
 )
 from decision_backend.rest import schema
 from decision_backend.baklava.evaluate.run import ExecutionError, run_baklava_model
@@ -43,7 +44,7 @@ from decision_backend.database.session import get_db
 
 
 logging.basicConfig(
-    level=os.environ.get("DSUI_LOG_LEVEL", "INFO"),
+    level=DSUI_LOG_LEVEL,
     format="%(asctime)s %(levelname)s:%(name)s:%(message)s",
 )
 logging.getLogger("aiosqlite").setLevel(logging.INFO)  # disable debug logging of database connection
@@ -132,7 +133,7 @@ def create_app():
             status_code=500,
             content=ExecutionErrorMessage(
                 reason=error.reason, r_script=error.r_script, estimates=error.estimates, stderr=error.stderr
-            ),
+            ).model_dump(),
         )
 
     # add route that performs Monte Carlo simulation in R
@@ -166,18 +167,23 @@ def create_app():
             description="""the number of histogram bins that are used to generate the result histograms
           (minimum of 1, maximum of environment variable `DSUI_R_MAX_BINS`)""",
         ),
+        timeout: float = Query(
+            10.0,
+            description="""the maximum runtime of the R script in seconds
+            (minimum of 1, maximum of environment variable `DSUI_R_MAX_RUNTIME`)""",
+        ),
         _user: User = Depends(current_active_user),
     ) -> DecisionSupportHistogramResult:
         """Perform and return the results of a Monte Carlo simulation for a Baklava model."""
         if mc_runs < 1 or mc_runs > DSUI_R_MAX_MCRUNS:
-            raise ExecutionError(
-                f"number of Monte Carlo runs needs to be between 1 and {DSUI_R_MAX_MCRUNS}", None, None, None
-            )
+            raise ExecutionError(f"number of Monte Carlo runs needs to be between 1 and {DSUI_R_MAX_MCRUNS}")
         if bins < 1 or bins > DSUI_R_MAX_BINS:
+            raise ExecutionError(f"number of histogram bins needs to be between 1 and {DSUI_R_MAX_BINS}")
+        if timeout < 1 or timeout > DSUI_R_MAX_RUNTIME:
             raise ExecutionError(
-                f"number of histogram bins needs to be between 1 and {DSUI_R_MAX_BINS}", None, None, None
+                f"maximum runtime of R script (in seconds) needs to be between 1 and {DSUI_R_MAX_RUNTIME}",
             )
-        return run_baklava_model(model, mc_runs, bins, do_evpi=False)
+        return run_baklava_model(model, mc_runs, bins, timeout, do_evpi=False)
 
     # add route that performs EVPI calculation in R
     @app.post(
@@ -205,14 +211,21 @@ def create_app():
             description="""the number of Monte Carlo runs that are performed to generate the EVPI results
           (minimum 1, maximum of environment variable `DSUI_R_MAX_MCRUNS`)""",
         ),
+        timeout: float = Query(
+            10.0,
+            description="""the maximum runtime of the R script in seconds
+            (minimum of 1, maximum of environment variable `DSUI_R_MAX_RUNTIME`)""",
+        ),
         _user: User = Depends(current_active_user),
     ) -> DecisionSupportEVPIResult:
         """Perform and return the results of an EVPI calculation for a Baklava model."""
         if mc_runs < 1 or mc_runs > DSUI_R_MAX_MCRUNS:
+            raise ExecutionError(f"number of Monte Carlo runs needs to be between 1 and {DSUI_R_MAX_MCRUNS}")
+        if timeout < 1 or timeout > DSUI_R_MAX_RUNTIME:
             raise ExecutionError(
-                f"number of Monte Carlo runs needs to be between 1 and {DSUI_R_MAX_MCRUNS}", None, None, None
+                f"maximum runtime of R script (in seconds) needs to be between 1 and {DSUI_R_MAX_RUNTIME}"
             )
-        return run_baklava_model(model, mc_runs, 0, do_evpi=True)
+        return run_baklava_model(model, mc_runs, 0, timeout, do_evpi=True)
 
     # add route that saves model to database
     @app.post("/api/v1/decision_model/", response_model=schema.DecisionModel, tags=["models"])

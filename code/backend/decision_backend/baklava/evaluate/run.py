@@ -23,7 +23,7 @@ from decision_backend.baklava.evaluate.files import (
 from decision_backend.baklava.translate.model import translate_model
 from decision_backend.baklava.common.schema import BaklavaModel
 from decision_backend.baklava.translate.variables import VariableManager
-from decision_backend.env import DSUI_R_MAX_BINS, DSUI_R_MAX_MCRUNS, DSUI_R_MAX_RUNTIME, DSUI_R_SCRIPT_PATH
+from decision_backend.env import DSUI_R_MAX_BINS, DSUI_R_MAX_MCRUNS, DSUI_R_SCRIPT_PATH
 from decision_backend.rest.schema import DecisionSupportEVPIResult, DecisionSupportHistogramResult
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ class RuntimeInput(NamedTuple):
 class ExecutionError(Exception):
     """Execution error that is raised in case of Rscript error."""
 
-    def __init__(self, reason, r_script, estimates, stderr):
+    def __init__(self, reason, r_script=None, estimates=None, stderr=None):
         self.reason = reason
         self.r_script = r_script
         self.estimates = estimates
@@ -83,7 +83,7 @@ def _build_r_runtime_input(
     return RuntimeInput(r_script, estimates_df)
 
 
-def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: bool):
+def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, timeout: float, do_evpi: bool):
     """Execute the R-script for a Baklava model."""
     with open_files_context() as files:
         # generate R input
@@ -94,7 +94,7 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
             write_estimates_csv_file(runtime_input.estimates_df, files.estimates_file)
             write_r_script_file(runtime_input.r_script, files.r_script_file)
         except Exception as e:
-            raise ExecutionError(f"Error while generating input files for R: {str(e)}", None, None, None) from e
+            raise ExecutionError(f"Error while generating input files for R: {str(e)}") from e
 
         # execute r
         try:
@@ -102,22 +102,20 @@ def run_baklava_model(model: BaklavaModel, mc_runs: int, bins: int, do_evpi: boo
                 [DSUI_R_SCRIPT_PATH, files.r_script_file.name],
                 capture_output=True,
                 text=True,
-                timeout=DSUI_R_MAX_RUNTIME,
+                timeout=timeout,
                 check=False,
             )
         except subprocess.TimeoutExpired as e:
             raise ExecutionError(
-                f"R process killed after maximum allowed runtime of {DSUI_R_MAX_RUNTIME} seconds.",
+                f"R process killed after maximum allowed runtime of {timeout} seconds.",
                 runtime_input.r_script,
                 runtime_input.estimates_df.to_csv(),
-                None,
             ) from e
         except Exception as e:
             raise ExecutionError(
                 f"Error while executing R-script: {str(e)}",
                 runtime_input.r_script,
                 runtime_input.estimates_df.to_csv(),
-                None,
             ) from e
 
         # check r reported any errors

@@ -21,7 +21,7 @@ from decision_backend.database.session import get_user_db
 logger = logging.getLogger(__name__)
 
 DSUI_SECRET = os.environ.get("DSUI_SECRET", "default_secret")
-DSUI_JWT_TOKEN_LIFETIME = int(os.environ.get("JWT_TOKEN_LIFETIME", "600"))  # 600 seconds = 10 minutes
+DSUI_JWT_LIFETIME = int(os.environ.get("DSUI_JWT_LIFETIME", "600"))  # 600 seconds = 10 minutes
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
@@ -37,7 +37,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
 def initialize_user_authentication():
     """Initialize the user authentication backend using the JWT strategy."""
 
-    logger.debug("jwt token lifetime is %d seconds", DSUI_JWT_TOKEN_LIFETIME)
+    logger.debug("jwt token lifetime is %d seconds", DSUI_JWT_LIFETIME)
 
     if DSUI_SECRET == "default_secret":  # nosec
         logger.warning("No secret provided! Please specify environment variable DSUI_SECRET with a custom secret!")
@@ -46,7 +46,7 @@ def initialize_user_authentication():
         yield UserManager(user_db)
 
     def get_jwt_strategy() -> JWTStrategy:
-        return JWTStrategy(secret=DSUI_SECRET, lifetime_seconds=DSUI_JWT_TOKEN_LIFETIME)
+        return JWTStrategy(secret=DSUI_SECRET, lifetime_seconds=DSUI_JWT_LIFETIME)
 
     auth_backend = AuthenticationBackend(
         name="jwt",

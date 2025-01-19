@@ -35,6 +35,7 @@
       model,
       mcRuns: getEvpi ? modelStore.settings.backend.evpiMcRuns : modelStore.settings.backend.mcRuns,
       bins: modelStore.settings.backend.bins,
+      timeout: modelStore.settings.backend.timeout,
       getEvpi,
       onSuccess: result => {
         loading.value = false;

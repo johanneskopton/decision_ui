@@ -146,6 +146,23 @@
                 </v-slider>
               </td>
             </tr>
+            <tr>
+              <td>Maximum R-Script Runtime (in seconds)</td>
+              <td>
+                <v-slider v-model="settings.backend.timeout" class="slider" max="30" min="1" step="1" width="100%">
+                  <template #append>
+                    <v-text-field
+                      v-model="settings.backend.timeout"
+                      density="compact"
+                      width="120px"
+                      type="number"
+                      variant="outlined"
+                      hide-details
+                    ></v-text-field>
+                  </template>
+                </v-slider>
+              </td>
+            </tr>
           </tbody>
         </v-table>
       </v-card-text>

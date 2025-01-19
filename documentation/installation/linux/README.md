@@ -33,16 +33,8 @@ The following arguments can to be provided:
 - `-e DSUI_SECRET=default_secret` \
   specify a custom secret (random characters, similar to a password) to ensure that the application can securely
   encrypt login data
-- `-e JWT_TOKEN_LIFETIME=600` \
-  lifetime of the JSON Web Tokens (JWT) in seconds (default is 10 minutes)
-- `-e DSUI_LOG_LEVEL=DEBUG` \
-  show debug messages (default level is `INFO`)
-- `-e DSUI_R_MAX_RUNTIME=10` \
-  maximum runtime of R script in seconds (default 10 seconds)
-- `-e DSUI_R_MAX_MCRUNS=100000` \
-  maximum number of Monte Carlo runs that are allowed to run in the backend (default 100.000)
-- `-e DSUI_R_MAX_BINS=200` \
-  maximum number of histogram bins that can be generated in the backend (default 200)
+
+Additional environment variables are described in the "Developers Guide" section.
 
 As soon as the application is started, you can access the user interface from your browser using the address:
 [`http://localhost:8080`](http://localhost:8080).

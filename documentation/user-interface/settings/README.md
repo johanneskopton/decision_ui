@@ -36,3 +36,11 @@ The following settings are available:
 - EVPI Monte Carlo Runs \
   The number of Monte Carlo runs that are performed to estimate the Expected Value of Perfect Information (EVPI)
   visualized in the EVPI diagram on the Result dashboard page.
+
+- Maximum R-Script Runtime \
+  The number of seconds that the generated R-code is allowed to run before it will be forcefully stopped. Depending
+  on the complexity of your model and the CPU performance of your machine, the R-script will take more or less time to
+  finish simulating all Monte Carlo runs. Please adjust this timeout appropriately.
+
+> Note: In case you are accessing the Decision Support UI on a remote server, the server administrator might have set
+> stricter limits for any of these settings. In this case, choosing a higher value will result in an error message.

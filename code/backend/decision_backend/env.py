@@ -2,13 +2,16 @@
 
 import os
 
+DSUI_LOG_LEVEL = os.environ.get("DSUI_LOG_LEVEL", "INFO")
+"""Log level used when running the backend"""
+
 DSUI_DATABASE_PATH = os.environ.get("DSUI_DATABASE_PATH", "./data/decision-support-ui-backend.db")
 """Path to the database file"""
 
 DSUI_R_SCRIPT_PATH = os.environ.get("DSUI_R_SCRIPT_PATH", "Rscript")
 """Path to the R binary Rscript"""
 
-DSUI_R_MAX_RUNTIME = float(os.environ.get("DSUI_R_MAX_RUNTIME", "10"))
+DSUI_R_MAX_RUNTIME = float(os.environ.get("DSUI_R_MAX_RUNTIME", "30"))
 """Maximum runtime when running any R script in seconds"""
 
 DSUI_R_MAX_MCRUNS = int(os.environ.get("DSUI_R_MAX_MCRUNS", "100000"))

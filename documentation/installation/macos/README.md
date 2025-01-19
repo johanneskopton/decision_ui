@@ -46,8 +46,8 @@ podman run \
 ![Podman Run Container](./podman-run.webp)
 
 Instead of `$(pwd)`, your current directory of your terminal, you can also specify any other directory that will be
-used to permanently store the database on your host machine. A comprehensive list of all arguments is given in the
-Linux installation instructions.
+used to permanently store the database on your host machine. A comprehensive list of all environment variables is
+provided in the Developers Guide section.
 
 Finally, open [http://localhost:8080](http://localhost:8080) in your browser.
 

@@ -72,6 +72,7 @@ export const doRunModel = async ({
   model,
   mcRuns,
   bins,
+  timeout,
   getEvpi,
   onSuccess,
   onExecutionError,
@@ -81,13 +82,14 @@ export const doRunModel = async ({
   model: any;
   mcRuns: number;
   bins: number;
+  timeout: number;
   getEvpi: boolean;
   onSuccess: (results: DecisionSupportResult | EVPIResult) => void;
   onExecutionError: (error: ExecutionError) => void;
   onUnknownError: () => void;
 }) => {
   const route = getEvpi ? "/api/v1/evpi" : "/api/v1/monte_carlo";
-  const options = `?mc_runs=${mcRuns}` + (getEvpi ? `` : `&bins=${bins}`);
+  const options = `?mc_runs=${mcRuns}&timeout=${timeout}` + (getEvpi ? `` : `&bins=${bins}`);
   axios
     .post((await getBackendBaseURL()) + route + options, model, {
       headers: {

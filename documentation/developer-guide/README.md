@@ -61,3 +61,30 @@ For development on MacOS, we suggest installing [Podman](https://podman.io/) and
 ### MacOS Distribution & Packaging
 
 On MacOS, there is no self-contained pre-built version of R that can be packaged alongside an electron app. Because of that, the easiest way to distribute the application is with a Docker image.
+
+## Environment Variables
+
+The following environment variables will be considered when running the backend:
+
+- `DSUI_DATABASE_PATH=./data/decision-support-ui-backend.db` \
+  path to the sqlite database file
+- `DSUI_R_SCRIPT_PATH=Rscript` \
+  path to the `Rscript` or `Rscript.exe` binary
+- `DSUI_JWT_LIFETIME=600` \
+  lifetime of the JSON Web Tokens (JWT) in seconds (default is 10 minutes)
+- `DSUI_LOG_LEVEL=INFO` \
+  log level, show debug messages by providing `DEBUG`
+- `DSUI_R_MAX_RUNTIME=30` \
+  maximum runtime of R script in seconds (default 30 seconds)
+- `DSUI_R_MAX_MCRUNS=100000` \
+  maximum number of Monte Carlo runs that are allowed to run in the backend (default 100.000)
+- `DSUI_R_MAX_BINS=200` \
+  maximum number of histogram bins that can be generated in the backend (default 200)
+- `DSUI_R_VALUE_PRECISION=5` \
+  maximum floating point precision when writing numeric values in the R-code
+- `DSUI_CORS_ORIGINS=*` \
+  backend CORS origins parameter, adapt according to your deployment strategy
+- `DSUI_CORS_METHODS=GET,POST` \
+  backend CORS methods parameter
+- `DSUI_CORS_HEADERS=*` \
+  backend CORS headers parameter, adapt according to your deployment strategy

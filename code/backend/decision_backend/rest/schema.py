@@ -1,6 +1,6 @@
 """REST schema models"""
 
-from typing import List, Mapping, Sequence
+from typing import List, Mapping, Optional, Sequence
 from uuid import UUID
 
 from fastapi_users import schemas
@@ -11,9 +11,9 @@ class ExecutionErrorMessage(BaseModel):
     """An error message related to the execution of R."""
 
     reason: str
-    r_script: str
-    estimates: str
-    stderr: str
+    r_script: Optional[str]
+    estimates: Optional[str]
+    stderr: Optional[str]
 
 
 class DecisionModelBase(BaseModel):

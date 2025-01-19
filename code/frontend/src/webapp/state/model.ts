@@ -38,6 +38,7 @@ interface Settings {
     bins: number;
     mcRuns: number;
     evpiMcRuns: number;
+    timeout: number;
   };
 }
 
@@ -84,7 +85,8 @@ const initializeModelState = (): ModelState => {
       backend: {
         bins: 100,
         mcRuns: 50000,
-        evpiMcRuns: 1000
+        evpiMcRuns: 1000,
+        timeout: 10
       }
     },
     decisionSupportResult: null,
