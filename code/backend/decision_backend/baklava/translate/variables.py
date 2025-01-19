@@ -14,13 +14,14 @@ from decision_backend.baklava.common.constants import (
 )
 from decision_backend.baklava.model.parser import GraphParser, ModelParser
 from decision_backend.baklava.common.schema import BakalvaNodeInterface, BaklavaNode
+from decision_backend.baklava.translate.sanitize import remove_newslines
 
 logger = logging.getLogger(__name__)
 
 
 def _generate_variable_name(title: str, existing_names: Set[str]) -> str:
     """Return a unique variable name given the node title."""
-    cleaned_name = re.sub(r" ", "_", title.strip())
+    cleaned_name = re.sub(r" ", "_", remove_newslines(title).strip())
     cleaned_name = re.sub(r"[^a-zA-Z0-9\_]", "", cleaned_name)
 
     base_name = cleaned_name
