@@ -21,7 +21,7 @@ from decision_backend.baklava.translate.nodes import (
     NODE_TYPE_TO_TRANSLATOR_MAP_IMPLEMENTATIONS,
     SubgraphInstanceNodeTranslator,
 )
-from decision_backend.baklava.translate.sanitize import remove_newslines
+from decision_backend.baklava.translate.sanitize import remove_newslines, remove_unsafe_characters
 from decision_backend.baklava.translate.variables import VariableManager
 
 logger = logging.getLogger(__name__)
@@ -99,7 +99,7 @@ def translate_graph(
     state = GraphTranslationState(variables, input_node_type, output_node_type)
 
     for output_node in graph.find_output_nodes(output_node_type):
-        state.add_line("# " + remove_newslines(output_node.title))
+        state.add_line("# " + remove_unsafe_characters(remove_newslines(output_node.title)))
         order = graph.get_depth_first_node_order(output_node)
 
         for node in reversed(order):
@@ -118,7 +118,7 @@ def translate_model(model: ModelParser, variables: VariableManager) -> Tuple[str
         state = translate_graph(graph, variables, SUBGRAPH_INPUT_NODE_TYPE, SUBGRAPH_OUTPUT_NODE_TYPE)
 
         function_name = variables.get_function_name_for_subgraph(graph)
-        result += f"\t# subgraph {remove_newslines(graph.get_name())}\n"
+        result += f"\t# subgraph {remove_unsafe_characters(remove_newslines(graph.get_name()))}\n"
         result += f"\t{function_name} <- function({", ".join(sorted(state.get_input_variables()))}){{\n"
         result += "".join(f"\t\t{line}\n" for line in state.get_translations())
         result += f"\t\treturn(list({", ".join([f"{n}={n}" for n in sorted(state.get_output_variables())])}))\n"
