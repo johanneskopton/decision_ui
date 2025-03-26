@@ -10,7 +10,9 @@
   <div class="container">
     <div class="header">
       <div>
-        <a href="https://www.inres.uni-bonn.de/" target="_blank"><img :src="InresLogo" class="inresLogo" /></a>
+        <a href="https://www.gartenbauwissenschaften.uni-bonn.de/" target="_blank">
+          <img :src="InresLogo" class="inresLogo" />
+        </a>
       </div>
       <div>
         <a href="https://www.uni-bonn.de/" target="_blank"><img :src="UniBonnLogo" class="uniBonnLogo" /></a>
@@ -57,7 +59,11 @@
       </div>
     </div>
     <div class="footer">
-      <div><img :src="NifamLogo" class="nifamLogo" /></div>
+      <div>
+        <a href="https://www.gartenbauwissenschaften.uni-bonn.de/en/research/hollistic-modeling/nifam" target="_blank">
+          <img :src="NifamLogo" class="nifamLogo" />
+        </a>
+      </div>
       <div><img :src="FundingLogo" class="fundingLogo" /></div>
     </div>
   </div>
@@ -79,7 +85,7 @@
     .inresLogo {
       display: block;
       margin: 2em 0 0 2em;
-      width: 7em;
+      width: 8em;
     }
 
     .uniBonnLogo {
