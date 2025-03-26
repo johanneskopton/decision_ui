@@ -1,0 +1,17 @@
+FROM localhost/decision-support-ui/base:latest
+
+# copy code
+COPY bin /root/workspace/bin
+COPY documentation /root/workspace/documentation
+COPY code /root/workspace/code
+COPY .git /root/workspace/.git
+
+# install dependencies
+RUN bash /root/workspace/bin/install.sh
+
+# build
+ENV VITE_BACKEND_AUTH_HEADER="X-Auth-Token"
+RUN bash /root/workspace/bin/build.sh
+
+# start backend and frontend
+CMD bash /root/workspace/bin/run-webapp.sh

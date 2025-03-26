@@ -1,0 +1,98 @@
+{
+  "graph": {
+    "id": "0817ff06-eba6-42a5-97e3-b8fea2866c79",
+    "nodes": [
+      {
+        "type": "Note",
+        "id": "ad022ec5-0cc5-4bb8-865d-b5453e1dddda",
+        "title": "Note",
+        "inputs": {
+          "note": {
+            "id": "6336915f-8c1c-4c80-b43d-1534c356fa97",
+            "value": "This model contains the minimal nodes required to form a valid model: a single input estimate node connected to a single result node. Click on the blue rocket button in the right bottom corner to run the monte carlo simulation and inspect the results in the 'Results dashboard' by clicking the diagram button in the left menu.\n\nNodes may be renamed from the 3-dot menu, which influences how they are referenced in diagrams and the R-code."
+          }
+        },
+        "outputs": {},
+        "position": {
+          "x": 300,
+          "y": 100
+        },
+        "width": 900,
+        "twoColumn": false
+      },
+      {
+        "type": "Estimate",
+        "id": "997489df-22f8-48c8-ab19-f8dad0600ee9",
+        "title": "Estimate Node",
+        "inputs": {
+          "distribution": {
+            "id": "5157fcbb-86e0-4d6d-b452-dce0e18c43d5",
+            "value": "norm"
+          },
+          "comment": {
+            "id": "08a7b666-9c98-4193-bd26-c518e4fe5441",
+            "value": ""
+          },
+          "lower": {
+            "id": "375e7435-4620-4afa-8636-ed0f1f46297c",
+            "value": 0
+          },
+          "upper": {
+            "id": "acbf8321-3e52-4551-96a7-30f881cb6af9",
+            "value": 1
+          }
+        },
+        "outputs": {
+          "sample": {
+            "id": "c324702d-78a6-4d42-b9c2-bf0e17b93313",
+            "value": null
+          }
+        },
+        "position": {
+          "x": 400,
+          "y": 400
+        },
+        "width": 200,
+        "twoColumn": false
+      },
+      {
+        "type": "Result",
+        "id": "2dcd2cbb-c1eb-45fb-b821-ffb0577bb8f5",
+        "title": "Result Node",
+        "inputs": {
+          "sample": {
+            "id": "8a4156c1-13b6-46cb-9188-ba7ed2d32f91",
+            "value": null
+          }
+        },
+        "outputs": {
+          "display": {
+            "id": "23eb3049-f429-4b53-979c-a1dc685e7b53",
+            "value": null
+          }
+        },
+        "position": {
+          "x": 800,
+          "y": 400
+        },
+        "width": 300,
+        "twoColumn": false
+      }
+    ],
+    "connections": [
+      {
+        "id": "e691d876-4184-41b1-9321-41faec3f9ec0",
+        "from": "c324702d-78a6-4d42-b9c2-bf0e17b93313",
+        "to": "8a4156c1-13b6-46cb-9188-ba7ed2d32f91"
+      }
+    ],
+    "inputs": [],
+    "outputs": [],
+    "panning": {
+      "x": 0,
+      "y": 0
+    },
+    "scaling": 1
+  },
+  "graphTemplates": []
+}

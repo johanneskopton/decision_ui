@@ -1,0 +1,56 @@
+appId: de.uni-bonn.inres
+productName: Decision Support UI
+directories:
+  output: dist/electron/builder
+  buildResources: resources/build
+files:
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!bin/*"
+  - "!config/*"
+  - "!test/*"
+  - "!.editorconfig"
+  - "!.gitignore"
+  - "!.postcssrc.js"
+  - "!.prettierrc"
+  - "!electron.vite.config.ts"
+  - "!eslint.config.js"
+  - "!README.md"
+  - "!{tsconfig.json,tsconfig.node.json,tsconfig.app.json}"
+  - "!vite.config.ts"
+asarUnpack:
+  - resources/**
+win:
+  executableName: decision-support-ui
+  icon: public/favicon.ico
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  runAfterFinish: false
+  installerIcon: public/favicon.ico
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+dmg:
+  artifactName: ${name}-${version}.${ext}
+linux:
+  target:
+    - AppImage
+  maintainer: electronjs.org
+  category: Utility
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+electronDownload:
+  mirror: https://npmmirror.com/mirrors/electron/

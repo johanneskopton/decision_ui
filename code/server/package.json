@@ -1,0 +1,31 @@
+{
+  "name": "@uni-bonn/decision-support-ui_server",
+  "version": "0.1.0",
+  "description": "webserver hosting decision support ui",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p .",
+    "watch-build": "tsc -p . -w --preserveWatchOutput",
+    "watch-server": "nodemon -w ./build ./build/src/run.js",
+    "watch": "concurrently -k -c auto -n build,server \"npm run watch-build\" \"npm run watch-server\"",
+    "lint": "eslint .",
+    "start": "node build/src/run.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.5",
+    "express": "^4.21.1",
+    "http-proxy-middleware": "^3.0.3",
+    "nocache": "^4.0.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/express": "^4.17.17",
+    "@typescript-eslint/parser": "^8.14.0",
+    "@typescript-eslint/eslint-plugin": "^8.14.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^8.57.1",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
+  }
+}

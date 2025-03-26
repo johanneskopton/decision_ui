@@ -1,0 +1,8 @@
+code/frontend/node_modules
+code/frontend/dist
+code/backend/.pytest_cache
+code/backend/.venv
+code/backend/data/*
+code/backend/decision_backend.egg-info
+code/backend/dist
+deployment/staging/data

@@ -1,0 +1,67 @@
+FROM docker.io/library/fedora:41
+
+# install R build dependencies
+RUN --mount=type=cache,target=/var/cache/dnf,z \
+    dnf install -y gcc-c++ cmake openssl-devel libcurl-devel \
+                   libsodium-devel udunits2-devel gdal-devel \
+                   proj-devel geos-devel
+
+# install R
+RUN --mount=type=cache,target=/var/cache/dnf,z \
+    dnf install -y R R-core
+
+# install compatible pre-compiled R dependencies
+RUN --mount=type=cache,target=/var/cache/dnf,z \
+    dnf install -y R-assertthat R-dplyr R-ggplot2 R-magrittr \
+                   R-mvtnorm R-stringr R-tidyr R-tidyselect \
+                   R-knitr R-rmarkdown R-scales R-testthat \
+                   R-readr R-modelr R-microbenchmark R-sys R-zoo \
+                   R-broom R-rstudioapi R-askpass R-filelock \
+                   R-sodium R-backports R-DBI R-units R-rematch2 \
+                   R-polynom R-getPass R-keyring R-maps R-mime \
+                   R-openssl R-timechange R-data.table R-R.oo \
+                   R-R.methodsS3 R-sp R-cellranger R-cpp11 R-chron \
+                   R-date R-httr R-lubridate R-plyr R-progress \
+                   R-R.utils R-Rcpp R-Rcpp-devel R-readxl \
+                   R-reshape2 R-XML R-tkrplot
+
+# create directory to avoid R install error
+RUN mkdir -p /usr/share/doc/R/html/
+
+# set env variable to reduce install size of R dependencies
+# see http://dirk.eddelbuettel.com/blog/2019/03/27/
+ENV _R_SHLIB_STRIP_=1
+
+# manually install decisionSupport package
+RUN MAKE="make -j8" R -e 'options(warn=2); \
+          install.packages( \
+              c("decisionSupport"), \
+              INSTALL_opts=c("--no-docs", "--no-html", "--no-help"), \
+              repos="https://cran.uni-muenster.de/" \
+          );'
+
+# install development basics
+RUN --mount=type=cache,target=/var/cache/dnf,z \
+    dnf install -y sudo git git-lfs vim tmux wget make pv
+
+# install python
+RUN --mount=type=cache,target=/var/cache/dnf,z \
+    dnf install -y python3 python3-pip python3-virtualenv
+
+# install nodejs
+RUN --mount=type=cache,target=/var/cache/dnf,z \
+    curl -fsSL https://rpm.nodesource.com/setup_22.x | bash - && \
+    dnf install -y nodejs
+
+# install node "concurrently" to start multiple commands in parallel
+RUN npm install -g concurrently
+
+# copy custom screenrc for convenience
+COPY ./resources/tmux.conf /root/.tmux.conf
+
+WORKDIR /root/workspace
+
+# keep container running for development work
+# (e.g. vscode remote development plugin)
+# don't do this other than for development purposes
+ENTRYPOINT ["tail", "-f", "/dev/null"]
