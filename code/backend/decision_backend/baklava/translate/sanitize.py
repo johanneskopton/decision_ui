@@ -20,4 +20,4 @@ def remove_newslines(s: str):
 def remove_unsafe_characters(s: str):
     """Remove any"""
     s_normalized = unicodedata.normalize("NFC", s)
-    return re.sub(f"[^ ${RE_LATIN}${RE_NUMBERS}${RE_GERMAN}${RE_VIETNAMESE}\_]", "", s_normalized)
+    return re.sub(rf"[^ ${RE_LATIN}${RE_NUMBERS}${RE_GERMAN}${RE_VIETNAMESE}\_]", "", s_normalized)
