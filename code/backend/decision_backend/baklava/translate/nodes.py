@@ -195,7 +195,7 @@ class ToSeriesNodeTranslator(NodeTranslator):
             if type(timestep) in [int, float, np.int64]:
                 return [
                     f"{variable_name} <- rep(0, {values["n"]})",
-                    f"[{values["timestep"] + 1}] <- {values["x"]}",
+                    f"{variable_name}[{values["timestep"] + 1}] <- {values["x"]}",
                 ]
 
             return [
