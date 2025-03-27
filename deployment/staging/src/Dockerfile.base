@@ -1,5 +1,8 @@
 FROM docker.io/library/fedora:41
 
+# update system
+RUN dnf update -y && dnf clean all && rm -rf /var/cache/dnf
+
 # install R build dependencies
 RUN dnf install -y gcc-c++ cmake openssl-devel libcurl-devel \
                    libsodium-devel udunits2-devel gdal-devel \
