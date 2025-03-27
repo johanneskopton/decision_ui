@@ -1,10 +1,10 @@
-@ECHO OFF 
+@ECHO OFF
 setlocal
 
 REM change to backend directory
 CD /D "%~dp0/../"
 
-SET R_VERSION=4.4.2
+SET R_VERSION=4.4.3
 SET ROOT_PATH=%cd%
 SET RESOURCES_DIR=%root_path%\resources
 SET DOWNLOAD_DIR=%resources_dir%\download
