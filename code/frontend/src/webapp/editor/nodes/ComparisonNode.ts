@@ -1,50 +1,145 @@
-import nj, { NdArray } from "@d4c/numjs";
-import cwise from "cwise";
-
 import { defineMathNode } from "./AbstractMathNode";
 
 type SupportedOperationType = ">" | "<" | ">=" | "<=";
 
-const greaterThan = cwise({
-  args: ["array", "array"],
-  body: function gt(a, b) {
-    a = +(a > b);
+/**
+ * Return element-wise comparison (greater than) of both probabilistic intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const greaterThanForArray = (a: number[], b: number[]): number[] => {
+  const shape = a.length;
+  const result = new Array(shape);
+  for (let i = 0; i < shape; i++) {
+    result[i] = +(a > b);
   }
-});
-
-const greaterThanOrEqual = cwise({
-  args: ["array", "array"],
-  body: function gteq(a, b) {
-    a = +(a >= b);
-  }
-});
-
-const lowerThan = cwise({
-  args: ["array", "array"],
-  body: function lt(a, b) {
-    a = +(a < b);
-  }
-});
-
-const lowerThanOrEqual = cwise({
-  args: ["array", "array"],
-  body: function lteq(a, b) {
-    a = +(a <= b);
-  }
-});
-
-const applyCwise = (func: cwise.Return, a: nj.NdArray, b: nj.NdArray) => {
-  const x = NdArray.new(a).clone();
-  func(x.selection, b.selection);
-  return x;
+  return result;
 };
 
-const applyCwiseArray = (func: cwise.Return, a: number[], b: number[]) => {
-  return applyCwise(func, nj.array(a), nj.array(b)).tolist() as number[];
+/**
+ * Return element-wise comparison (greater than or equal) of both probabilistic intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const greaterThanOrEqualForArray = (a: number[], b: number[]): number[] => {
+  const shape = a.length;
+  const result = new Array(shape);
+  for (let i = 0; i < shape; i++) {
+    result[i] = +(a >= b);
+  }
+  return result;
 };
 
-const applyCwiseSeries = (func: cwise.Return, a: number[][], b: number[][]) => {
-  return applyCwise(func, nj.array(a), nj.array(b)).tolist() as number[][];
+/**
+ * Return element-wise comparison (lower than) of both probabilistic intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const lowerThanForArray = (a: number[], b: number[]): number[] => {
+  const shape = a.length;
+  const result = new Array(shape);
+  for (let i = 0; i < shape; i++) {
+    result[i] = +(a < b);
+  }
+  return result;
+};
+
+/**
+ * Return element-wise comparison (lower than or equal) of both probabilistic intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const lowerThanOrEqualForArray = (a: number[], b: number[]): number[] => {
+  const shape = a.length;
+  const result = new Array(shape);
+  for (let i = 0; i < shape; i++) {
+    result[i] = +(a <= b);
+  }
+  return result;
+};
+
+/**
+ * Return element-wise comparison (greater than) of both probabilistic series intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const greaterThanForSeries = (a: number[][], b: number[][]): number[][] => {
+  const shape = [a.length, a[0].length];
+  const result = new Array(shape[0]);
+  for (let j = 0; j < shape[0]; j++) {
+    result[j] = new Array(shape[1]);
+    for (let i = 0; i < shape[1]; i++) {
+      result[j][i] = +(a[j][i] > b[j][i]);
+    }
+  }
+  return result;
+};
+
+/**
+ * Return element-wise comparison (greater than or equal) of both probabilistic series intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const greaterThanOrEqualForSeries = (a: number[][], b: number[][]): number[][] => {
+  const shape = [a.length, a[0].length];
+  const result = new Array(shape[0]);
+  for (let j = 0; j < shape[0]; j++) {
+    result[j] = new Array(shape[1]);
+    for (let i = 0; i < shape[1]; i++) {
+      result[j][i] = +(a[j][i] >= b[j][i]);
+    }
+  }
+  return result;
+};
+
+/**
+ * Return element-wise comparison (lower than) of both probabilistic series intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const lowerThanForSeries = (a: number[][], b: number[][]): number[][] => {
+  const shape = [a.length, a[0].length];
+  const result = new Array(shape[0]);
+  for (let j = 0; j < shape[0]; j++) {
+    result[j] = new Array(shape[1]);
+    for (let i = 0; i < shape[1]; i++) {
+      result[j][i] = +(a[j][i] < b[j][i]);
+    }
+  }
+  return result;
+};
+
+/**
+ * Return element-wise comparison (lower than or equal) of both probabilistic series intputs.
+ *
+ * @param a the first input distribution
+ * @param b the second input distribution
+ * @returns the element-wise comparison (0=false, 1=true) of both inputs
+ */
+const lowerThanOrEqualForSeries = (a: number[][], b: number[][]): number[][] => {
+  const shape = [a.length, a[0].length];
+  const result = new Array(shape[0]);
+  for (let j = 0; j < shape[0]; j++) {
+    result[j] = new Array(shape[1]);
+    for (let i = 0; i < shape[1]; i++) {
+      result[j][i] = +(a[j][i] <= b[j][i]);
+    }
+  }
+  return result;
 };
 
 export const ComparisonNode = defineMathNode<SupportedOperationType>({
@@ -64,16 +159,16 @@ export const ComparisonNode = defineMathNode<SupportedOperationType>({
   },
 
   probabilisticOperations: {
-    ">": (a, b) => applyCwiseArray(greaterThan, a, b),
-    "<": (a, b) => applyCwiseArray(lowerThan, a, b),
-    ">=": (a, b) => applyCwiseArray(greaterThanOrEqual, a, b),
-    "<=": (a, b) => applyCwiseArray(lowerThanOrEqual, a, b)
+    ">": (a, b) => greaterThanForArray(a, b),
+    "<": (a, b) => lowerThanForArray(a, b),
+    ">=": (a, b) => greaterThanOrEqualForArray(a, b),
+    "<=": (a, b) => lowerThanOrEqualForArray(a, b)
   },
 
   seriesOperations: {
-    ">": (a, b) => applyCwiseSeries(greaterThan, a, b),
-    "<": (a, b) => applyCwiseSeries(lowerThan, a, b),
-    ">=": (a, b) => applyCwiseSeries(greaterThanOrEqual, a, b),
-    "<=": (a, b) => applyCwiseSeries(lowerThanOrEqual, a, b)
+    ">": (a, b) => greaterThanForSeries(a, b),
+    "<": (a, b) => lowerThanForSeries(a, b),
+    ">=": (a, b) => greaterThanOrEqualForSeries(a, b),
+    "<=": (a, b) => lowerThanOrEqualForSeries(a, b)
   }
 });

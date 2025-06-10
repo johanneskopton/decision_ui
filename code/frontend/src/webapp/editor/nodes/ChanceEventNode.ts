@@ -1,7 +1,5 @@
 import { Node, SelectInterface, type CalculateFunctionReturnType } from "baklavajs";
 import { setType } from "@baklavajs/interface-types";
-import cwise from "cwise";
-import nj from "@d4c/numjs";
 
 import {
   DETERMINISTIC_TYPE,
@@ -24,25 +22,41 @@ import { FlexibleNumberInterface } from "../interfaces/FlexibleNumberInterface";
 
 import { makeArray, makeSeries } from "../common/math";
 
-const chanceFunc = cwise({
-  args: ["array", "array", "array"],
-  body: function chance(chance, value_if, value_if_not) {
-    chance = (value_if - value_if_not) * +(Math.random() < chance) + value_if_not;
+/**
+ * Calculate the output of the chance event node if any input is a probabilistic series.
+ *
+ * @param chance the chance distribution
+ * @param value_if the value_if distribution
+ * @param value_if_not the value_if_not distribution
+ * @returns element-wise mix of both distributions depending on the chance event
+ */
+const chanceForArray = (chance: number[], value_if: number[], value_if_not: number[]): number[] => {
+  const shape = chance.length;
+  const result = new Array(shape);
+  for (let i = 0; i < shape; i++) {
+    result[i] = (value_if[i] - value_if_not[i]) * +(Math.random() < chance[i]) + value_if_not[i];
   }
-});
-
-const applyCwise = (func: cwise.Return, chance: nj.NdArray, value_if: nj.NdArray, value_if_not: nj.NdArray) => {
-  const x = nj.NdArray.new(chance).clone();
-  func(x.selection, value_if.selection, value_if_not.selection);
-  return x;
+  return result;
 };
 
-const applyCwiseArray = (func: cwise.Return, chance: number[], value_if: number[], value_if_not: number[]) => {
-  return applyCwise(func, nj.array(chance), nj.array(value_if), nj.array(value_if_not)).tolist() as number[];
-};
-
-const applyCwiseSeries = (func: cwise.Return, chance: number[][], value_if: number[][], value_if_not: number[][]) => {
-  return applyCwise(func, nj.array(chance), nj.array(value_if), nj.array(value_if_not)).tolist() as number[][];
+/**
+ * Calculate the output of the chance event node if any input is a probabilistic series.
+ *
+ * @param chance the chance series distribution
+ * @param value_if the value_if series distribution
+ * @param value_if_not the value_if_not series distribution
+ * @returns element-wise mix of both distributions depending on the chance event
+ */
+const chanceForSeries = (chance: number[][], value_if: number[][], value_if_not: number[][]): number[][] => {
+  const shape = [chance.length, chance[0].length];
+  const result = new Array(shape[0]);
+  for (let j = 0; j < shape[0]; j++) {
+    result[j] = new Array(shape[1]);
+    for (let i = 0; i < shape[1]; i++) {
+      result[j][i] = (value_if[j][i] - value_if_not[j][i]) * +(Math.random() < chance[j][i]) + value_if_not[j][i];
+    }
+  }
+  return result;
 };
 
 export const ChanceEventNode = defineFlexibleDynamicNode({
@@ -125,7 +139,7 @@ export const ChanceEventNode = defineFlexibleDynamicNode({
           // report error
         }
 
-        return { sample: applyCwiseArray(chanceFunc, chance_array, value_if_array, value_if_not_array) };
+        return { sample: chanceForArray(chance_array, value_if_array, value_if_not_array) };
       }
       case PROBABILISTIC_SERIES_TYPE: {
         if (!isSeries(chance) && !isSeries(value_if) && !isSeries(value_if_not)) {
@@ -140,7 +154,7 @@ export const ChanceEventNode = defineFlexibleDynamicNode({
         const chance_series = makeSeries(chance, mcRuns, n);
         const value_if_series = makeSeries(value_if, mcRuns, n);
         const value_if_not_series = makeSeries(value_if_not, mcRuns, n);
-        return { series: applyCwiseSeries(chanceFunc, chance_series, value_if_series, value_if_not_series) };
+        return { series: chanceForSeries(chance_series, value_if_series, value_if_not_series) };
       }
 
       default:
