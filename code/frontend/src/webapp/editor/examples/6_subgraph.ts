@@ -40,7 +40,7 @@ const getNpvSubgraph = (editor: Editor) => {
   discountInputNode.position = { x: 300, y: 650 };
 
   const discountTypeConstraintNode = new TypeConstraintNode();
-  discountTypeConstraintNode.inputs.type.value = DETERMINISTIC_TYPE;
+  discountTypeConstraintNode.inputs.type.value = PROBABILISTIC_TYPE;
   subgraph.addNode(discountTypeConstraintNode);
   discountTypeConstraintNode.position = { x: 550, y: 650 };
 
@@ -60,8 +60,8 @@ const getNpvSubgraph = (editor: Editor) => {
 
   subgraph.addConnection(sampleInputNode.outputs.placeholder, sampleTypeConstraintNode.inputs.sample);
   subgraph.addConnection(sampleTypeConstraintNode.outputs.sample, toSeriesNode.inputs.x);
-  subgraph.addConnection(discountInputNode.outputs.placeholder, discountTypeConstraintNode.inputs.value);
-  subgraph.addConnection(discountTypeConstraintNode.outputs.value, npvNode.inputs.discount);
+  subgraph.addConnection(discountInputNode.outputs.placeholder, discountTypeConstraintNode.inputs.sample);
+  subgraph.addConnection(discountTypeConstraintNode.outputs.sample, npvNode.inputs.discount);
   subgraph.addConnection(toSeriesNode.outputs.series, npvNode.inputs.x);
   subgraph.addConnection(npvNode.outputs.sample, outputNode.inputs.placeholder);
 
@@ -99,8 +99,9 @@ export const getSubgraphModel = () => {
   const discountEstNode = new EstimateNode();
   displayedGraph.addNode(discountEstNode);
   discountEstNode.title = "Discount Estimate";
-  discountEstNode.inputs.distribution.value = "deterministic";
-  discountEstNode.inputs.value.value = 10;
+  discountEstNode.inputs.distribution.value = "posnorm";
+  discountEstNode.inputs.lower.value = 9;
+  discountEstNode.inputs.upper.value = 11;
   discountEstNode.position = { x: 300, y: 700 };
 
   const subNode = new SubgraphNodeType();
@@ -112,7 +113,7 @@ export const getSubgraphModel = () => {
   resultNode.position = { x: 900, y: 400 };
 
   displayedGraph.addConnection(sampleEstNode.outputs.sample, subNode.inputs[Object.keys(subNode.inputs)[0]]);
-  displayedGraph.addConnection(discountEstNode.outputs.value, subNode.inputs[Object.keys(subNode.inputs)[1]]);
+  displayedGraph.addConnection(discountEstNode.outputs.sample, subNode.inputs[Object.keys(subNode.inputs)[1]]);
   displayedGraph.addConnection(subNode.outputs[Object.keys(subNode.outputs)[0]], resultNode.inputs.sample);
 
   return viewPlugin.editor.save();

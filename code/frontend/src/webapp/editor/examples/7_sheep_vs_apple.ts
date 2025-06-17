@@ -146,9 +146,9 @@ export const getExampleSheepVsAppleModel = () => {
   displayedGraph.addNode(noteNode);
   noteNode.inputs.note.value =
     `This model investigates the decision of whether to add an apple agroforestry. ` +
-    `It is based on the Seminar 9.1 of the lecture 'Decision Analysis and Forecasting for Agricultural Development' ` +
+    `It is based on the Seminar 6 Part 1 of the lecture 'Decision Analysis and Forecasting for Agricultural Development' ` +
     `by Cory Whitney and Eike Luedeling, see:\n` +
-    `https://agtools.app/decision_analysis/#section-voi_1`;
+    `https://agtools.app/decision_analysis/#section-model_programming`;
   noteNode.position = { x: 570, y: 100 };
   noteNode.width = 550;
 
@@ -200,8 +200,8 @@ export const getExampleSheepVsAppleModel = () => {
     displayedGraph,
     "Discount",
     "Discount rate per year in %",
-    DETERMINISTIC_DISTRIBUTION,
-    { value: 10 },
+    POSITIVE_NORMAL_DISTRIBUTION,
+    { lower: 9, upper: 11 },
     { x: 600, y: 1080 }
   );
 
@@ -220,7 +220,7 @@ export const getExampleSheepVsAppleModel = () => {
   displayedGraph.addConnection(appleIncome.outputs.sample, decisionNode.inputs[inputKeys[1]]);
   displayedGraph.addConnection(sheepCosts.outputs.sample, decisionNode.inputs[inputKeys[2]]);
   displayedGraph.addConnection(appleCosts.outputs.sample, decisionNode.inputs[inputKeys[3]]);
-  displayedGraph.addConnection(discount.outputs.value, decisionNode.inputs[inputKeys[4]]);
+  displayedGraph.addConnection(discount.outputs.sample, decisionNode.inputs[inputKeys[4]]);
   displayedGraph.addConnection(decisionNode.outputs[outputKeys[0]], bothResult.inputs.sample);
   displayedGraph.addConnection(decisionNode.outputs[outputKeys[1]], sheepOnlyResult.inputs.sample);
   displayedGraph.addConnection(decisionNode.outputs[outputKeys[2]], benefitResult.inputs.sample);
