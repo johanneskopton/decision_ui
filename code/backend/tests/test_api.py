@@ -22,6 +22,14 @@ def test_user():
     return {"username": "test@test.com", "password": "test"}
 
 
+def _do_login(client, test_user) -> str:
+    response = client.post("/api/auth/jwt/login", data=test_user)
+    assert response.status_code == 200
+    token = response.json()["access_token"]
+    assert token is not None
+    return token
+
+
 def test_register(client):
     """Test registering user account."""
     response = client.post("/api/auth/register", json={"email": "test@test.com", "password": "test"})
@@ -35,16 +43,13 @@ def test_register(client):
 
 def test_login(client, test_user):
     """Test logging in with user credentials."""
-    response = client.post("/api/auth/jwt/login", data=test_user)
-    assert response.status_code == 200
-    token = response.json()["access_token"]
+    token = _do_login(client, test_user)
     assert token is not None
-    return token
 
 
 def test_api(client, test_user):
     """Check that the Monte Carlo simulation API route returns some result."""
-    token = test_login(client, test_user)
+    token = _do_login(client, test_user)
 
     example_dir = os.path.join(os.path.dirname(__file__), "fixtures/examples/1_minimal_model")
     with open(os.path.join(example_dir, "graph.json"), "r", encoding="utf8") as f:
