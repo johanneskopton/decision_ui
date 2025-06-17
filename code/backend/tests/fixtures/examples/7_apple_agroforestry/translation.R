@@ -1,5 +1,5 @@
 model_function <- function(){
-	# subgraph NPV 10-year
+	# subgraph NPV 10year
 	NPV_10year <- function(Discount, Sample){
 		# Subgraph Output
 		To_Series <- rep(Sample, 10)
